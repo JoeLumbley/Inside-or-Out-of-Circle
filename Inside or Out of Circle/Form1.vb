@@ -16,13 +16,16 @@
     Private Function IsPointInsideCircle(pointX As Double, pointY As Double,
                                          centerX As Double, centerY As Double,
                                          radius As Double) As Boolean
+
         ' calculate horizontal distance
         Dim dx As Double = pointX - centerX
         ' calculate vertical distance
         Dim dy As Double = pointY - centerY
 
         distanceSquared = dx * dx + dy * dy
+
         Return distanceSquared <= radius * radius
+
     End Function
 
     Private Sub DrawCircle(e As PaintEventArgs)
@@ -38,8 +41,34 @@
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
+
         DrawCircle(e)
 
+        DrawCalculationDetails(e)
+
+        ' Draw the circle center
+        e.Graphics.FillEllipse(Brushes.Black, circleCenter.X - 3, circleCenter.Y - 3, 6, 6)
+        e.Graphics.DrawString($"X:{circleCenter.X},Y:{circleCenter.Y}", Me.Font, Brushes.Black, circleCenter.X + 10, circleCenter.Y + 10)
+
+        ' Draw the radius line
+        e.Graphics.DrawLine(Pens.Black, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
+        e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y - 10)
+        e.Graphics.FillEllipse(Brushes.Black, circleCenter.X + radius - 3, circleCenter.Y - 3, 6, 6)
+
+        ' Draw the distance line and distance calculation
+        ' Draw a line from the circle center to the mouse pointer location 
+        e.Graphics.DrawLine(Pens.Black, circleCenter, MousePointerLocation)
+        e.Graphics.DrawString($"Distance²: {distanceSquared}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y)
+
+        ' Draw the mouse pointer location
+        e.Graphics.DrawString($"X:{MousePointerLocation.X},Y:{MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
+
+        ' Draw the mouse pointer location as a small circle
+        e.Graphics.FillEllipse(Brushes.Black, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
+
+    End Sub
+
+    Private Sub DrawCalculationDetails(e As PaintEventArgs)
         e.Graphics.DrawString($"Radius: {radius}",
                               Me.Font,
                               Brushes.Black,
@@ -86,24 +115,6 @@
                               Brushes.Black,
                               10,
                               220)
-
-        ' Draw the circle center
-        e.Graphics.FillEllipse(Brushes.Black, circleCenter.X - 3, circleCenter.Y - 3, 6, 6)
-        e.Graphics.DrawString($"X:{circleCenter.X},Y:{circleCenter.Y}", Me.Font, Brushes.Black, circleCenter.X + 10, circleCenter.Y + 10)
-
-        ' Draw the radius line
-        e.Graphics.DrawLine(Pens.Black, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
-        e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y - 10)
-
-        ' Draw the distance line
-        ' Draw a line from the circle center to the mouse pointer location 
-        e.Graphics.DrawLine(Pens.Black, circleCenter, MousePointerLocation)
-
-        ' Draw the mouse pointer location
-        e.Graphics.FillEllipse(Brushes.Black, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
-        e.Graphics.DrawString($"Distance²: {distanceSquared}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y)
-        e.Graphics.DrawString($"X:{MousePointerLocation.X},Y:{MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
-
     End Sub
 
     Protected Overrides Sub OnResize(e As EventArgs)
