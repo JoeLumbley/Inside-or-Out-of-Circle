@@ -28,13 +28,12 @@ Partial Class Form1
         ' 
         AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(618, 424)
+        ClientSize = New Size(1178, 644)
         DoubleBuffered = True
         Margin = New Padding(4, 5, 4, 5)
         Name = "Form1"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Inside or Out of Circle - Code with Joe"
-        WindowState = FormWindowState.Maximized
         ResumeLayout(False)
     End Sub
 
