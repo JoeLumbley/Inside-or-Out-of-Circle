@@ -10,7 +10,14 @@
     Private DistancePen As New Pen(Color.Black, 3)
     Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
     Private RadiusPen As New Pen(Color.Gray, 2)
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 
+        RadiusPen.CustomStartCap = RadiusArrowCap
+        RadiusPen.CustomEndCap = RadiusArrowCap
+        DistancePen.CustomStartCap = DistanceArrowCap
+        DistancePen.CustomEndCap = DistanceArrowCap
+
+    End Sub
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
@@ -32,7 +39,7 @@
 
         ' Draw the circle center
         e.Graphics.FillEllipse(Brushes.Gray, circleCenter.X - 3, circleCenter.Y - 3, 6, 6)
-        e.Graphics.DrawString($"X:{circleCenter.X},Y:{circleCenter.Y}",
+        e.Graphics.DrawString($"X: {circleCenter.X}, Y: {circleCenter.Y}",
                               Me.Font,
                               Brushes.Black,
                               circleCenter.X,
@@ -42,22 +49,15 @@
         e.Graphics.FillEllipse(Brushes.Gray, circleCenter.X + radius - 3, circleCenter.Y - 3, 6, 6)
 
         ' Draw the radius line
-        RadiusPen.CustomStartCap = RadiusArrowCap
-        RadiusPen.CustomEndCap = RadiusArrowCap
-
         e.Graphics.DrawLine(RadiusPen, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
+        e.Graphics.DrawString($"Radius: {radius}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y + 10)
         e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y - 10)
-
 
         ' Draw the mouse pointer location as a small circle
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
 
         ' Draw the distance line and distance calculation
         ' Draw a line from the circle center to the mouse pointer location 
-        'Dim MyPen As New Pen(Color.Black, 2)
-        DistancePen.CustomStartCap = DistanceArrowCap
-        DistancePen.CustomEndCap = DistanceArrowCap
-
         e.Graphics.DrawLine(DistancePen, circleCenter, MousePointerLocation)
         e.Graphics.DrawString($"Distance²: {distanceSquared}",
                               Me.Font,
@@ -66,7 +66,7 @@
                               MousePointerLocation.Y)
 
         ' Draw the mouse pointer location
-        e.Graphics.DrawString($"X:{MousePointerLocation.X},Y:{MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
+        e.Graphics.DrawString($"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
 
     End Sub
 
@@ -130,13 +130,13 @@
                               10,
                               40)
 
-        e.Graphics.DrawString($"Center: X:{circleCenter.X},Y:{circleCenter.Y}",
+        e.Graphics.DrawString($"Center: X: {circleCenter.X}, Y: {circleCenter.Y}",
                               Me.Font,
                               Brushes.Black,
                               10,
                               70)
 
-        e.Graphics.DrawString($"Mouse: X:{MousePointerLocation.X},Y:{MousePointerLocation.Y}",
+        e.Graphics.DrawString($"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}",
                               Me.Font,
                               Brushes.Black,
                               10,
@@ -165,5 +165,7 @@
                               10,
                               220)
     End Sub
+
+
 
 End Class
