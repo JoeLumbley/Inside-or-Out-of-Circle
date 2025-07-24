@@ -6,6 +6,11 @@
     Private isInside As Boolean = False
     Private distanceSquared As Double
     Private RadiusSquared As Double = radius * radius
+    Private DistanceArrowCap As New Drawing2D.AdjustableArrowCap(5, 5, True)
+    Private DistancePen As New Pen(Color.Black, 3)
+    Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
+    Private RadiusPen As New Pen(Color.Gray, 2)
+
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
@@ -33,22 +38,27 @@
                               circleCenter.X,
                               circleCenter.Y + 10)
 
+        Dim MousePointBrush As SolidBrush = If(isInside, Brushes.Yellow, Brushes.Gray)
+        e.Graphics.FillEllipse(Brushes.Gray, circleCenter.X + radius - 3, circleCenter.Y - 3, 6, 6)
+
         ' Draw the radius line
-        e.Graphics.DrawLine(Pens.Black, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
+        RadiusPen.CustomStartCap = RadiusArrowCap
+        RadiusPen.CustomEndCap = RadiusArrowCap
+
+        e.Graphics.DrawLine(RadiusPen, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
         e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y - 10)
-        e.Graphics.FillEllipse(Brushes.Black, circleCenter.X + radius - 3, circleCenter.Y - 3, 6, 6)
 
 
         ' Draw the mouse pointer location as a small circle
-        e.Graphics.FillEllipse(Brushes.Gray, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
+        e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
 
         ' Draw the distance line and distance calculation
         ' Draw a line from the circle center to the mouse pointer location 
-        Dim MyPen As New Pen(Color.Black, 2)
-        MyPen.CustomStartCap = New Drawing2D.AdjustableArrowCap(5, 5, True)
-        MyPen.CustomEndCap = New Drawing2D.AdjustableArrowCap(5, 5, True)
+        'Dim MyPen As New Pen(Color.Black, 2)
+        DistancePen.CustomStartCap = DistanceArrowCap
+        DistancePen.CustomEndCap = DistanceArrowCap
 
-        e.Graphics.DrawLine(MyPen, circleCenter, MousePointerLocation)
+        e.Graphics.DrawLine(DistancePen, circleCenter, MousePointerLocation)
         e.Graphics.DrawString($"Distance²: {distanceSquared}",
                               Me.Font,
                               Brushes.Black,
@@ -149,7 +159,7 @@
                               10,
                               190)
 
-        e.Graphics.DrawString($"Inside Circle: {isInside}",
+        e.Graphics.DrawString($"Inside Circle: {isInside} = {distanceSquared} <= {RadiusSquared}",
                               Me.Font,
                               Brushes.Black,
                               10,
