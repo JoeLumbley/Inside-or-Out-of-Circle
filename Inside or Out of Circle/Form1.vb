@@ -1,15 +1,16 @@
 ﻿Public Class Form1
 
-    Private circleCenter As Point = New Point(150, 150)
+    Private CircleCenterPoint As Point = New Point(150, 150)
     Private MousePointerLocation As Point = New Point(0, 0)
-    Private radius As Integer = 300
-    Private isInside As Boolean = False
-    Private distanceSquared As Double
-    Private RadiusSquared As Double = radius * radius
+    Private CircleRadius As Integer = 300
+    Private IsPointerInsideCircle As Boolean = False
+    Private DistanceSquared As Double
+    Private RadiusSquared As Double = CircleRadius * CircleRadius
     Private DistanceArrowCap As New Drawing2D.AdjustableArrowCap(5, 5, True)
     Private DistancePen As New Pen(Color.Black, 3)
     Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
     Private RadiusPen As New Pen(Color.Gray, 2)
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         RadiusPen.CustomStartCap = RadiusArrowCap
@@ -24,7 +25,7 @@
 
         MousePointerLocation = e.Location
 
-        isInside = IsPointInsideCircle(e.X, e.Y, circleCenter.X, circleCenter.Y, radius)
+        IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
 
         Invalidate() ' Triggers redraw
 
@@ -38,28 +39,28 @@
         DrawCalculationDetails(e)
 
         ' Draw the circle center
-        e.Graphics.FillEllipse(Brushes.Gray, circleCenter.X - 3, circleCenter.Y - 3, 6, 6)
-        e.Graphics.DrawString($"X: {circleCenter.X}, Y: {circleCenter.Y}",
+        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
+        e.Graphics.DrawString($"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
                               Me.Font,
                               Brushes.Black,
-                              circleCenter.X,
-                              circleCenter.Y + 10)
+                              CircleCenterPoint.X,
+                              CircleCenterPoint.Y + 10)
 
-        Dim MousePointBrush As SolidBrush = If(isInside, Brushes.Yellow, Brushes.Gray)
-        e.Graphics.FillEllipse(Brushes.Gray, circleCenter.X + radius - 3, circleCenter.Y - 3, 6, 6)
+        Dim MousePointBrush As SolidBrush = If(IsPointerInsideCircle, Brushes.Yellow, Brushes.Gray)
+        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
         ' Draw the radius line
-        e.Graphics.DrawLine(RadiusPen, circleCenter, New Point(circleCenter.X + radius, circleCenter.Y))
-        e.Graphics.DrawString($"Radius: {radius}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y + 10)
-        e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, circleCenter.X + radius + 10, circleCenter.Y - 10)
+        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+        e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
+        e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
 
         ' Draw the mouse pointer location as a small circle
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
 
         ' Draw the distance line and distance calculation
         ' Draw a line from the circle center to the mouse pointer location 
-        e.Graphics.DrawLine(DistancePen, circleCenter, MousePointerLocation)
-        e.Graphics.DrawString($"Distance²: {distanceSquared}",
+        e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
+        e.Graphics.DrawString($"Distance²: {DistanceSquared}",
                               Me.Font,
                               Brushes.Black,
                               MousePointerLocation.X + 30,
@@ -74,11 +75,11 @@
         MyBase.OnResize(e)
 
         ' Recalculate center on resize
-        circleCenter = New Point(Me.ClientSize.Width \ 2, Me.ClientSize.Height \ 2)
+        CircleCenterPoint = New Point(Me.ClientSize.Width \ 2, Me.ClientSize.Height \ 2)
 
-        radius = Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 3
+        CircleRadius = Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 3
 
-        RadiusSquared = radius * radius
+        RadiusSquared = CircleRadius * CircleRadius
 
         Invalidate() ' Redraw to reflect new position
 
@@ -93,21 +94,21 @@
         ' calculate vertical distance
         Dim dy As Double = pointY - centerY
 
-        distanceSquared = dx * dx + dy * dy
+        DistanceSquared = dx * dx + dy * dy
 
-        Return distanceSquared <= radius * radius
+        Return DistanceSquared <= radius * radius
 
     End Function
 
     Private Sub DrawCircle(e As PaintEventArgs)
 
-        Dim fillColor As Color = If(isInside, Color.LightSkyBlue, Color.LightGray)
+        Dim fillColor As Color = If(IsPointerInsideCircle, Color.LightSkyBlue, Color.LightGray)
 
         Using brush As New SolidBrush(fillColor)
 
-            Dim rect As New Rectangle(circleCenter.X - radius,
-                                  circleCenter.Y - radius,
-                                  radius * 2, radius * 2)
+            Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius,
+                                  CircleCenterPoint.Y - CircleRadius,
+                                  CircleRadius * 2, CircleRadius * 2)
 
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
@@ -118,19 +119,19 @@
     End Sub
 
     Private Sub DrawCalculationDetails(e As PaintEventArgs)
-        e.Graphics.DrawString($"Radius: {radius}",
+        e.Graphics.DrawString($"Radius: {CircleRadius}",
                               Me.Font,
                               Brushes.Black,
                               10,
                               10)
 
-        e.Graphics.DrawString($"Radius²: {RadiusSquared} = {radius} * {radius}",
+        e.Graphics.DrawString($"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}",
                               Me.Font,
                               Brushes.Black,
                               10,
                               40)
 
-        e.Graphics.DrawString($"Center: X: {circleCenter.X}, Y: {circleCenter.Y}",
+        e.Graphics.DrawString($"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
                               Me.Font,
                               Brushes.Black,
                               10,
@@ -142,24 +143,24 @@
                               10,
                               100)
 
-        e.Graphics.DrawString($"X Distance: {MousePointerLocation.X - circleCenter.X} = {MousePointerLocation.X} - {circleCenter.X}",
+        e.Graphics.DrawString($"X Distance: {MousePointerLocation.X - CircleCenterPoint.X} = {MousePointerLocation.X} - {CircleCenterPoint.X}",
                               Me.Font,
                               Brushes.Black,
                               10,
                               130)
 
-        e.Graphics.DrawString($"Y Distance: {MousePointerLocation.Y - circleCenter.Y} = {MousePointerLocation.Y} - {circleCenter.Y}",
+        e.Graphics.DrawString($"Y Distance: {MousePointerLocation.Y - CircleCenterPoint.Y} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}",
                               Me.Font,
                               Brushes.Black,
                               10,
                               160)
 
-        e.Graphics.DrawString($"Distance²: {distanceSquared} = {MousePointerLocation.X - circleCenter.X} * {MousePointerLocation.X - circleCenter.X} + {MousePointerLocation.Y - circleCenter.Y} * {MousePointerLocation.Y - circleCenter.Y}",
+        e.Graphics.DrawString($"Distance²: {DistanceSquared} = {MousePointerLocation.X - CircleCenterPoint.X} * {MousePointerLocation.X - CircleCenterPoint.X} + {MousePointerLocation.Y - CircleCenterPoint.Y} * {MousePointerLocation.Y - CircleCenterPoint.Y}",
                               Me.Font, Brushes.Black,
                               10,
                               190)
 
-        e.Graphics.DrawString($"Inside Circle: {isInside} = {distanceSquared} <= {RadiusSquared}",
+        e.Graphics.DrawString($"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}",
                               Me.Font,
                               Brushes.Black,
                               10,
