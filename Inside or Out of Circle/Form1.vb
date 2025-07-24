@@ -66,7 +66,6 @@ Public Class Form1
         e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
 
         ' Draw the mouse pointer location as a small circle
-        'Dim MousePointBrush As SolidBrush = If(IsPointerInsideCircle, Brushes.Yellow, Brushes.Gray)
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
 
         ' Draw the distance line and distance calculation
@@ -86,14 +85,13 @@ Public Class Form1
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
 
-        ' Recalculate center on resize
         CircleCenterPoint = New Point(Me.ClientSize.Width \ 2, Me.ClientSize.Height \ 2)
 
         CircleRadius = Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 3
 
         RadiusSquared = CircleRadius * CircleRadius
 
-        Invalidate() ' Redraw to reflect new position
+        Invalidate()
 
     End Sub
 
@@ -126,10 +124,6 @@ Public Class Form1
 
     Private Sub DrawCircle(e As PaintEventArgs)
 
-        'Dim fillColor As Color = If(IsPointerInsideCircle, Color.LightSkyBlue, Color.LightGray)
-
-        'Using brush As New SolidBrush(CircleBrush)
-
         Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius,
                                   CircleCenterPoint.Y - CircleRadius,
                                   CircleRadius * 2, CircleRadius * 2)
@@ -138,10 +132,7 @@ Public Class Form1
 
         e.Graphics.FillEllipse(CircleBrush, rect)
 
-        'End Using
-
     End Sub
-
 
     Private Sub DrawCalculationDetails(e As PaintEventArgs)
 
