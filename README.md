@@ -3,8 +3,8 @@
 This app demonstrates the fundamental concept of hit detection using **squared distance math**. It features a dynamic circle rendered via **GDI**, where the circle changes color in real time based on the mouse pointer’s position relative to its radius.
 
 
-<img width="1920" height="1080" alt="004" src="https://github.com/user-attachments/assets/66105ee9-b204-439f-aa99-1fb92566a7eb" />
 
+<img width="1920" height="1080" alt="006" src="https://github.com/user-attachments/assets/e7512828-0859-4af0-879d-81ae1299ace2" />
 
 
 
