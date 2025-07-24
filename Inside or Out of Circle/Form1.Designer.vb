@@ -32,7 +32,7 @@ Partial Class Form1
         DoubleBuffered = True
         Name = "Form1"
         StartPosition = FormStartPosition.CenterScreen
-        Text = "Form1"
+        Text = "Inside or Out of Circle - Code with Joe"
         ResumeLayout(False)
     End Sub
 
