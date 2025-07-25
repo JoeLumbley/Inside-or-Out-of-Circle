@@ -47,14 +47,14 @@ The application visualizes a circle and determines whether the mouse pointer is 
 
 ## Key Components
 
-### 1. Class Definition
+###  Class Definition
 
 ```vb
 Public Class Form1
 ```
 - The main class `Form1` inherits from the base `Form` class, which represents the main window of the application.
 
-### 2. Variables
+###  Variables
 
 ```vb
 Private CircleCenterPoint As Point = New Point(150, 150)
@@ -70,7 +70,7 @@ Private RadiusSquared As Double = CircleRadius * CircleRadius
 - **IsPointerInsideCircle**: A boolean flag indicating whether the pointer is inside the circle.
 - **DistanceSquared** and **RadiusSquared**: Variables used for distance calculations.
 
-### 3. Initialization in Load Event
+###  Initialization in Load Event
 
 ```vb
 Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -82,7 +82,7 @@ End Sub
 ```
 - This method initializes the arrow caps for drawing the radius and distance lines when the form loads.
 
-### 4. Mouse Movement Handling
+###  Mouse Movement Handling
 
 ```vb
 Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
@@ -102,7 +102,7 @@ End Sub
 ```
 - This method updates the mouse pointer's location and checks if it is inside the circle. It changes the colors of the circle and pointer based on the pointer's position and calculates the squared distance.
 
-### 5. Painting the Circle and Details
+###  Painting the Circle and Details
 
 ```vb
 Protected Overrides Sub OnPaint(e As PaintEventArgs)
@@ -115,7 +115,7 @@ End Sub
 ```
 - This method handles the drawing of the circle and other graphical elements, such as the radius line and distance calculations.
 
-### 6. Circle Drawing Logic
+###  Circle Drawing Logic
 
 ```vb
 Private Sub DrawCircle(e As PaintEventArgs)
@@ -126,7 +126,7 @@ End Sub
 ```
 - This method draws the circle using the calculated center and radius, applying anti-aliasing for smoother edges.
 
-### 7. Distance Calculation
+###  Distance Calculation
 
 ```vb
 Function IsPointInsideCircle(pointX As Double, pointY As Double, centerX As Double, centerY As Double, radius As Double) As Boolean
@@ -138,7 +138,7 @@ End Function
 ```
 - This function checks if a given point is inside the circle by comparing the squared distance from the point to the circle's center with the squared radius.
 
-### 8. Resizing the Form
+###  Resizing the Form
 
 ```vb
 Protected Overrides Sub OnResize(e As EventArgs)
