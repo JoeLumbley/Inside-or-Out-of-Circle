@@ -33,9 +33,7 @@ The **Inside or Out of Circle** application is an interactive educational tool d
 
 The **Inside or Out of Circle** app is not just a simple interactive tool; it is a comprehensive educational platform that combines visual feedback with mathematical principles. By engaging with this application, users can deepen their understanding of geometry and enhance their programming skills in a fun and interactive way.
 
---- 
 
-Certainly! Below is a structured code walkthrough for the `Inside or Out of Circle` application that you can include in your README file. This will help users understand the key components and functionality of the code.
 
 ---
 
