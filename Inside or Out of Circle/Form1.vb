@@ -1,5 +1,62 @@
 ﻿
+' Inside or Out of Circle
+
+' This program demonstrates how to determine if a point is inside or outside a circle.
+' It calculates the squared distance from the point to the center of the circle
+' and compares it to the squared radius of the circle.
+' If the squared distance is less than or equal to the squared radius,
+' the point is inside or on the edge of the circle.
+' If the squared distance is greater than the squared radius, the point is outside the circle.
+' The program also displays the radius, center of the circle, mouse pointer location,
+' and the calculated distances in a graphical window.
+
+' MIT License
+
+' Copyright (c) 2025 Joseph W. Lumbley
+
+' Permission is hereby granted, free of charge, to any person obtaining a copy
+' of this software and associated documentation files (the "Software"), to deal
+' in the Software without restriction, including without limitation the rights
+' to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+' copies of the Software, and to permit persons to whom the Software is
+' furnished to do so, subject to the following conditions:
+' The above copyright notice and this permission notice shall be included in all
+' copies or substantial portions of the Software.
+' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+' IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+' FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+' AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+' LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+' OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+' SOFTWARE.
+
 Public Class Form1
+
+    Private Structure TextDisplay
+        Public X As Integer
+        Public Y As Integer
+        Public Text As String
+        Public Sub New(x As Integer, y As Integer, text As String)
+            Me.X = x
+            Me.Y = y
+            Me.Text = text
+        End Sub
+    End Structure
+
+    Private TextDisplays As New List(Of TextDisplay) From {
+        New TextDisplay(10, 10, "Radius: "),
+        New TextDisplay(10, 40, "Radius²: "),
+        New TextDisplay(10, 70, "Center: X: , Y: "),
+        New TextDisplay(10, 100, "Mouse: X: , Y: "),
+        New TextDisplay(10, 130, "X Distance: "),
+        New TextDisplay(10, 160, "Y Distance: "),
+        New TextDisplay(10, 190, "Distance²: "),
+        New TextDisplay(10, 220, "Inside Circle: "),
+        New TextDisplay(0, 0, "Distance²: "),
+        New TextDisplay(0, 0, "X:   ,Y: ")
+    }
+
+
 
     Private CircleCenterPoint As Point = New Point(150, 150)
     Private MousePointerLocation As Point = New Point(0, 0)
@@ -38,6 +95,38 @@ Public Class Form1
         YDistance = MousePointerLocation.Y - CircleCenterPoint.Y
         DistanceSquared = XDistance * XDistance + YDistance * YDistance
 
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+            Dim td = TextDisplays(i)
+            Select Case i
+                Case 0
+                    td.Text = $"Radius: {CircleRadius}"
+                Case 1
+                    td.Text = $"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}"
+                Case 2
+                    td.Text = $"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}"
+                Case 3
+                    td.Text = $"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}"
+                Case 4
+                    td.Text = $"X Distance: {XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}"
+                Case 5
+                    td.Text = $"Y Distance: {YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}"
+                Case 6
+                    td.Text = $"Distance²: {DistanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}"
+                Case 7
+                    td.Text = $"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
+                Case 8
+                    td.Text = $"Distance²: {DistanceSquared}"
+                    td.X = MousePointerLocation.X + 30
+                    td.Y = MousePointerLocation.Y
+                Case 9
+                    td.Text = $"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}"
+                    td.X = MousePointerLocation.X + 30
+                    td.Y = MousePointerLocation.Y + 20
+            End Select
+            TextDisplays(i) = td
+        Next
+
         Invalidate() ' Triggers redraw
 
     End Sub
@@ -46,6 +135,12 @@ Public Class Form1
         MyBase.OnPaint(e)
 
         DrawCircle(e)
+        'Dim myPen As New Pen(Color)
+        Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
+        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, basePt)
+        e.Graphics.DrawLine(RadiusPen, basePt, MousePointerLocation)
+        'e.Graphics.DrawLine(Pens.LightSalmon, CircleCenterPoint, MousePointerLocation)
+
 
         DrawCalculationDetails(e)
 
@@ -70,14 +165,14 @@ Public Class Form1
         ' Draw the distance line and distance calculation
         ' Draw a line from the circle center to the mouse pointer location 
         e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
-        e.Graphics.DrawString($"Distance²: {DistanceSquared}",
-                              Me.Font,
-                              Brushes.Black,
-                              MousePointerLocation.X + 30,
-                              MousePointerLocation.Y)
+        'e.Graphics.DrawString($"Distance²: {DistanceSquared}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      MousePointerLocation.X + 30,
+        '                      MousePointerLocation.Y)
 
         ' Draw the mouse pointer location
-        e.Graphics.DrawString($"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
+        'e.Graphics.DrawString($"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
 
     End Sub
 
@@ -135,52 +230,60 @@ Public Class Form1
 
     Private Sub DrawCalculationDetails(e As PaintEventArgs)
 
-        e.Graphics.DrawString($"Radius: {CircleRadius}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              10)
 
-        e.Graphics.DrawString($"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              40)
+        For Each textDisplay As TextDisplay In TextDisplays
+            e.Graphics.DrawString(textDisplay.Text, Me.Font, Brushes.Black, textDisplay.X, textDisplay.Y)
+        Next
 
-        e.Graphics.DrawString($"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              70)
 
-        e.Graphics.DrawString($"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              100)
 
-        e.Graphics.DrawString($"X Distance: {XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              130)
 
-        e.Graphics.DrawString($"Y Distance: {YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              160)
+        'e.Graphics.DrawString($"Radius: {CircleRadius}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      10)
 
-        e.Graphics.DrawString($"Distance²: {DistanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}",
-                              Me.Font, Brushes.Black,
-                              10,
-                              190)
+        'e.Graphics.DrawString($"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      40)
 
-        e.Graphics.DrawString($"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}",
-                              Me.Font,
-                              Brushes.Black,
-                              10,
-                              220)
+        'e.Graphics.DrawString($"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      70)
+
+        'e.Graphics.DrawString($"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      100)
+
+        'e.Graphics.DrawString($"X Distance: {XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      130)
+
+        'e.Graphics.DrawString($"Y Distance: {YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      160)
+
+        'e.Graphics.DrawString($"Distance²: {DistanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}",
+        '                      Me.Font, Brushes.Black,
+        '                      10,
+        '                      190)
+
+        'e.Graphics.DrawString($"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      10,
+        '                      220)
 
     End Sub
 
