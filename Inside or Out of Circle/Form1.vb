@@ -1,5 +1,4 @@
-﻿Imports System.Reflection
-
+﻿
 Public Class Form1
 
     Private CircleCenterPoint As Point = New Point(150, 150)
