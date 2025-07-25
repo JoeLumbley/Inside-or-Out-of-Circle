@@ -35,4 +35,126 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 
 --- 
 
+Certainly! Below is a structured code walkthrough for the `Inside or Out of Circle` application that you can include in your README file. This will help users understand the key components and functionality of the code.
+
+---
+
+# Code Walkthrough
+
+This section provides an overview of the main components of the `Inside or Out of Circle` application, explaining how the code works and its functionality.
+
+## Overview
+
+The application visualizes a circle and determines whether the mouse pointer is inside or outside the circle using squared distance calculations. The user receives immediate visual feedback based on their interaction with the application.
+
+## Key Components
+
+### 1. Class Definition
+
+```vb
+Public Class Form1
+```
+- The main class `Form1` inherits from the base `Form` class, which represents the main window of the application.
+
+### 2. Variables
+
+```vb
+Private CircleCenterPoint As Point = New Point(150, 150)
+Private MousePointerLocation As Point = New Point(0, 0)
+Private CircleRadius As Integer = 300
+Private IsPointerInsideCircle As Boolean = False
+Private DistanceSquared As Double
+Private RadiusSquared As Double = CircleRadius * CircleRadius
+```
+- **CircleCenterPoint**: The center of the circle.
+- **MousePointerLocation**: The current location of the mouse pointer.
+- **CircleRadius**: The radius of the circle.
+- **IsPointerInsideCircle**: A boolean flag indicating whether the pointer is inside the circle.
+- **DistanceSquared** and **RadiusSquared**: Variables used for distance calculations.
+
+### 3. Initialization in Load Event
+
+```vb
+Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+    RadiusPen.CustomStartCap = RadiusArrowCap
+    RadiusPen.CustomEndCap = RadiusArrowCap
+    DistancePen.CustomStartCap = DistanceArrowCap
+    DistancePen.CustomEndCap = DistanceArrowCap
+End Sub
+```
+- This method initializes the arrow caps for drawing the radius and distance lines when the form loads.
+
+### 4. Mouse Movement Handling
+
+```vb
+Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
+    MyBase.OnMouseMove(e)
+
+    MousePointerLocation = e.Location
+    IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
+    MousePointBrush = If(IsPointerInsideCircle, Brushes.Yellow, Brushes.Gray)
+    CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+
+    XDistance = MousePointerLocation.X - CircleCenterPoint.X
+    YDistance = MousePointerLocation.Y - CircleCenterPoint.Y
+    DistanceSquared = XDistance * XDistance + YDistance * YDistance
+
+    Invalidate() ' Triggers redraw
+End Sub
+```
+- This method updates the mouse pointer's location and checks if it is inside the circle. It changes the colors of the circle and pointer based on the pointer's position and calculates the squared distance.
+
+### 5. Painting the Circle and Details
+
+```vb
+Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    MyBase.OnPaint(e)
+
+    DrawCircle(e)
+    DrawCalculationDetails(e)
+    ' Additional drawing code...
+End Sub
+```
+- This method handles the drawing of the circle and other graphical elements, such as the radius line and distance calculations.
+
+### 6. Circle Drawing Logic
+
+```vb
+Private Sub DrawCircle(e As PaintEventArgs)
+    Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2)
+    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+    e.Graphics.FillEllipse(CircleBrush, rect)
+End Sub
+```
+- This method draws the circle using the calculated center and radius, applying anti-aliasing for smoother edges.
+
+### 7. Distance Calculation
+
+```vb
+Function IsPointInsideCircle(pointX As Double, pointY As Double, centerX As Double, centerY As Double, radius As Double) As Boolean
+    Dim Xdistance As Double = pointX - centerX
+    Dim Ydistance As Double = pointY - centerY
+    Dim squaredDistance As Double = Xdistance * Xdistance + Ydistance * Ydistance
+    Return squaredDistance <= radius * radius
+End Function
+```
+- This function checks if a given point is inside the circle by comparing the squared distance from the point to the circle's center with the squared radius.
+
+### 8. Resizing the Form
+
+```vb
+Protected Overrides Sub OnResize(e As EventArgs)
+    MyBase.OnResize(e)
+    CircleCenterPoint = New Point(Me.ClientSize.Width \ 2, Me.ClientSize.Height \ 2)
+    CircleRadius = Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 3
+    RadiusSquared = CircleRadius * CircleRadius
+    Invalidate()
+End Sub
+```
+- This method adjusts the circle's position and radius when the form is resized, ensuring it remains centered and appropriately sized.
+
+
+The `Inside or Out of Circle` application effectively demonstrates the principles of hit detection and graphical rendering. By utilizing squared distance calculations, it provides an efficient and interactive way for users to understand spatial relationships.
+
+---
 
