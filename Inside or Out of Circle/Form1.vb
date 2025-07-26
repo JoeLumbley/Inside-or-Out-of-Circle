@@ -36,27 +36,31 @@ Public Class Form1
         Public X As Integer
         Public Y As Integer
         Public Text As String
-        Public Sub New(x As Integer, y As Integer, text As String)
+        Public Brush As SolidBrush
+        Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush)
             Me.X = x
             Me.Y = y
             Me.Text = text
+            Me.Brush = brush
         End Sub
+
+
     End Structure
 
     Private TextDisplays As New List(Of TextDisplay) From {
-        New TextDisplay(10, 10, "Radius: "),
-        New TextDisplay(10, 40, "Radius²: "),
-        New TextDisplay(10, 70, "Center: X: , Y: "),
-        New TextDisplay(10, 100, "Mouse: X: , Y: "),
-        New TextDisplay(10, 130, "X Distance: "),
-        New TextDisplay(10, 160, "Y Distance: "),
-        New TextDisplay(10, 190, "Distance²: "),
-        New TextDisplay(10, 220, "Inside Circle: "),
-        New TextDisplay(0, 0, "Distance²: "),
-        New TextDisplay(0, 0, "X:   ,Y: "),
-        New TextDisplay(0, 0, "X:   ,Y: "),
-        New TextDisplay(0, 0, "Radius: "),
-        New TextDisplay(0, 0, "Radius²: ")
+        New TextDisplay(10, 10, "Radius: ", Brushes.Black),
+        New TextDisplay(10, 40, "Radius²: ", Brushes.Black),
+        New TextDisplay(10, 70, "Center: X: , Y: ", Brushes.Black),
+        New TextDisplay(10, 100, "Mouse: X: , Y: ", Brushes.Black),
+        New TextDisplay(10, 130, "X Distance: ", Brushes.Black),
+        New TextDisplay(10, 160, "Y Distance: ", Brushes.Black),
+        New TextDisplay(10, 190, "Distance²: ", Brushes.Black),
+        New TextDisplay(10, 220, "Inside Circle: ", Brushes.Black),
+        New TextDisplay(0, 0, "Distance²: ", Brushes.Black),
+        New TextDisplay(0, 0, "X:   ,Y: ", Brushes.Black),
+        New TextDisplay(0, 0, "X:   ,Y: ", Brushes.Black),
+        New TextDisplay(0, 0, "Radius: ", Brushes.Black),
+        New TextDisplay(0, 0, "Radius²: ", Brushes.Black)
     }
 
 
@@ -70,23 +74,85 @@ Public Class Form1
     Private RadiusSquared As Double = CircleRadius * CircleRadius
     Private DistanceArrowCap As New Drawing2D.AdjustableArrowCap(5, 5, True)
     Private DistancePen As New Pen(Color.Black, 3)
+    Private ArrowBlack3Pen As New Pen(Color.Black, 3)
+    Private TransparentPen As New Pen(Color.Transparent, 3)
+
     Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
     Private RadiusPen As New Pen(Color.Gray, 2)
     Private XYDistancePen As New Pen(Color.Orchid, 2)
+    Private Orchid2Pen As New Pen(Color.Orchid, 2)
 
     Private XDistance As Double = 0
     Private YDistance As Double = 0
     Private MousePointBrush As SolidBrush = Brushes.Gray
     Private CircleBrush As SolidBrush = Brushes.LightGray
+    Private RadiusBrush As SolidBrush = Brushes.Gray
 
+
+    'RadiusBrush
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+        DistancePen = TransparentPen
 
         RadiusPen.CustomStartCap = RadiusArrowCap
         RadiusPen.CustomEndCap = RadiusArrowCap
-        DistancePen.CustomStartCap = DistanceArrowCap
-        DistancePen.CustomEndCap = DistanceArrowCap
+        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
+        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
+        XYDistancePen = TransparentPen
+        MousePointBrush = Brushes.Transparent
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+            Dim td = TextDisplays(i)
+
+            td = TextDisplays(i)
+            td.Brush = Brushes.Transparent
+            TextDisplays(i) = td
+            td = TextDisplays(i)
+            td.Brush = Brushes.Transparent
+            TextDisplays(i) = td
+
+        Next
 
     End Sub
+
+    Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
+
+        DistancePen = ArrowBlack3Pen
+        XYDistancePen = Orchid2Pen
+        MousePointBrush = Brushes.Gray
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+            Dim td = TextDisplays(i)
+
+            td = TextDisplays(i)
+            td.Brush = Brushes.Black
+            TextDisplays(i) = td
+
+        Next
+
+
+        Invalidate() ' Redraw to apply the new pen
+    End Sub
+
+    Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
+        DistancePen = TransparentPen
+        XYDistancePen = TransparentPen
+        MousePointBrush = Brushes.Transparent
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+            Dim td = TextDisplays(i)
+
+            td = TextDisplays(i)
+            td.Brush = Brushes.Transparent
+            TextDisplays(i) = td
+
+        Next
+
+
+        Invalidate() ' Redraw to apply the new pen
+
+    End Sub
+
+
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
@@ -158,7 +224,8 @@ Public Class Form1
 
         ' Draw the radius line
         e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
-        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
+        e.Graphics.FillEllipse(RadiusBrush, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
+
 
         ' Draw YX distance lines
         Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
@@ -234,7 +301,7 @@ Public Class Form1
 
 
         For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.DrawString(textDisplay.Text, Me.Font, Brushes.Black, textDisplay.X, textDisplay.Y)
+            e.Graphics.DrawString(textDisplay.Text, Me.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
         Next
 
 
