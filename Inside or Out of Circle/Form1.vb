@@ -146,8 +146,6 @@ Public Class Form1
         e.Graphics.DrawLine(XYDistancePen, CircleCenterPoint, basePt)
         e.Graphics.DrawLine(XYDistancePen, basePt, MousePointerLocation)
 
-
-
         ' Draw the circle center
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
         e.Graphics.DrawString($"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
@@ -158,20 +156,13 @@ Public Class Form1
 
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
-
-
-
         e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
         e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
-
-
-
 
         ' Draw the mouse pointer location as a small circle
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
 
-        ' Draw the distance line and distance calculation
-        ' Draw a line from the circle center to the mouse pointer location 
+        ' Draw the distance line 
         e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
         'e.Graphics.DrawString($"Distance²: {DistanceSquared}",
         '                      Me.Font,
