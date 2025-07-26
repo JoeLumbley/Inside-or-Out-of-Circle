@@ -72,7 +72,7 @@ Public Class Form1
     Private DistancePen As New Pen(Color.Black, 3)
     Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
     Private RadiusPen As New Pen(Color.Gray, 2)
-    Private XYDistancePen As New Pen(Color.Plum, 2)
+    Private XYDistancePen As New Pen(Color.Orchid, 2)
 
     Private XDistance As Double = 0
     Private YDistance As Double = 0
@@ -158,6 +158,7 @@ Public Class Form1
 
         ' Draw the radius line
         e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
         ' Draw YX distance lines
         Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
@@ -172,7 +173,7 @@ Public Class Form1
         '                      CircleCenterPoint.X,
         '                      CircleCenterPoint.Y + 10)
 
-        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
+
 
         'e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
         'e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
