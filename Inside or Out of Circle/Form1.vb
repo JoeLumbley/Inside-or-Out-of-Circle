@@ -68,6 +68,8 @@ Public Class Form1
     Private DistancePen As New Pen(Color.Black, 3)
     Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
     Private RadiusPen As New Pen(Color.Gray, 2)
+    Private XYDistancePen As New Pen(Color.Plum, 2)
+
     Private XDistance As Double = 0
     Private YDistance As Double = 0
     Private MousePointBrush As SolidBrush = Brushes.Gray
@@ -135,14 +137,16 @@ Public Class Form1
         MyBase.OnPaint(e)
 
         DrawCircle(e)
-        'Dim myPen As New Pen(Color)
+
+        ' Draw the radius line
+        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+
+        ' Draw YX distance lines
         Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
-        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, basePt)
-        e.Graphics.DrawLine(RadiusPen, basePt, MousePointerLocation)
-        'e.Graphics.DrawLine(Pens.LightSalmon, CircleCenterPoint, MousePointerLocation)
+        e.Graphics.DrawLine(XYDistancePen, CircleCenterPoint, basePt)
+        e.Graphics.DrawLine(XYDistancePen, basePt, MousePointerLocation)
 
 
-        DrawCalculationDetails(e)
 
         ' Draw the circle center
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
@@ -154,10 +158,14 @@ Public Class Form1
 
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
-        ' Draw the radius line
-        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+
+
+
         e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
         e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
+
+
+
 
         ' Draw the mouse pointer location as a small circle
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
@@ -173,6 +181,8 @@ Public Class Form1
 
         ' Draw the mouse pointer location
         'e.Graphics.DrawString($"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}", Me.Font, Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y + 20)
+
+        DrawCalculationDetails(e)
 
     End Sub
 
