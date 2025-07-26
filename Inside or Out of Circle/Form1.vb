@@ -53,8 +53,12 @@ Public Class Form1
         New TextDisplay(10, 190, "Distance²: "),
         New TextDisplay(10, 220, "Inside Circle: "),
         New TextDisplay(0, 0, "Distance²: "),
-        New TextDisplay(0, 0, "X:   ,Y: ")
+        New TextDisplay(0, 0, "X:   ,Y: "),
+        New TextDisplay(0, 0, "X:   ,Y: "),
+        New TextDisplay(0, 0, "Radius: "),
+        New TextDisplay(0, 0, "Radius²: ")
     }
+
 
 
 
@@ -125,6 +129,20 @@ Public Class Form1
                     td.Text = $"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}"
                     td.X = MousePointerLocation.X + 30
                     td.Y = MousePointerLocation.Y + 20
+                Case 10
+                    td.Text = $"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}"
+                    td.X = CircleCenterPoint.X
+                    td.Y = CircleCenterPoint.Y + 10
+                Case 11
+                    td.Text = $"Radius: {CircleRadius}"
+                    td.X = CircleCenterPoint.X + CircleRadius + 10
+                    td.Y = CircleCenterPoint.Y + 10
+                Case 12
+                    td.Text = $"Radius²: {RadiusSquared}"
+                    td.X = CircleCenterPoint.X + CircleRadius + 10
+                    td.Y = CircleCenterPoint.Y - 10
+
+
             End Select
             TextDisplays(i) = td
         Next
@@ -148,16 +166,16 @@ Public Class Form1
 
         ' Draw the circle center
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
-        e.Graphics.DrawString($"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
-                              Me.Font,
-                              Brushes.Black,
-                              CircleCenterPoint.X,
-                              CircleCenterPoint.Y + 10)
+        'e.Graphics.DrawString($"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
+        '                      Me.Font,
+        '                      Brushes.Black,
+        '                      CircleCenterPoint.X,
+        '                      CircleCenterPoint.Y + 10)
 
         e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
-        e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
-        e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
+        'e.Graphics.DrawString($"Radius: {CircleRadius}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y + 10)
+        'e.Graphics.DrawString($"Radius²: {RadiusSquared}", Me.Font, Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - 10)
 
         ' Draw the mouse pointer location as a small circle
         e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
