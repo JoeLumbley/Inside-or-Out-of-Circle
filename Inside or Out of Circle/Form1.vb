@@ -61,6 +61,51 @@ Public Class Form1
         New TextDisplay(0, 0, "Radius²: ", Brushes.Black)
     }
 
+    Private Structure LineDisplay
+        Public X1 As Integer
+        Public Y1 As Integer
+        Public X2 As Integer
+        Public Y2 As Integer
+        Public Pen As Pen
+        Public Sub New(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, pen As Pen)
+            Me.X1 = x1
+            Me.Y1 = y1
+            Me.X2 = x2
+            Me.Y2 = y2
+            Me.Pen = pen
+        End Sub
+    End Structure
+
+    Private LineDisplays As New List(Of LineDisplay) From {
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Gray, 2)),
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Gray, 2)),
+        New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Gray, 2)),
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Gray, 2))
+    }
+
+
+    Private Structure CircleDisplay
+        Public X As Integer
+        Public Y As Integer
+        Public Width As Integer
+        Public Height As Integer
+        Public Brush As SolidBrush
+        Public Sub New(x As Integer, y As Integer, width As Integer, height As Integer, brush As Brush)
+            Me.X = x
+            Me.Y = y
+            Me.Width = width
+            Me.Height = height
+            Me.Brush = brush
+        End Sub
+    End Structure
+
+    Private CircleDisplays As New List(Of CircleDisplay) From {
+        New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
+        New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+        New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+        New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
+    }
+
     Private CircleCenterPoint As Point = New Point(150, 150)
     Private MousePointerLocation As Point = New Point(0, 0)
     Private CircleRadius As Integer = 300
@@ -94,14 +139,34 @@ Public Class Form1
         MousePointBrush = Brushes.Transparent
 
         For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td = TextDisplays(i)
 
-            td = TextDisplays(i)
+            Dim td As TextDisplay = TextDisplays(i)
+
             td.Brush = Brushes.Transparent
             TextDisplays(i) = td
-            td = TextDisplays(i)
-            td.Brush = Brushes.Transparent
-            TextDisplays(i) = td
+
+        Next
+
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+            Dim ld As LineDisplay = LineDisplays(i)
+            ld.Pen = Pens.Transparent
+            LineDisplays(i) = ld
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    ld.Brush = CircleBrush
+
+            End Select
+
+            CircleDisplays(i) = ld
 
         Next
 
@@ -122,6 +187,58 @@ Public Class Form1
 
         Next
 
+        For i As Integer = 0 To LineDisplays.Count - 1
+            Dim ld = LineDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = CircleCenterPoint.X + CircleRadius
+                    ld.Y2 = CircleCenterPoint.Y
+                    ld.Pen = RadiusPen
+                Case 1
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = CircleCenterPoint.Y
+                    ld.Pen = XYDistancePen
+                Case 2
+                    ld.X1 = MousePointerLocation.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = MousePointerLocation.Y
+                    ld.Pen = XYDistancePen
+                Case 3
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = MousePointerLocation.Y
+                    ld.Pen = DistancePen
+
+            End Select
+
+            LineDisplays(i) = ld
+
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    ld.Brush = CircleBrush
+
+            End Select
+
+            CircleDisplays(i) = ld
+
+        Next
+
+
+
         Invalidate()
 
     End Sub
@@ -139,6 +256,52 @@ Public Class Form1
             TextDisplays(i) = td
 
         Next
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+
+            Dim ld As LineDisplay = LineDisplays(i)
+
+            ld.Pen = Pens.Transparent
+
+            LineDisplays(i) = ld
+
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    ld.Brush = CircleBrush
+                Case 1
+                    ld.X = CircleCenterPoint.X + CircleRadius - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = Brushes.Transparent
+                Case 2
+                    ld.X = CircleCenterPoint.X - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = Brushes.Transparent
+                Case 3
+                    ld.X = MousePointerLocation.X - 3
+                    ld.Y = MousePointerLocation.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = Brushes.Transparent
+
+            End Select
+
+            CircleDisplays(i) = ld
+
+        Next
+
+
 
         Invalidate() ' Redraw to apply the new pen
 
@@ -204,6 +367,79 @@ Public Class Form1
 
         Next
 
+
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+            Dim ld = LineDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = CircleCenterPoint.X + CircleRadius
+                    ld.Y2 = CircleCenterPoint.Y
+                    'ld.Pen = RadiusPen
+                Case 1
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = CircleCenterPoint.Y
+                    'ld.Pen = XYDistancePen
+                Case 2
+                    ld.X1 = MousePointerLocation.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = MousePointerLocation.Y
+                    'ld.Pen = XYDistancePen
+                Case 3
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = MousePointerLocation.X
+                    ld.Y2 = MousePointerLocation.Y
+                    'ld.Pen = DistancePen
+
+
+            End Select
+
+            LineDisplays(i) = ld
+
+        Next
+
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    ld.Brush = CircleBrush
+                Case 1
+                    ld.X = CircleCenterPoint.X + CircleRadius - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = RadiusBrush
+                Case 2
+                    ld.X = CircleCenterPoint.X - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = RadiusBrush
+                Case 3
+                    ld.X = MousePointerLocation.X - 3
+                    ld.Y = MousePointerLocation.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = MousePointBrush
+
+            End Select
+
+            CircleDisplays(i) = ld
+
+        Next
+
+
         Invalidate()
 
     End Sub
@@ -211,25 +447,40 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        DrawCircle(e)
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+        'DrawCircle(e)
+
+        For Each circleDisplay As CircleDisplay In CircleDisplays
+
+            e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+
+        Next
 
         ' Draw the radius line
-        e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
-        e.Graphics.FillEllipse(RadiusBrush, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
+        'e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+        'e.Graphics.FillEllipse(RadiusBrush, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
 
         ' Draw YX distance lines
-        Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
-        e.Graphics.DrawLine(XYDistancePen, CircleCenterPoint, basePt)
-        e.Graphics.DrawLine(XYDistancePen, basePt, MousePointerLocation)
+        'Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
+        'e.Graphics.DrawLine(XYDistancePen, CircleCenterPoint, basePt)
+        'e.Graphics.DrawLine(XYDistancePen, basePt, MousePointerLocation)
 
         ' Draw the circle center
-        e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
+        'e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
 
         ' Draw the mouse pointer location as a small circle
-        e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
+        'e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
+
+
+        For Each lineDisplay As LineDisplay In LineDisplays
+
+            e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+
+        Next
 
         ' Draw the distance line 
-        e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
+        'e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
 
         DrawCalculationDetails(e)
 
@@ -243,6 +494,23 @@ Public Class Form1
         CircleRadius = Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 3
 
         RadiusSquared = CircleRadius * CircleRadius
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case 0
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    'ld.Brush = CircleBrush
+
+            End Select
+
+            CircleDisplays(i) = ld
+
+        Next
+
 
         Invalidate()
 
@@ -277,13 +545,13 @@ Public Class Form1
 
     Private Sub DrawCircle(e As PaintEventArgs)
 
-        Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius,
-                                  CircleCenterPoint.Y - CircleRadius,
-                                  CircleRadius * 2, CircleRadius * 2)
+        'Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius,
+        '                          CircleCenterPoint.Y - CircleRadius,
+        '                          CircleRadius * 2, CircleRadius * 2)
 
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        'e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
-        e.Graphics.FillEllipse(CircleBrush, rect)
+        'e.Graphics.FillEllipse(CircleBrush, rect)
 
     End Sub
 
