@@ -198,12 +198,13 @@ Public Class Form1
                     td.X = CircleCenterPoint.X + CircleRadius + 10
                     td.Y = CircleCenterPoint.Y - 10
 
-
             End Select
+
             TextDisplays(i) = td
+
         Next
 
-        Invalidate() ' Triggers redraw
+        Invalidate()
 
     End Sub
 
@@ -215,7 +216,6 @@ Public Class Form1
         ' Draw the radius line
         e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
         e.Graphics.FillEllipse(RadiusBrush, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
-
 
         ' Draw YX distance lines
         Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
