@@ -99,6 +99,13 @@ Public Class Form1
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Gray, 2))
     }
 
+    Private Enum LineDisplayIndex
+        RadiusLine = 0
+        XDistanceLine = 1
+        YDistanceLine = 2
+        DistanceLine = 3
+    End Enum
+
     Private Structure CircleDisplay
         Public X As Integer
         Public Y As Integer
@@ -204,25 +211,25 @@ Public Class Form1
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
             Select Case i
-                Case 0
+                Case LineDisplayIndex.RadiusLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = CircleCenterPoint.X + CircleRadius
                     ld.Y2 = CircleCenterPoint.Y
                     ld.Pen = RadiusPen
-                Case 1
+                Case LineDisplayIndex.XDistanceLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = CircleCenterPoint.Y
                     ld.Pen = XYDistancePen
-                Case 2
+                Case LineDisplayIndex.YDistanceLine
                     ld.X1 = MousePointerLocation.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = MousePointerLocation.Y
                     ld.Pen = XYDistancePen
-                Case 3
+                Case LineDisplayIndex.DistanceLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
@@ -380,22 +387,22 @@ Public Class Form1
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
             Select Case i
-                Case 0
+                Case LineDisplayIndex.RadiusLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = CircleCenterPoint.X + CircleRadius
                     ld.Y2 = CircleCenterPoint.Y
-                Case 1
+                Case LineDisplayIndex.XDistanceLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = CircleCenterPoint.Y
-                Case 2
+                Case LineDisplayIndex.YDistanceLine
                     ld.X1 = MousePointerLocation.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = MousePointerLocation.Y
-                Case 3
+                Case LineDisplayIndex.DistanceLine
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
