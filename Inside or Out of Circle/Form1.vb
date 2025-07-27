@@ -451,23 +451,16 @@ Public Class Form1
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
         For Each circleDisplay As CircleDisplay In CircleDisplays
-
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-
         Next
 
         For Each lineDisplay As LineDisplay In LineDisplays
-
             e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-
         Next
 
         For Each textDisplay As TextDisplay In TextDisplays
-            'e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 13), textDisplay.Brush, textDisplay.X, textDisplay.Y)
-            'use textrender to draw text
             e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
             e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 10), textDisplay.Brush, textDisplay.X, textDisplay.Y)
-
         Next
 
     End Sub
