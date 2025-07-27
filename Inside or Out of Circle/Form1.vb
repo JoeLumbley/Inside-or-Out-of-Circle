@@ -61,6 +61,22 @@ Public Class Form1
         New TextDisplay(0, 0, "Radius²: ", Brushes.Black)
     }
 
+    Private Enum TextDisplayIndex
+        Radius = 0
+        RadiusSquared = 1
+        Center = 2
+        Mouse = 3
+        XDistance = 4
+        YDistance = 5
+        DistanceSquared = 6
+        InsideCircle = 7
+        DistanceSquaredAtMouse = 8
+        MouseCoordinates = 9
+        CircleCenterCoordinates = 10
+        CircleRadiusText = 11
+        CircleRadiusSquaredText = 12
+    End Enum
+
     Private Structure LineDisplay
         Public X1 As Integer
         Public Y1 As Integer
@@ -318,39 +334,39 @@ Public Class Form1
         For i As Integer = 0 To TextDisplays.Count - 1
             Dim td = TextDisplays(i)
             Select Case i
-                Case 0
+                Case TextDisplayIndex.Radius
                     td.Text = $"Radius: {CircleRadius}"
-                Case 1
+                Case TextDisplayIndex.RadiusSquared
                     td.Text = $"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}"
-                Case 2
+                Case TextDisplayIndex.Center
                     td.Text = $"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}"
-                Case 3
+                Case TextDisplayIndex.Mouse
                     td.Text = $"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}"
-                Case 4
+                Case TextDisplayIndex.XDistance
                     td.Text = $"X Distance: {XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}"
-                Case 5
+                Case TextDisplayIndex.YDistance
                     td.Text = $"Y Distance: {YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}"
-                Case 6
+                Case TextDisplayIndex.DistanceSquared
                     td.Text = $"Distance²: {DistanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}"
-                Case 7
+                Case TextDisplayIndex.InsideCircle
                     td.Text = $"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
-                Case 8
+                Case TextDisplayIndex.DistanceSquaredAtMouse
                     td.Text = $"Distance²: {DistanceSquared}"
                     td.X = MousePointerLocation.X + 30
                     td.Y = MousePointerLocation.Y
-                Case 9
+                Case TextDisplayIndex.MouseCoordinates
                     td.Text = $"X: {MousePointerLocation.X},Y: {MousePointerLocation.Y}"
                     td.X = MousePointerLocation.X + 30
                     td.Y = MousePointerLocation.Y + 20
-                Case 10
+                Case TextDisplayIndex.CircleCenterCoordinates
                     td.Text = $"X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}"
                     td.X = CircleCenterPoint.X
                     td.Y = CircleCenterPoint.Y + 10
-                Case 11
+                Case TextDisplayIndex.CircleRadiusText
                     td.Text = $"Radius: {CircleRadius}"
                     td.X = CircleCenterPoint.X + CircleRadius + 10
                     td.Y = CircleCenterPoint.Y + 10
-                Case 12
+                Case TextDisplayIndex.CircleRadiusSquaredText
                     td.Text = $"Radius²: {RadiusSquared}"
                     td.X = CircleCenterPoint.X + CircleRadius + 10
                     td.Y = CircleCenterPoint.Y - 10
@@ -447,7 +463,11 @@ Public Class Form1
         Next
 
         For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 13), textDisplay.Brush, textDisplay.X, textDisplay.Y)
+            'e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 13), textDisplay.Brush, textDisplay.X, textDisplay.Y)
+            'use textrender to draw text
+            e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+            e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 10), textDisplay.Brush, textDisplay.X, textDisplay.Y)
+
         Next
 
     End Sub
