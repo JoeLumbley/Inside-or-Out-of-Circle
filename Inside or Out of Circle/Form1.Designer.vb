@@ -26,11 +26,10 @@ Partial Class Form1
         ' 
         ' Form1
         ' 
-        AutoScaleDimensions = New SizeF(10F, 25F)
-        AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1178, 644)
+        AutoScaleMode = AutoScaleMode.None
+        ClientSize = New Size(1116, 557)
         DoubleBuffered = True
-        Margin = New Padding(4, 5, 4, 5)
+        Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Name = "Form1"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Inside or Out of Circle - Code with Joe"

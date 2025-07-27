@@ -447,7 +447,7 @@ Public Class Form1
         Next
 
         For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.DrawString(textDisplay.Text, Me.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+            e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", 13), textDisplay.Brush, textDisplay.X, textDisplay.Y)
         Next
 
     End Sub
@@ -500,8 +500,7 @@ Public Class Form1
         ' It uses the squared distance to avoid the computational cost of taking a square root.
         ' The function returns True if the point is inside or on the edge of the circle,
         ' and False if the point is outside the circle.
-        ' This approach is efficient because it avoids the need for floating-point operations
-        ' that can be costly in terms of performance, especially in real-time applications.
+
         ' The function calculates the horizontal and vertical distances from the point to the center of the circle,
         ' squares these distances, and sums them to get the squared distance.
         ' It then compares this squared distance to the squared radius of the circle.
