@@ -83,7 +83,6 @@ Public Class Form1
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Gray, 2))
     }
 
-
     Private Structure CircleDisplay
         Public X As Integer
         Public Y As Integer
@@ -146,7 +145,6 @@ Public Class Form1
             TextDisplays(i) = td
 
         Next
-
 
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld As LineDisplay = LineDisplays(i)
@@ -237,8 +235,6 @@ Public Class Form1
 
         Next
 
-
-
         Invalidate()
 
     End Sub
@@ -301,9 +297,7 @@ Public Class Form1
 
         Next
 
-
-
-        Invalidate() ' Redraw to apply the new pen
+        Invalidate()
 
     End Sub
 
@@ -367,8 +361,6 @@ Public Class Form1
 
         Next
 
-
-
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
             Select Case i
@@ -377,33 +369,27 @@ Public Class Form1
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = CircleCenterPoint.X + CircleRadius
                     ld.Y2 = CircleCenterPoint.Y
-                    'ld.Pen = RadiusPen
                 Case 1
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = CircleCenterPoint.Y
-                    'ld.Pen = XYDistancePen
                 Case 2
                     ld.X1 = MousePointerLocation.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = MousePointerLocation.Y
-                    'ld.Pen = XYDistancePen
                 Case 3
                     ld.X1 = CircleCenterPoint.X
                     ld.Y1 = CircleCenterPoint.Y
                     ld.X2 = MousePointerLocation.X
                     ld.Y2 = MousePointerLocation.Y
-                    'ld.Pen = DistancePen
-
 
             End Select
 
             LineDisplays(i) = ld
 
         Next
-
 
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
@@ -439,7 +425,6 @@ Public Class Form1
 
         Next
 
-
         Invalidate()
 
     End Sub
@@ -449,29 +434,11 @@ Public Class Form1
 
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
-        'DrawCircle(e)
-
         For Each circleDisplay As CircleDisplay In CircleDisplays
 
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
 
         Next
-
-        ' Draw the radius line
-        'e.Graphics.DrawLine(RadiusPen, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
-        'e.Graphics.FillEllipse(RadiusBrush, CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6)
-
-        ' Draw YX distance lines
-        'Dim basePt = New Point(MousePointerLocation.X, CircleCenterPoint.Y)
-        'e.Graphics.DrawLine(XYDistancePen, CircleCenterPoint, basePt)
-        'e.Graphics.DrawLine(XYDistancePen, basePt, MousePointerLocation)
-
-        ' Draw the circle center
-        'e.Graphics.FillEllipse(Brushes.Gray, CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6)
-
-        ' Draw the mouse pointer location as a small circle
-        'e.Graphics.FillEllipse(MousePointBrush, MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6)
-
 
         For Each lineDisplay As LineDisplay In LineDisplays
 
@@ -479,10 +446,9 @@ Public Class Form1
 
         Next
 
-        ' Draw the distance line 
-        'e.Graphics.DrawLine(DistancePen, CircleCenterPoint, MousePointerLocation)
-
-        DrawCalculationDetails(e)
+        For Each textDisplay As TextDisplay In TextDisplays
+            e.Graphics.DrawString(textDisplay.Text, Me.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+        Next
 
     End Sub
 
@@ -503,7 +469,6 @@ Public Class Form1
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
                     ld.Height = CircleRadius * 2
-                    'ld.Brush = CircleBrush
 
             End Select
 
@@ -511,15 +476,14 @@ Public Class Form1
 
         Next
 
-
         Invalidate()
 
     End Sub
 
     Function IsPointInsideCircle(pointX As Double, pointY As Double,
              centerX As Double, centerY As Double, radius As Double) As Boolean
-        ' Note: This function is a simplified version of the distance check.
-        ' It is efficient and avoids unnecessary calculations by using squared distances.
+        ' This function checks if a point (pointX, pointY) is inside or on the edge of a circle
+        ' defined by its center (centerX, centerY) and radius.
 
         ' Calculate horizontal distance from the point to the center of the circle
         Dim Xdistance As Double = pointX - centerX
@@ -533,34 +497,19 @@ Public Class Form1
         ' Check if the squared distance is less than or equal to the squared radius
         Return squaredDistance <= radius * radius
 
-        ' If the squared distance from the point to the center of the circle
-        ' (dx)^2 + (dy)^2 is less than or equal <= to the squared radius (radius^2),
-        ' then the point is inside or on the edge of the circle.
-
-        ' If the squared distance is greater than > the squared radius, then the point is outside the circle.
-        ' This optimization is particularly useful in performance-critical applications
-        ' such as real-time graphics rendering or physics simulations.
+        ' It uses the squared distance to avoid the computational cost of taking a square root.
+        ' The function returns True if the point is inside or on the edge of the circle,
+        ' and False if the point is outside the circle.
+        ' This approach is efficient because it avoids the need for floating-point operations
+        ' that can be costly in terms of performance, especially in real-time applications.
+        ' The function calculates the horizontal and vertical distances from the point to the center of the circle,
+        ' squares these distances, and sums them to get the squared distance.
+        ' It then compares this squared distance to the squared radius of the circle.
+        ' If the squared distance is less than or equal to the squared radius, the point is inside or on the edge of the circle.
+        ' If the squared distance is greater than the squared radius, the point is outside the circle.
+        ' This method is particularly useful in scenarios where performance is critical,
+        ' such as in graphics rendering or physics simulations, where many distance checks may be performed frequently.
 
     End Function
-
-    Private Sub DrawCircle(e As PaintEventArgs)
-
-        'Dim rect As New Rectangle(CircleCenterPoint.X - CircleRadius,
-        '                          CircleCenterPoint.Y - CircleRadius,
-        '                          CircleRadius * 2, CircleRadius * 2)
-
-        'e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-
-        'e.Graphics.FillEllipse(CircleBrush, rect)
-
-    End Sub
-
-    Private Sub DrawCalculationDetails(e As PaintEventArgs)
-
-        For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.DrawString(textDisplay.Text, Me.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
-        Next
-
-    End Sub
 
 End Class
