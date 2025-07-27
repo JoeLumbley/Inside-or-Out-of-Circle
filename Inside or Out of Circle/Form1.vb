@@ -289,60 +289,9 @@ Public Class Form1
 
     Private Sub DrawCalculationDetails(e As PaintEventArgs)
 
-
         For Each textDisplay As TextDisplay In TextDisplays
             e.Graphics.DrawString(textDisplay.Text, Me.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
         Next
-
-
-
-
-        'e.Graphics.DrawString($"Radius: {CircleRadius}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      10)
-
-        'e.Graphics.DrawString($"Radius²: {RadiusSquared} = {CircleRadius} * {CircleRadius}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      40)
-
-        'e.Graphics.DrawString($"Center: X: {CircleCenterPoint.X}, Y: {CircleCenterPoint.Y}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      70)
-
-        'e.Graphics.DrawString($"Mouse: X: {MousePointerLocation.X}, Y: {MousePointerLocation.Y}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      100)
-
-        'e.Graphics.DrawString($"X Distance: {XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      130)
-
-        'e.Graphics.DrawString($"Y Distance: {YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      160)
-
-        'e.Graphics.DrawString($"Distance²: {DistanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}",
-        '                      Me.Font, Brushes.Black,
-        '                      10,
-        '                      190)
-
-        'e.Graphics.DrawString($"Inside Circle: {IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}",
-        '                      Me.Font,
-        '                      Brushes.Black,
-        '                      10,
-        '                      220)
 
     End Sub
 
