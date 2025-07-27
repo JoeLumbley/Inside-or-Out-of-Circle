@@ -43,8 +43,6 @@ Public Class Form1
             Me.Text = text
             Me.Brush = brush
         End Sub
-
-
     End Structure
 
     Private TextDisplays As New List(Of TextDisplay) From {
@@ -62,9 +60,6 @@ Public Class Form1
         New TextDisplay(0, 0, "Radius: ", Brushes.Black),
         New TextDisplay(0, 0, "Radius²: ", Brushes.Black)
     }
-
-
-
 
     Private CircleCenterPoint As Point = New Point(150, 150)
     Private MousePointerLocation As Point = New Point(0, 0)
@@ -88,8 +83,6 @@ Public Class Form1
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
 
-
-    'RadiusBrush
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         DistancePen = TransparentPen
 
