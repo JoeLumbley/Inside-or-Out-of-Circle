@@ -114,16 +114,16 @@ Public Class Form1
         MousePointBrush = Brushes.Gray
 
         For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td = TextDisplays(i)
 
-            td = TextDisplays(i)
+            Dim td As TextDisplay = TextDisplays(i)
+
             td.Brush = Brushes.Black
             TextDisplays(i) = td
 
         Next
 
+        Invalidate()
 
-        Invalidate() ' Redraw to apply the new pen
     End Sub
 
     Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
@@ -132,20 +132,17 @@ Public Class Form1
         MousePointBrush = Brushes.Transparent
 
         For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td = TextDisplays(i)
 
-            td = TextDisplays(i)
+            Dim td As TextDisplay = TextDisplays(i)
+
             td.Brush = Brushes.Transparent
             TextDisplays(i) = td
 
         Next
 
-
         Invalidate() ' Redraw to apply the new pen
 
     End Sub
-
-
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
