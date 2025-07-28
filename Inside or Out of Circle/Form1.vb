@@ -128,6 +128,13 @@ Public Class Form1
         New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
     }
 
+    Private Enum CircleDisplayIndex
+        Circle = 0
+        RadiusEndPoint = 1
+        CenterPoint = 2
+        MousePoint = 3
+    End Enum
+
     Private CircleCenterPoint As Point = New Point(150, 150)
     Private MousePointerLocation As Point = New Point(0, 0)
     Private CircleRadius As Integer = 300
@@ -245,7 +252,7 @@ Public Class Form1
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
             Select Case i
-                Case 0
+                Case CircleDisplayIndex.Circle
                     ld.X = CircleCenterPoint.X - CircleRadius
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
@@ -289,25 +296,25 @@ Public Class Form1
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
             Select Case i
-                Case 0
+                Case CircleDisplayIndex.Circle
                     ld.X = CircleCenterPoint.X - CircleRadius
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
                     ld.Height = CircleRadius * 2
                     ld.Brush = CircleBrush
-                Case 1
+                Case CircleDisplayIndex.RadiusEndPoint
                     ld.X = CircleCenterPoint.X + CircleRadius - 3
                     ld.Y = CircleCenterPoint.Y - 3
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = Brushes.Transparent
-                Case 2
+                Case CircleDisplayIndex.CenterPoint
                     ld.X = CircleCenterPoint.X - 3
                     ld.Y = CircleCenterPoint.Y - 3
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = Brushes.Transparent
-                Case 3
+                Case CircleDisplayIndex.MousePoint
                     ld.X = MousePointerLocation.X - 3
                     ld.Y = MousePointerLocation.Y - 3
                     ld.Width = 6
@@ -417,25 +424,25 @@ Public Class Form1
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
             Select Case i
-                Case 0
+                Case CircleDisplayIndex.Circle
                     ld.X = CircleCenterPoint.X - CircleRadius
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
                     ld.Height = CircleRadius * 2
                     ld.Brush = CircleBrush
-                Case 1
+                Case CircleDisplayIndex.RadiusEndPoint
                     ld.X = CircleCenterPoint.X + CircleRadius - 3
                     ld.Y = CircleCenterPoint.Y - 3
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = RadiusBrush
-                Case 2
+                Case CircleDisplayIndex.CenterPoint
                     ld.X = CircleCenterPoint.X - 3
                     ld.Y = CircleCenterPoint.Y - 3
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = RadiusBrush
-                Case 3
+                Case CircleDisplayIndex.MousePoint
                     ld.X = MousePointerLocation.X - 3
                     ld.Y = MousePointerLocation.Y - 3
                     ld.Width = 6
@@ -484,7 +491,7 @@ Public Class Form1
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
             Select Case i
-                Case 0
+                Case CircleDisplayIndex.Circle
                     ld.X = CircleCenterPoint.X - CircleRadius
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
