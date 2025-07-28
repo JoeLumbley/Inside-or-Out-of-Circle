@@ -135,8 +135,8 @@ Public Class Form1
         MousePoint = 3
     End Enum
 
-    Private CircleCenterPoint As Point = New Point(150, 150)
-    Private MousePointerLocation As Point = New Point(0, 0)
+    Private CircleCenterPoint As New Point(150, 150)
+    Private MousePointerLocation As New Point(0, 0)
     Private CircleRadius As Integer = 300
     Private IsPointerInsideCircle As Boolean = False
     Private DistanceSquared As Double
@@ -185,7 +185,7 @@ Public Class Form1
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
             Select Case i
-                Case 0
+                Case CircleDisplayIndex.Circle
                     ld.X = CircleCenterPoint.X - CircleRadius
                     ld.Y = CircleCenterPoint.Y - CircleRadius
                     ld.Width = CircleRadius * 2
