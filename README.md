@@ -2,7 +2,7 @@
 
 The **Inside or Out of Circle** application is an interactive educational tool designed to demonstrate and explore the concept of hit detection using squared distance calculations. This app provides a visual and engaging way to understand how proximity to a defined area (in this case, a circle) can be quantified and represented graphically.
 
-<img width="1920" height="1080" alt="009" src="https://github.com/user-attachments/assets/f1e87d4c-ab24-466a-8b36-9d23a521fef0" />
+<img width="1920" height="1080" alt="010" src="https://github.com/user-attachments/assets/89f892f4-b211-43f0-98b8-712706c714cb" />
 
 ### Key Features
 
