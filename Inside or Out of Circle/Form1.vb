@@ -121,10 +121,14 @@ Public Class Form1
         End Sub
     End Structure
 
+
+    Private MouseHilightBrush As New SolidBrush(Color.FromArgb(128, Color.Yellow))
+
     Private CircleDisplays As New List(Of CircleDisplay) From {
         New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
         New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
         New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+        New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
         New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
     }
 
@@ -132,7 +136,8 @@ Public Class Form1
         Circle = 0
         RadiusEndPoint = 1
         CenterPoint = 2
-        MousePoint = 3
+        MouseHight = 3
+        MousePoint = 4
     End Enum
 
     Private CircleCenterPoint As New Point(150, 150)
@@ -154,9 +159,12 @@ Public Class Form1
     Private XDistance As Double = 0
     Private YDistance As Double = 0
     Private MousePointBrush As SolidBrush = Brushes.Gray
+
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
     Private CombinedText As String = String.Empty
+
+    Private HeadingDisplay As New TextDisplay(10, 10, "Inside or Out of Circle", Brushes.Black)
 
 
     Dim circleInfo = TextDisplays
@@ -308,28 +316,34 @@ Public Class Form1
             Dim ld = CircleDisplays(i)
             Select Case i
                 Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
+                    'ld.X = CircleCenterPoint.X - CircleRadius
+                    'ld.Y = CircleCenterPoint.Y - CircleRadius
+                    'ld.Width = CircleRadius * 2
+                    'ld.Height = CircleRadius * 2
                     ld.Brush = CircleBrush
                 Case CircleDisplayIndex.RadiusEndPoint
-                    ld.X = CircleCenterPoint.X + CircleRadius - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
+                    'ld.X = CircleCenterPoint.X + CircleRadius - 3
+                    'ld.Y = CircleCenterPoint.Y - 3
+                    'ld.Width = 6
+                    'ld.Height = 6
                     ld.Brush = Brushes.Transparent
                 Case CircleDisplayIndex.CenterPoint
-                    ld.X = CircleCenterPoint.X - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
+                    'ld.X = CircleCenterPoint.X - 3
+                    'ld.Y = CircleCenterPoint.Y - 3
+                    'ld.Width = 6
+                    'ld.Height = 6
                     ld.Brush = Brushes.Transparent
                 Case CircleDisplayIndex.MousePoint
-                    ld.X = MousePointerLocation.X - 3
-                    ld.Y = MousePointerLocation.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
+                    'ld.X = MousePointerLocation.X - 3
+                    'ld.Y = MousePointerLocation.Y - 3
+                    'ld.Width = 6
+                    'ld.Height = 6
+                    ld.Brush = Brushes.Transparent
+                Case CircleDisplayIndex.MouseHight
+                    'ld.X = MousePointerLocation.X - 3
+                    'ld.Y = MousePointerLocation.Y - 3
+                    'ld.Width = 6
+                    'ld.Height = 6
                     ld.Brush = Brushes.Transparent
 
             End Select
@@ -471,6 +485,12 @@ Public Class Form1
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = MousePointBrush
+                Case CircleDisplayIndex.MouseHight
+                    ld.X = MousePointerLocation.X - 20
+                    ld.Y = MousePointerLocation.Y - 20
+                    ld.Width = 40
+                    ld.Height = 40
+                    ld.Brush = MouseHilightBrush
 
             End Select
 
@@ -491,7 +511,8 @@ Public Class Form1
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
         Next
 
-        e.Graphics.FillEllipse(New SolidBrush(Color.FromArgb(128, Color.Yellow)), MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40)
+        ' Draw mouse highlight 
+        'e.Graphics.FillEllipse(MouseHilightBrush, MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40)
 
         For Each lineDisplay As LineDisplay In LineDisplays
             e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
