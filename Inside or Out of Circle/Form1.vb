@@ -487,9 +487,14 @@ Public Class Form1
 
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
+
+
         For Each circleDisplay As CircleDisplay In CircleDisplays
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
         Next
+
+        e.Graphics.FillEllipse(New SolidBrush(Color.FromArgb(128, Color.Yellow)), MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40)
+
 
         For Each lineDisplay As LineDisplay In LineDisplays
             e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
