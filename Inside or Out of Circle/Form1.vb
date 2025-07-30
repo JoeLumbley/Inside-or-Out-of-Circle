@@ -516,13 +516,28 @@ Public Class Form1
                 Case TextDisplayIndex.Footer
 
 
+
+
+
+                    td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
+                    td.Brush = Brushes.Black
+                    td.FontSize = FooterFontSize
+                    Dim graphicsUni As Graphics = CreateGraphics()
+                    Dim ThisFontWidth As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Width
+                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Height
+
+                    td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
+                    'td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisFontHeight \ 2)
+                    'td.Y = ClientSize.Height - ThisFontHeight - 10
+                    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisFontHeight \ 2)
+
             End Select
 
             TextDisplays(i) = td
 
         Next
 
-        CombinedText = String.Join(Environment.NewLine, TextDisplays.Select(Function(td) td.Text))
+        'CombinedText = String.Join(Environment.NewLine, TextDisplays.Select(Function(td) td.Text))
 
         '    circleInfo = New TextDisplays.Where(Function(td, i) i <= TextDisplayIndex.Center).Select(Function(td) td.Text)
         '    mouseInfo = TextDisplays.Where(Function(td, i) i >= TextDisplayIndex.Mouse AndAlso i <= TextDisplayIndex.DistanceSquared).Select(Function(td) td.Text)
@@ -664,6 +679,7 @@ Public Class Form1
 
         CenterFontSize = Math.Max(5, Me.ClientSize.Width \ 50)
         HeadingFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
+        FooterFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
 
 
         For i As Integer = 0 To TextDisplays.Count - 1
