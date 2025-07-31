@@ -150,16 +150,12 @@ Public Class Form1
     Private RadiusBrush As SolidBrush = Brushes.Gray
     Private CombinedText As String = String.Empty
 
-    'Private HeadingDisplay As New TextDisplay(10, 10, "Inside or Out of Circle", Brushes.Black)
-
-
     Dim circleInfo = TextDisplays
     Dim mouseInfo = TextDisplays
     Dim resultInfo = TextDisplays
 
     Dim groupedText As String = String.Empty
 
-    'Private Font As New Font("Segoe UI", 10)
     Private ThisFontSize As Integer = 10
     Private HeadingFontSize As Integer = 16
     Private MouseFontSize As Integer = 12
@@ -169,9 +165,6 @@ Public Class Form1
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
-
-        'StartPosition = FormStartPosition.CenterScreen
-        'ClientSize = New Size(800, 600)
 
         DistancePen = TransparentPen
 
@@ -195,7 +188,6 @@ Public Class Form1
                     td.Brush = Brushes.Transparent
             End Select
 
-            'td.Brush = Brushes.Transparent
             TextDisplays(i) = td
 
         Next
@@ -347,19 +339,7 @@ Public Class Form1
 
             End Select
 
-
-
         Next
-
-        'For i As Integer = 0 To LineDisplays.Count - 1
-
-        '    Dim ld As LineDisplay = LineDisplays(i)
-
-        '    ld.Pen = Pens.Transparent
-
-        '    LineDisplays(i) = ld
-
-        'Next
 
         For i As Integer = 0 To LineDisplays.Count - 1
 
@@ -380,47 +360,6 @@ Public Class Form1
             End Select
             LineDisplays(i) = ld
         Next
-
-
-        'For i As Integer = 0 To CircleDisplays.Count - 1
-        '    Dim ld = CircleDisplays(i)
-        '    Select Case i
-        '        Case CircleDisplayIndex.Circle
-        '            'ld.X = CircleCenterPoint.X - CircleRadius
-        '            'ld.Y = CircleCenterPoint.Y - CircleRadius
-        '            'ld.Width = CircleRadius * 2
-        '            'ld.Height = CircleRadius * 2
-        '            ld.Brush = CircleBrush
-        '        Case CircleDisplayIndex.RadiusEndPoint
-        '            'ld.X = CircleCenterPoint.X + CircleRadius - 3
-        '            'ld.Y = CircleCenterPoint.Y - 3
-        '            'ld.Width = 6
-        '            'ld.Height = 6
-        '            ld.Brush = Brushes.Transparent
-        '        Case CircleDisplayIndex.CenterPoint
-        '            'ld.X = CircleCenterPoint.X - 3
-        '            'ld.Y = CircleCenterPoint.Y - 3
-        '            'ld.Width = 6
-        '            'ld.Height = 6
-        '            ld.Brush = Brushes.Transparent
-        '        Case CircleDisplayIndex.MousePoint
-        '            'ld.X = MousePointerLocation.X - 3
-        '            'ld.Y = MousePointerLocation.Y - 3
-        '            'ld.Width = 6
-        '            'ld.Height = 6
-        '            ld.Brush = Brushes.Transparent
-        '        Case CircleDisplayIndex.MouseHight
-        '            'ld.X = MousePointerLocation.X - 3
-        '            'ld.Y = MousePointerLocation.Y - 3
-        '            'ld.Width = 6
-        '            'ld.Height = 6
-        '            ld.Brush = Brushes.Transparent
-
-        '    End Select
-
-        '    CircleDisplays(i) = ld
-
-        'Next
 
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
@@ -454,7 +393,6 @@ Public Class Form1
 
         Next
 
-
         Invalidate()
 
     End Sub
@@ -467,7 +405,6 @@ Public Class Form1
         IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
         MousePointBrush = If(IsPointerInsideCircle, Brushes.LimeGreen, Brushes.Tomato)
         CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
-        'MouseHilightBrush = If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.Yellow)), New SolidBrush(Color.FromArgb(255, Color.LightGray)))
 
         XDistance = MousePointerLocation.X - CircleCenterPoint.X
         YDistance = MousePointerLocation.Y - CircleCenterPoint.Y
@@ -515,10 +452,6 @@ Public Class Form1
 
                 Case TextDisplayIndex.Footer
 
-
-
-
-
                     td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
                     td.Brush = Brushes.Black
                     td.FontSize = FooterFontSize
@@ -527,8 +460,6 @@ Public Class Form1
                     Dim ThisFontHeight As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Height
 
                     td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
-                    'td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisFontHeight \ 2)
-                    'td.Y = ClientSize.Height - ThisFontHeight - 10
                     td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisFontHeight \ 2)
 
             End Select
@@ -536,18 +467,6 @@ Public Class Form1
             TextDisplays(i) = td
 
         Next
-
-        'CombinedText = String.Join(Environment.NewLine, TextDisplays.Select(Function(td) td.Text))
-
-        '    circleInfo = New TextDisplays.Where(Function(td, i) i <= TextDisplayIndex.Center).Select(Function(td) td.Text)
-        '    mouseInfo = TextDisplays.Where(Function(td, i) i >= TextDisplayIndex.Mouse AndAlso i <= TextDisplayIndex.DistanceSquared).Select(Function(td) td.Text)
-        '    resultInfo = TextDisplays.Where(Function(td, i) i >= TextDisplayIndex.InsideCircle).Select(Function(td) td.Text)
-
-        '    groupedText = String.Join(Environment.NewLine & Environment.NewLine,
-        '{String.Join(Environment.NewLine, circleInfo),
-        ' String.Join(Environment.NewLine, mouseInfo),
-        ' String.Join(Environment.NewLine, resultInfo)})
-
 
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
@@ -640,21 +559,6 @@ Public Class Form1
             e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
             e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", textDisplay.FontSize), textDisplay.Brush, textDisplay.X, textDisplay.Y)
         Next
-
-        'e.Graphics.DrawString(CombinedText, New Font("Segoe UI", 10), Brushes.Black, 20, 20)
-        'e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
-        'Dim FontHeight As Single = e.Graphics.MeasureString($"Radius² {RadiusSquared}", New Font("Segoe UI", fontSize)).Height
-        'e.Graphics.DrawString($"Radius²: {RadiusSquared}", New Font("Segoe UI", fontSize), Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - FontHeight \ 4)
-        'e.Graphics.DrawString($"Radius² {RadiusSquared}", New Font("Segoe UI", fontSize), Brushes.Black, CircleCenterPoint.X + CircleRadius + 10, CircleCenterPoint.Y - FontHeight \ 2)
-
-        'FontHeight = e.Graphics.MeasureString($"Distance² {DistanceSquared}", New Font("Segoe UI", fontSize)).Height
-
-        'e.Graphics.DrawString($"Distance² {DistanceSquared}", New Font("Segoe UI", fontSize), Brushes.Black, MousePointerLocation.X + 30, MousePointerLocation.Y - FontHeight \ 2)
-
-
-        'FontHeight = e.Graphics.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", fontSize)).Height
-        'Dim FontWidth As Single = e.Graphics.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", fontSize)).Width
-        'e.Graphics.DrawString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", fontSize), Brushes.Black, ClientSize.Width \ 2 - FontWidth \ 2, 20)
 
     End Sub
 
