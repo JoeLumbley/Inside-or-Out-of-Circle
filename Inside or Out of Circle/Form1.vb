@@ -38,21 +38,31 @@ Public Class Form1
         Public Text As String
         Public Brush As SolidBrush
         Public FontSize As Integer
-        Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush, fontSize As Integer)
+        Public Font As Font
+        Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush, fontSize As Integer, font As Font)
             Me.X = x
             Me.Y = y
             Me.Text = text
             Me.Brush = brush
             Me.FontSize = fontSize
+            Me.Font = font
         End Sub
+
+        'Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush, fontSize As Integer)
+        '    Me.X = x
+        '    Me.Y = y
+        '    Me.Text = text
+        '    Me.Brush = brush
+        '    Me.FontSize = fontSize
+        'End Sub
     End Structure
 
     Private TextDisplays As New List(Of TextDisplay) From {
-        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10),
-        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10),
-        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10),
-        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10),
-        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10)
+        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
     }
 
     Private Enum TextDisplayIndex
@@ -163,8 +173,11 @@ Public Class Form1
     Private CenterFontSize As Integer = 12
     Private FooterFontSize As Integer = 10
 
+    Private gridPen As New Pen(Color.PowderBlue, 1)
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+        gridPen = Pens.Transparent
 
         DistancePen = TransparentPen
 
@@ -411,62 +424,122 @@ Public Class Form1
         DistanceSquared = XDistance * XDistance + YDistance * YDistance
 
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Heading
-                    td.Text = $"Inside Circle {IsPointerInsideCircle}"
-                    td.Brush = Brushes.Black
-                    td.FontSize = HeadingFontSize
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontWidth As Single = graphicsUni.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", HeadingFontSize)).Width
-                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", HeadingFontSize)).Height
+        'For i As Integer = 0 To TextDisplays.Count - 1
+        '    Dim td = TextDisplays(i)
+        '    Select Case i
+        '        Case TextDisplayIndex.Heading
+        '            td.Text = $"Inside Circle {IsPointerInsideCircle}"
+        '            td.Brush = Brushes.Black
+        '            td.FontSize = HeadingFontSize
+        '            Dim graphicsUni As Graphics = CreateGraphics()
+        '            Dim ThisFontWidth As Single = graphicsUni.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", HeadingFontSize)).Width
+        '            Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Inside Circle {IsPointerInsideCircle}", New Font("Segoe UI", HeadingFontSize)).Height
 
-                    td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
-                    td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisFontHeight \ 2)
+        '            td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
+        '            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisFontHeight \ 2)
 
-                Case TextDisplayIndex.Mouse
-                    td.Text = $"Distance² {DistanceSquared}"
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Distance² {DistanceSquared}", New Font("Segoe UI", MouseFontSize)).Height
-                    td.FontSize = MouseFontSize
-                    td.X = MousePointerLocation.X + 30
+        '        Case TextDisplayIndex.Mouse
+        '            td.Text = $"Distance² {DistanceSquared}"
+        '            Dim graphicsUni As Graphics = CreateGraphics()
+        '            Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Distance² {DistanceSquared}", New Font("Segoe UI", MouseFontSize)).Height
+        '            td.FontSize = MouseFontSize
+        '            td.X = MousePointerLocation.X + 30
 
-                    td.Y = MousePointerLocation.Y - ThisFontHeight \ 2
-                Case TextDisplayIndex.Radius
-                    td.Text = $"Radius² {RadiusSquared}"
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Radius² {RadiusSquared}", New Font("Segoe UI", RadiusFontSize)).Height
-                    td.FontSize = RadiusFontSize
+        '            td.Y = MousePointerLocation.Y - ThisFontHeight \ 2
+        '        Case TextDisplayIndex.Radius
+        '            td.Text = $"Radius² {RadiusSquared}"
+        '            Dim graphicsUni As Graphics = CreateGraphics()
+        '            Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Radius² {RadiusSquared}", New Font("Segoe UI", RadiusFontSize)).Height
+        '            td.FontSize = RadiusFontSize
 
-                    td.X = CircleCenterPoint.X + CircleRadius + 10
-                    td.Y = CircleCenterPoint.Y - ThisFontHeight \ 2
-                Case TextDisplayIndex.Center
-                    td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontWidth As Single = graphicsUni.MeasureString($"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}", New Font("Segoe UI", CenterFontSize)).Width
-                    td.FontSize = CenterFontSize
+        '            td.X = CircleCenterPoint.X + CircleRadius + 10
+        '            td.Y = CircleCenterPoint.Y - ThisFontHeight \ 2
+        '        Case TextDisplayIndex.Center
+        '            td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+        '            Dim graphicsUni As Graphics = CreateGraphics()
+        '            Dim ThisFontWidth As Single = graphicsUni.MeasureString($"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}", New Font("Segoe UI", CenterFontSize)).Width
+        '            td.FontSize = CenterFontSize
 
-                    td.X = CircleCenterPoint.X - ThisFontWidth \ 2
-                    td.Y = CircleCenterPoint.Y
+        '            td.X = CircleCenterPoint.X - ThisFontWidth \ 2
+        '            td.Y = CircleCenterPoint.Y
 
-                Case TextDisplayIndex.Footer
+        '        Case TextDisplayIndex.Footer
 
-                    td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
-                    td.Brush = Brushes.Black
-                    td.FontSize = FooterFontSize
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontWidth As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Width
-                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Height
+        '            td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
+        '            td.Brush = Brushes.Black
+        '            td.FontSize = FooterFontSize
+        '            Dim graphicsUni As Graphics = CreateGraphics()
+        '            Dim ThisFontWidth As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Width
+        '            Dim ThisFontHeight As Single = graphicsUni.MeasureString($"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}", New Font("Segoe UI", FooterFontSize)).Height
 
-                    td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
-                    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisFontHeight \ 2)
+        '            td.X = ClientSize.Width \ 2 - ThisFontWidth \ 2
+        '            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisFontHeight \ 2)
 
-            End Select
+        '    End Select
 
-            TextDisplays(i) = td
+        '    TextDisplays(i) = td
 
-        Next
+        'Next
+
+
+        ' Predefine fonts for reuse
+        Dim headingFont As New Font("Segoe UI", HeadingFontSize)
+        Dim mouseFont As New Font("Segoe UI", MouseFontSize)
+        Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
+        Dim centerFont As New Font("Segoe UI", CenterFontSize)
+        Dim footerFont As New Font("Segoe UI", FooterFontSize)
+
+        Using g As Graphics = CreateGraphics()
+            For i As Integer = 0 To TextDisplays.Count - 1
+                Dim td = TextDisplays(i)
+
+                Select Case i
+                    Case TextDisplayIndex.Heading
+                        td.Text = $"Inside Circle {IsPointerInsideCircle}"
+                        td.Brush = Brushes.Black
+                        td.FontSize = HeadingFontSize
+                        Dim size = g.MeasureString(td.Text, headingFont)
+                        td.X = ClientSize.Width \ 2 - size.Width \ 2
+                        td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (size.Height \ 2)
+                        td.Font = headingFont
+                    Case TextDisplayIndex.Mouse
+                        td.Text = $"Distance² {DistanceSquared}"
+                        td.FontSize = MouseFontSize
+                        Dim size = g.MeasureString(td.Text, mouseFont)
+                        td.X = MousePointerLocation.X + 30
+                        td.Y = MousePointerLocation.Y - size.Height \ 2
+                        td.Font = mouseFont
+
+                    Case TextDisplayIndex.Radius
+                        td.Text = $"Radius² {RadiusSquared}"
+                        td.FontSize = RadiusFontSize
+                        Dim size = g.MeasureString(td.Text, radiusFont)
+                        td.X = CircleCenterPoint.X + CircleRadius + 10
+                        td.Y = CircleCenterPoint.Y - size.Height \ 2
+                        td.Font = radiusFont
+
+                    Case TextDisplayIndex.Center
+                        td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+                        td.FontSize = CenterFontSize
+                        Dim size = g.MeasureString(td.Text, centerFont)
+                        td.X = CircleCenterPoint.X - size.Width \ 2
+                        td.Y = CircleCenterPoint.Y
+                        td.Font = centerFont
+
+                    Case TextDisplayIndex.Footer
+                        td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
+                        td.Brush = Brushes.Black
+                        td.FontSize = FooterFontSize
+                        Dim size = g.MeasureString(td.Text, footerFont)
+                        td.X = ClientSize.Width \ 2 - size.Width \ 2
+                        td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
+                        td.Font = footerFont
+
+                End Select
+
+                TextDisplays(i) = td
+            Next
+        End Using
 
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
@@ -542,24 +615,61 @@ Public Class Form1
 
     End Sub
 
+    'Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    '    MyBase.OnPaint(e)
+
+    '    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+    '    For Each circleDisplay As CircleDisplay In CircleDisplays
+    '        e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+    '    Next
+
+    '    For Each lineDisplay As LineDisplay In LineDisplays
+    '        e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+    '    Next
+
+    '    For Each textDisplay As TextDisplay In TextDisplays
+    '        e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+    '        e.Graphics.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+    '    Next
+
+    'End Sub
+
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+
+        ' 🟢 Draw filled circles
         For Each circleDisplay As CircleDisplay In CircleDisplays
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
         Next
 
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
+
+        ' 🔲 Draw grid (light gray lines every 20 pixels)
+        'Dim gridPen As New Pen(Color.PowderBlue, 1)
+        For x As Integer = 0 To ClientSize.Width Step 20
+            e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+        Next
+        For y As Integer = 0 To ClientSize.Height Step 20
+            e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+        Next
+
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+
+        ' 📏 Draw lines
         For Each lineDisplay As LineDisplay In LineDisplays
             e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
         Next
 
+        ' 🔤 Draw text overlays
         For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
-            e.Graphics.DrawString(textDisplay.Text, New Font("Segoe UI", textDisplay.FontSize), textDisplay.Brush, textDisplay.X, textDisplay.Y)
+            e.Graphics.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
         Next
-
     End Sub
 
     Protected Overrides Sub OnResize(e As EventArgs)
@@ -581,26 +691,49 @@ Public Class Form1
         HeadingFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
         FooterFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td = TextDisplays(i)
-            Select Case i
+        'For i As Integer = 0 To TextDisplays.Count - 1
+        '    Dim td = TextDisplays(i)
 
-                Case TextDisplayIndex.Radius
-                    'td.Text = $"Radius: {CircleRadius}"
+        '    Dim g As Graphics = CreateGraphics()
+        '    Dim ThisFontHeight As Single
+
+        '    Select Case i
+        '        Case TextDisplayIndex.Radius
+        '            'td.Text = $"Radius: {CircleRadius}"
+        '            td.Text = $"Radius² {RadiusSquared}"
+
+        '            ThisFontHeight = g.MeasureString($"Radius² {RadiusSquared}", New Font("Segoe UI", RadiusFontSize)).Height
+
+        '            td.FontSize = RadiusFontSize
+
+        '            td.X = CircleCenterPoint.X + CircleRadius + 10
+        '            td.Y = CircleCenterPoint.Y - ThisFontHeight \ 2
+
+        '    End Select
+
+        '    TextDisplays(i) = td
+
+        'Next
+
+        Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
+
+        Using g As Graphics = CreateGraphics()
+            For i As Integer = 0 To TextDisplays.Count - 1
+                Dim td = TextDisplays(i)
+
+                If i = TextDisplayIndex.Radius Then
                     td.Text = $"Radius² {RadiusSquared}"
 
-                    Dim graphicsUni As Graphics = CreateGraphics()
-                    Dim ThisFontHeight As Single = graphicsUni.MeasureString($"Radius² {RadiusSquared}", New Font("Segoe UI", RadiusFontSize)).Height
+                    Dim ThisFontHeight As Single = g.MeasureString(td.Text, radiusFont).Height
                     td.FontSize = RadiusFontSize
-
+                    td.Font = New Font("Segoe UI", RadiusFontSize)
                     td.X = CircleCenterPoint.X + CircleRadius + 10
                     td.Y = CircleCenterPoint.Y - ThisFontHeight \ 2
+                End If
 
-            End Select
-
-            TextDisplays(i) = td
-
-        Next
+                TextDisplays(i) = td
+            Next
+        End Using
 
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
