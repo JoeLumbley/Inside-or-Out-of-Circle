@@ -165,6 +165,15 @@ Public Class Form1
 
     Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
+
+    Private Enum ViewStateIndex
+        Overview
+        ParametersView
+    End Enum
+
+    Private ViewState As ViewStateIndex = ViewStateIndex.Overview
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         gridPen = Pens.Transparent
@@ -403,6 +412,14 @@ Public Class Form1
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
 
+        If ViewState = ViewStateIndex.Overview Then
+            gridPen = Pens.Transparent
+        Else
+            gridPen = Pens.LightGray
+
+        End If
+
+
         MousePointerLocation = e.Location
 
         IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
@@ -441,7 +458,13 @@ Public Class Form1
                         td.Font = mouseFont
 
                     Case TextDisplayIndex.Radius
-                        td.Text = $"Radius² {RadiusSquared}"
+                        If ViewState = ViewStateIndex.Overview Then
+                            td.Text = $"Radius² {RadiusSquared}"
+                        Else
+                            td.Text = $"Radius {CircleRadius}"
+                        End If
+
+                        'td.Text = $"Radius² {RadiusSquared}"
                         td.FontSize = RadiusFontSize
                         Dim size = g.MeasureString(td.Text, radiusFont)
                         td.X = CircleCenterPoint.X + CircleRadius + 10
@@ -617,7 +640,13 @@ Public Class Form1
                 Dim td = TextDisplays(i)
 
                 If i = TextDisplayIndex.Radius Then
-                    td.Text = $"Radius² {RadiusSquared}"
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Text = $"Radius² {RadiusSquared}"
+                    Else
+                        td.Text = $"Radius {CircleRadius}"
+                    End If
+
+                    'td.Text = $"Radius² {RadiusSquared}"
 
                     Dim ThisFontHeight As Single = g.MeasureString(td.Text, radiusFont).Height
                     td.FontSize = RadiusFontSize
@@ -722,4 +751,31 @@ Public Class Form1
 
     End Function
 
+    Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
+        ViewState = ViewStateIndex.Overview
+        Invalidate()
+
+    End Sub
+
+    Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
+        ViewState = ViewStateIndex.ParametersView
+        ' Update the text display for the radius in ParametersView
+        For i As Integer = 0 To TextDisplays.Count - 1
+            Dim td As TextDisplay = TextDisplays(i)
+            If i = TextDisplayIndex.Radius Then
+                If ViewState = ViewStateIndex.Overview Then
+                    td.Text = $"Radius² {RadiusSquared}"
+                Else
+                    td.Text = $"Radius {CircleRadius}"
+                End If
+                td.Brush = Brushes.Black
+            Else
+                td.Brush = Brushes.Transparent
+            End If
+            TextDisplays(i) = td
+        Next
+
+        Invalidate()
+
+    End Sub
 End Class
