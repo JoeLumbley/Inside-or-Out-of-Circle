@@ -1,5 +1,4 @@
-﻿
-' Inside or Out of Circle
+﻿' Inside or Out of Circle
 
 ' This program demonstrates how to determine if a point is inside or outside a circle.
 ' It calculates the squared distance from the point to the center of the circle
@@ -108,7 +107,6 @@ Public Class Form1
             Me.Brush = brush
         End Sub
     End Structure
-
 
     Private MouseHilightBrush As New SolidBrush(Color.FromArgb(128, Color.Yellow))
 
@@ -682,7 +680,6 @@ Public Class Form1
                     ld.Width = 6
                     ld.Height = 6
                     ld.Brush = RadiusBrush
-
 
             End Select
 
