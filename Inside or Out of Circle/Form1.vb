@@ -787,12 +787,13 @@ Public Class Form1
             TextDisplays(i) = td
         Next
 
-        UpdateGridBrush()
+        UpdateGridPen()
 
     End Sub
 
     ' update the grid brush in ParametersView
-    Private Sub UpdateGridBrush()
+    Private Sub UpdateGridPen()
+
         ' Update the grid pen based on the current view state
         If ViewState = ViewStateIndex.Overview Then
             gridPen = Pens.Transparent
