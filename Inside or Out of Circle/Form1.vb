@@ -753,12 +753,24 @@ Public Class Form1
 
     Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
         ViewState = ViewStateIndex.Overview
+
+        UpdateView()
+
         Invalidate()
 
     End Sub
 
     Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
         ViewState = ViewStateIndex.ParametersView
+
+        UpdateView()
+
+        Invalidate()
+
+    End Sub
+
+    Private Sub UpdateView()
+
         ' Update the text display for the radius in ParametersView
         For i As Integer = 0 To TextDisplays.Count - 1
             Dim td As TextDisplay = TextDisplays(i)
@@ -775,7 +787,19 @@ Public Class Form1
             TextDisplays(i) = td
         Next
 
-        Invalidate()
+        UpdateGridBrush()
 
     End Sub
+
+    ' update the grid brush in ParametersView
+    Private Sub UpdateGridBrush()
+        ' Update the grid pen based on the current view state
+        If ViewState = ViewStateIndex.Overview Then
+            gridPen = Pens.Transparent
+        Else
+            gridPen = Pens.LightGray
+        End If
+
+    End Sub
+
 End Class
