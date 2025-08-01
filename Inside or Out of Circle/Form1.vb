@@ -173,7 +173,7 @@ Public Class Form1
     Private CenterFontSize As Integer = 12
     Private FooterFontSize As Integer = 10
 
-    Private gridPen As New Pen(Color.PowderBlue, 1)
+    Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 
@@ -638,6 +638,16 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
+
+        ' 🔲 Draw grid (light gray lines every 20 pixels)
+        'Dim gridPen As New Pen(Color.PowderBlue, 1)
+        For x As Integer = 0 To ClientSize.Width Step 50
+            e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+        Next
+        For y As Integer = 0 To ClientSize.Height Step 50
+            e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+        Next
 
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
@@ -647,18 +657,8 @@ Public Class Form1
             e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
         Next
 
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
 
-        ' 🔲 Draw grid (light gray lines every 20 pixels)
-        'Dim gridPen As New Pen(Color.PowderBlue, 1)
-        For x As Integer = 0 To ClientSize.Width Step 20
-            e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
-        Next
-        For y As Integer = 0 To ClientSize.Height Step 20
-            e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-        Next
-
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        'e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
 
         ' 📏 Draw lines
@@ -674,6 +674,18 @@ Public Class Form1
 
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
+
+        ParametersViewButton.Left = Me.ClientSize.Width - 100
+        ParametersViewButton.Top = Me.ClientSize.Height - 100
+        ParametersViewButton.Width = 90
+        ParametersViewButton.Height = 90
+
+        OverviewButton.Left = Me.ClientSize.Width - 200
+        OverviewButton.Top = Me.ClientSize.Height - 100
+        OverviewButton.Width = 90
+        OverviewButton.Height = 90
+
+
 
         CircleCenterPoint = New Point(Me.ClientSize.Width \ 2, Me.ClientSize.Height \ 2)
 
