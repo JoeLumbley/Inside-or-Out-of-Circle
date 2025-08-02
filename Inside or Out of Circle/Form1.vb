@@ -341,15 +341,27 @@ Public Class Form1
 
         For i As Integer = 0 To TextDisplays.Count - 1
 
+            Dim td As TextDisplay = TextDisplays(i)
+
             Select Case i
                 Case TextDisplayIndex.Radius
+                Case TextDisplayIndex.Center
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    Else
+                        td.Brush = Brushes.Black
+
+                    End If
+
+
+
                 Case Else
-                    Dim td As TextDisplay = TextDisplays(i)
 
                     td.Brush = Brushes.Transparent
-                    TextDisplays(i) = td
 
             End Select
+
+            TextDisplays(i) = td
 
         Next
 
@@ -641,11 +653,23 @@ Public Class Form1
         HeadingFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
         FooterFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
 
+
+        'UpdateView()
+
+
+
+
+
         Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
 
         Using g As Graphics = CreateGraphics()
             For i As Integer = 0 To TextDisplays.Count - 1
                 Dim td = TextDisplays(i)
+
+
+
+
+
 
                 If i = TextDisplayIndex.Radius Then
                     If ViewState = ViewStateIndex.Overview Then
@@ -662,6 +686,27 @@ Public Class Form1
                     td.X = CircleCenterPoint.X + CircleRadius + 10
                     td.Y = CircleCenterPoint.Y - ThisFontHeight \ 2
                 End If
+
+                If i = TextDisplayIndex.Center Then
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+                        td.Brush = Brushes.Transparent
+
+                    Else
+                        td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+                        td.Brush = Brushes.Black
+
+                    End If
+                    Dim centerFont As New Font("Segoe UI", CenterFontSize)
+
+                    td.FontSize = CenterFontSize
+                    Dim size = g.MeasureString(td.Text, centerFont)
+                    td.X = CircleCenterPoint.X - size.Width \ 2
+                    td.Y = CircleCenterPoint.Y
+                    td.Font = centerFont
+
+                End If
+
 
                 TextDisplays(i) = td
             Next
@@ -973,7 +1018,7 @@ Public Class Form1
             For i As Integer = 0 To TextDisplays.Count - 1
                 Dim td As TextDisplay = TextDisplays(i)
 
-                If i = TextDisplayIndex.Heading AndAlso ViewState = ViewStateIndex.ParametersView Then
+                If i = TextDisplayIndex.Heading AndAlso ViewState = ViewStateIndex.Overview Then
                     td.Text = $"Inside Circle {IsPointerInsideCircle}"
                     td.Brush = Brushes.Black
                     td.FontSize = HeadingFontSize
@@ -981,6 +1026,16 @@ Public Class Form1
                     td.X = ClientSize.Width \ 2 - size.Width \ 2
                     td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (size.Height \ 2)
                     td.Font = headingFont
+
+                ElseIf i = TextDisplayIndex.Heading AndAlso ViewState = ViewStateIndex.ParametersView Then
+                    td.Text = $"Parameters"
+                    td.Brush = Brushes.Black
+                    td.FontSize = HeadingFontSize
+                    Dim size = g.MeasureString(td.Text, headingFont)
+                    td.X = ClientSize.Width \ 2 - size.Width \ 2
+                    td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (size.Height \ 2)
+                    td.Font = headingFont
+
                 ElseIf i = TextDisplayIndex.Mouse AndAlso ViewState = ViewStateIndex.Overview Then
                     td.Text = $"Distance² {DistanceSquared}"
                     td.Brush = Brushes.Black
@@ -1021,7 +1076,7 @@ Public Class Form1
                     td.Y = CircleCenterPoint.Y
                     td.Font = centerFont
 
-                ElseIf i = TextDisplayIndex.Footer Then
+                ElseIf i = TextDisplayIndex.Footer AndAlso ViewState = ViewStateIndex.Overview Then
                     td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
                     td.Brush = Brushes.Black
                     td.FontSize = FooterFontSize
@@ -1029,6 +1084,15 @@ Public Class Form1
                     td.X = ClientSize.Width \ 2 - size.Width \ 2
                     td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
                     td.Font = footerFont
+                ElseIf i = TextDisplayIndex.Footer AndAlso ViewState = ViewStateIndex.ParametersView Then
+                    td.Text = $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}"
+                    td.Brush = Brushes.Transparent
+                    td.FontSize = FooterFontSize
+                    Dim size = g.MeasureString(td.Text, footerFont)
+                    td.X = ClientSize.Width \ 2 - size.Width \ 2
+                    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
+                    td.Font = footerFont
+
                 ElseIf i = TextDisplayIndex.Radius AndAlso ViewState = ViewStateIndex.ParametersView Then
                     ' Update the radius text display in ParametersView
                     td.Text = $"Radius {CircleRadius}"
@@ -1063,6 +1127,7 @@ Public Class Form1
             Next
 
         End Using
+
 
         UpdateGridPen()
 
