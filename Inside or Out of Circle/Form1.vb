@@ -154,9 +154,9 @@ Public Class Form1
     Dim mouseInfo = TextDisplays
     Dim resultInfo = TextDisplays
 
-    Dim groupedText As String = String.Empty
+    'Dim groupedText As String = String.Empty
 
-    Private ThisFontSize As Integer = 10
+    'Private ThisFontSize As Integer = 10
     Private HeadingFontSize As Integer = 16
     Private MouseFontSize As Integer = 12
     Private RadiusFontSize As Integer = 12
@@ -164,7 +164,6 @@ Public Class Form1
     Private FooterFontSize As Integer = 10
 
     Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
-
 
     Private Enum ViewStateIndex
         Overview
@@ -488,7 +487,7 @@ Public Class Form1
 
         RadiusSquared = CircleRadius * CircleRadius
 
-        ThisFontSize = Math.Max(5, Me.ClientSize.Width \ 50)
+        'ThisFontSize = Math.Max(5, Me.ClientSize.Width \ 50)
 
         MouseFontSize = Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 20)
 
