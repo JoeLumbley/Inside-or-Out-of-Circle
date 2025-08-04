@@ -148,15 +148,12 @@ Public Class Form1
 
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
-    Private CombinedText As String = String.Empty
+    'Private CombinedText As String = String.Empty
 
-    Dim circleInfo = TextDisplays
-    Dim mouseInfo = TextDisplays
-    Dim resultInfo = TextDisplays
+    'Dim circleInfo = TextDisplays
+    'Dim mouseInfo = TextDisplays
+    'Dim resultInfo = TextDisplays
 
-    'Dim groupedText As String = String.Empty
-
-    'Private ThisFontSize As Integer = 10
     Private HeadingFontSize As Integer = 16
     Private MouseFontSize As Integer = 12
     Private RadiusFontSize As Integer = 12
@@ -429,6 +426,7 @@ Public Class Form1
         UpdateView()
 
         Invalidate()
+
         OverviewButton.Invalidate()
         ParametersViewButton.Invalidate()
 
@@ -440,7 +438,6 @@ Public Class Form1
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
 
         ' 🔲 Draw grid (light gray lines every 20 pixels)
-        'Dim gridPen As New Pen(Color.PowderBlue, 1)
         For x As Integer = 0 To ClientSize.Width Step 50
             e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
         Next
@@ -467,6 +464,150 @@ Public Class Form1
         Next
 
     End Sub
+
+    Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
+
+        Switch2Overview()
+
+        UpdateView()
+
+
+        'UpdateMousePointBrush()
+
+        'UpdateCircleBrush()
+
+        'Dim distanceSquared As Double = CalculateDistances()
+
+        'Using g As Graphics = CreateGraphics()
+        '    UpdateLineDisplays()
+        '    UpdateCircleDisplays()
+        '    UpdateTextDisplays(g, distanceSquared)
+        'End Using
+
+        Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Mouse)
+        td.Brush = Brushes.Transparent
+        TextDisplays(TextDisplayIndex.Mouse) = td
+
+        td = TextDisplays(TextDisplayIndex.Heading)
+        td.Brush = Brushes.Transparent
+        TextDisplays(TextDisplayIndex.Heading) = td
+
+        td = TextDisplays(TextDisplayIndex.Footer)
+        td.Brush = Brushes.Transparent
+        TextDisplays(TextDisplayIndex.Footer) = td
+
+
+        Dim cd As CircleDisplay = CircleDisplays(CircleDisplayIndex.MousePoint)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(CircleDisplayIndex.MousePoint) = cd
+
+        cd = CircleDisplays(CircleDisplayIndex.MouseHilight)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
+
+        'UpdateGridPen()
+
+        Invalidate()
+
+        InvaildateButtons()
+
+    End Sub
+
+    Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
+
+        Switch2ParametersView()
+
+        UpdateView()
+
+        Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Mouse)
+        td.Brush = Brushes.Transparent
+        TextDisplays(TextDisplayIndex.Mouse) = td
+
+        td = TextDisplays(TextDisplayIndex.Heading)
+        td.Brush = Brushes.Black
+        TextDisplays(TextDisplayIndex.Heading) = td
+
+        td = TextDisplays(TextDisplayIndex.Footer)
+        td.Brush = Brushes.Black
+        TextDisplays(TextDisplayIndex.Footer) = td
+
+
+        Dim cd As CircleDisplay = CircleDisplays(CircleDisplayIndex.MousePoint)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(CircleDisplayIndex.MousePoint) = cd
+
+        cd = CircleDisplays(CircleDisplayIndex.MouseHilight)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
+
+
+        Invalidate()
+
+        InvaildateButtons()
+
+    End Sub
+
+    Private Sub OverviewButton_MouseEnter(sender As Object, e As EventArgs) Handles OverviewButton.MouseEnter
+        InvaildateButtons()
+    End Sub
+
+    Private Sub ParametersViewButton_MouseEnter(sender As Object, e As EventArgs) Handles ParametersViewButton.MouseEnter
+        InvaildateButtons()
+    End Sub
+
+
+    Private Sub InvaildateButtons()
+        ' Invalidate the buttons to update their appearance
+
+        OverviewButton.Invalidate()
+
+        ParametersViewButton.Invalidate()
+
+    End Sub
+
+
+    Private Sub Switch2Overview()
+        ' Switch to Overview
+
+        ViewState = ViewStateIndex.Overview
+
+        MousePointerTopLeft()
+
+    End Sub
+
+    Private Sub CenterMousePointer()
+        MousePointerLocation = CircleCenterPoint
+    End Sub
+
+
+    Private Sub MousePointerTopLeft()
+        MousePointerLocation = New Point(30, 30)
+    End Sub
+
+
+    Private Sub Switch2ParametersView()
+        ' Switch to ParametersView
+
+        ViewState = ViewStateIndex.ParametersView
+
+        MousePointerTopLeft()
+
+
+    End Sub
+
+    'Private Sub OverviewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles OverviewButton.MouseMove
+    '    OverviewButton.Invalidate()
+    '    ParametersViewButton.Invalidate()
+
+    'End Sub
+
+    'Private Sub ParametersViewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles ParametersViewButton.MouseMove
+    '    OverviewButton.Invalidate()
+    '    ParametersViewButton.Invalidate()
+
+    'End Sub
+
+
 
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
@@ -602,6 +743,8 @@ Public Class Form1
         Next
 
         Invalidate()
+        OverviewButton.Invalidate()
+        ParametersViewButton.Invalidate()
 
     End Sub
 
@@ -636,21 +779,21 @@ Public Class Form1
 
     End Function
 
-    Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
-        ViewState = ViewStateIndex.Overview
+    Private Sub UpdateView()
 
-        UpdateView()
+        UpdateMousePointBrush()
 
-        Invalidate()
+        UpdateCircleBrush()
 
-    End Sub
+        Dim distanceSquared As Double = CalculateDistances()
 
-    Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
-        ViewState = ViewStateIndex.ParametersView
+        Using g As Graphics = CreateGraphics()
+            UpdateLineDisplays()
+            UpdateCircleDisplays()
+            UpdateTextDisplays(g, distanceSquared)
+        End Using
 
-        UpdateView()
-
-        Invalidate()
+        UpdateGridPen()
 
     End Sub
 
@@ -664,21 +807,6 @@ Public Class Form1
             gridPen = Pens.LightGray
         End If
 
-    End Sub
-
-    Private Sub UpdateView()
-        UpdateMousePointBrush()
-        UpdateCircleBrush()
-
-        Dim distanceSquared As Double = CalculateDistances()
-
-        Using g As Graphics = CreateGraphics()
-            UpdateLineDisplays()
-            UpdateCircleDisplays()
-            UpdateTextDisplays(g, distanceSquared)
-        End Using
-
-        UpdateGridPen()
     End Sub
 
     Private Sub UpdateMousePointBrush()
@@ -794,6 +922,7 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateTextDisplays(g As Graphics, distanceSquared As Double)
+
         Dim headingFont As New Font("Segoe UI", HeadingFontSize)
         Dim mouseFont As New Font("Segoe UI", MouseFontSize)
         Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
@@ -818,9 +947,11 @@ Public Class Form1
 
             TextDisplays(i) = td
         Next
+
     End Sub
 
     Private Sub UpdateHeadingText(ByRef td As TextDisplay, g As Graphics, headingFont As Font)
+
         If ViewState = ViewStateIndex.Overview Then
             td.Text = $"Inside Circle {IsPointerInsideCircle}"
         Else
@@ -833,6 +964,7 @@ Public Class Form1
         td.X = ClientSize.Width \ 2 - size.Width \ 2
         td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (size.Height \ 2)
         td.Font = headingFont
+
     End Sub
 
     Private Sub UpdateMouseText(ByRef td As TextDisplay, g As Graphics, mouseFont As Font, distanceSquared As Double)
@@ -861,8 +993,9 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateFooterText(ByRef td As TextDisplay, g As Graphics, footerFont As Font, distanceSquared As Double)
-        td.Text = $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}"
-        td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Black, Brushes.Transparent)
+        'td.Text = $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}"
+        td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
+        td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Black, Brushes.Black)
         td.FontSize = FooterFontSize
         Dim size = g.MeasureString(td.Text, footerFont)
         td.X = ClientSize.Width \ 2 - size.Width \ 2
@@ -879,16 +1012,6 @@ Public Class Form1
         td.Font = radiusFont
     End Sub
 
-    Private Sub OverviewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles OverviewButton.MouseMove
-        OverviewButton.Invalidate()
-        ParametersViewButton.Invalidate()
 
-    End Sub
-
-    Private Sub ParametersViewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles ParametersViewButton.MouseMove
-        OverviewButton.Invalidate()
-        ParametersViewButton.Invalidate()
-
-    End Sub
 
 End Class
