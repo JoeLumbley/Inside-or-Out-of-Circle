@@ -418,11 +418,16 @@ Public Class Form1
         Next
 
         Invalidate()
+        OverviewButton.Invalidate()
+        ParametersViewButton.Invalidate()
+
 
     End Sub
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
+
+
 
         'If ViewState = ViewStateIndex.Overview Then
         '    gridPen = Pens.Transparent
@@ -583,6 +588,9 @@ Public Class Form1
 
 
         Invalidate()
+        OverviewButton.Invalidate()
+        ParametersViewButton.Invalidate()
+
 
     End Sub
 
@@ -1259,6 +1267,21 @@ Public Class Form1
         td.Y = CircleCenterPoint.Y - size.Height \ 2
         td.Font = radiusFont
     End Sub
+
+    Private Sub OverviewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles OverviewButton.MouseMove
+        OverviewButton.Invalidate()
+        ParametersViewButton.Invalidate()
+
+
+    End Sub
+
+    Private Sub ParametersViewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles ParametersViewButton.MouseMove
+        OverviewButton.Invalidate()
+        ParametersViewButton.Invalidate()
+
+    End Sub
+
+
 
 
 End Class
