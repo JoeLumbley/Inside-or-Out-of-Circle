@@ -335,7 +335,6 @@ Public Class Form1
 
     End Sub
 
-
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
 
@@ -352,38 +351,6 @@ Public Class Form1
 
     End Sub
 
-    'Protected Overrides Sub OnPaint(e As PaintEventArgs)
-    '    MyBase.OnPaint(e)
-
-    '    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
-
-    '    ' 🔲 Draw grid (light gray lines every 20 pixels)
-    '    For x As Integer = 0 To ClientSize.Width Step 50
-    '        e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
-    '    Next
-    '    For y As Integer = 0 To ClientSize.Height Step 50
-    '        e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-    '    Next
-
-    '    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-    '    e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
-
-    '    ' 🟢 Draw filled circles
-    '    For Each circleDisplay As CircleDisplay In CircleDisplays
-    '        e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-    '    Next
-
-    '    ' 📏 Draw lines
-    '    For Each lineDisplay As LineDisplay In LineDisplays
-    '        e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-    '    Next
-
-    '    ' 🔤 Draw text overlays
-    '    For Each textDisplay As TextDisplay In TextDisplays
-    '        e.Graphics.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
-    '    Next
-
-    'End Sub
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
@@ -401,45 +368,6 @@ Public Class Form1
         DrawLines(g)
 
         DrawTextOverlays(g)
-
-    End Sub
-
-    Private Sub DrawGrid(g As Graphics)
-
-        ' 🔲 Draw grid ( lines every 50 pixels)
-        For x As Integer = 0 To ClientSize.Width Step 50
-            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
-        Next
-        For y As Integer = 0 To ClientSize.Height Step 50
-            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-        Next
-
-    End Sub
-
-    Private Sub DrawCircles(g As Graphics)
-
-        ' 🔵 Draw filled circles
-        For Each circleDisplay As CircleDisplay In CircleDisplays
-            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-        Next
-
-    End Sub
-
-    Private Sub DrawLines(g As Graphics)
-
-        ' 📏 Draw lines
-        For Each lineDisplay As LineDisplay In LineDisplays
-            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-        Next
-
-    End Sub
-
-    Private Sub DrawTextOverlays(g As Graphics)
-
-        ' abc Draw text overlays
-        For Each textDisplay As TextDisplay In TextDisplays
-            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
-        Next
 
     End Sub
 
@@ -462,18 +390,6 @@ Public Class Form1
 
         InvaildateButtons()
 
-    End Sub
-
-    Private Sub SetTextDisplayTransparent(index As TextDisplayIndex)
-        Dim td = TextDisplays(index)
-        td.Brush = Brushes.Transparent
-        TextDisplays(index) = td
-    End Sub
-
-    Private Sub SetCircleDisplayTransparent(index As CircleDisplayIndex)
-        Dim cd = CircleDisplays(index)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(index) = cd
     End Sub
 
     Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
@@ -501,40 +417,6 @@ Public Class Form1
 
     Private Sub ParametersViewButton_MouseEnter(sender As Object, e As EventArgs) Handles ParametersViewButton.MouseEnter
         InvaildateButtons()
-    End Sub
-
-    Private Sub InvaildateButtons()
-        ' Invalidate the buttons to update their appearance
-
-        OverviewButton.Invalidate()
-
-        ParametersViewButton.Invalidate()
-
-    End Sub
-
-    Private Sub Switch2Overview()
-        ' Switch to Overview
-
-        ViewState = ViewStateIndex.Overview
-
-        MousePointerTopLeft()
-
-    End Sub
-
-    Private Sub CenterMousePointer()
-        MousePointerLocation = CircleCenterPoint
-    End Sub
-
-    Private Sub MousePointerTopLeft()
-        MousePointerLocation = New Point(30, 30)
-    End Sub
-
-
-    Private Sub Switch2ParametersView()
-        ' Switch to ParametersView
-
-        ViewState = ViewStateIndex.ParametersView
-
     End Sub
 
     Protected Overrides Sub OnResize(e As EventArgs)
@@ -706,6 +588,89 @@ Public Class Form1
         ' such as in graphics rendering or physics simulations, where many distance checks may be performed frequently.
 
     End Function
+
+    Private Sub DrawGrid(g As Graphics)
+
+        ' 🔲 Draw grid ( lines every 50 pixels)
+        For x As Integer = 0 To ClientSize.Width Step 50
+            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+        Next
+        For y As Integer = 0 To ClientSize.Height Step 50
+            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+        Next
+
+    End Sub
+
+    Private Sub DrawCircles(g As Graphics)
+
+        ' 🔵 Draw filled circles
+        For Each circleDisplay As CircleDisplay In CircleDisplays
+            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+        Next
+
+    End Sub
+
+    Private Sub DrawLines(g As Graphics)
+
+        ' 📏 Draw lines
+        For Each lineDisplay As LineDisplay In LineDisplays
+            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+        Next
+
+    End Sub
+
+    Private Sub DrawTextOverlays(g As Graphics)
+
+        ' abc Draw text overlays
+        For Each textDisplay As TextDisplay In TextDisplays
+            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+        Next
+
+    End Sub
+
+    Private Sub SetTextDisplayTransparent(index As TextDisplayIndex)
+        Dim td = TextDisplays(index)
+        td.Brush = Brushes.Transparent
+        TextDisplays(index) = td
+    End Sub
+
+    Private Sub SetCircleDisplayTransparent(index As CircleDisplayIndex)
+        Dim cd = CircleDisplays(index)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(index) = cd
+    End Sub
+
+    Private Sub InvaildateButtons()
+        ' Invalidate the buttons to update their appearance
+
+        OverviewButton.Invalidate()
+
+        ParametersViewButton.Invalidate()
+
+    End Sub
+
+    Private Sub Switch2Overview()
+        ' Switch to Overview
+
+        ViewState = ViewStateIndex.Overview
+
+    End Sub
+
+    Private Sub CenterMousePointer()
+        MousePointerLocation = CircleCenterPoint
+    End Sub
+
+    Private Sub MousePointerTopLeft()
+        MousePointerLocation = New Point(30, 30)
+    End Sub
+
+
+    Private Sub Switch2ParametersView()
+        ' Switch to ParametersView
+
+        ViewState = ViewStateIndex.ParametersView
+
+    End Sub
 
     Private Sub UpdateView()
 
