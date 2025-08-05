@@ -520,7 +520,6 @@ Public Class Form1
         cd.Brush = Brushes.Transparent
         CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
 
-
         Invalidate()
 
         InvaildateButtons()
@@ -535,7 +534,6 @@ Public Class Form1
         InvaildateButtons()
     End Sub
 
-
     Private Sub InvaildateButtons()
         ' Invalidate the buttons to update their appearance
 
@@ -544,7 +542,6 @@ Public Class Form1
         ParametersViewButton.Invalidate()
 
     End Sub
-
 
     Private Sub Switch2Overview()
         ' Switch to Overview
@@ -559,7 +556,6 @@ Public Class Form1
         MousePointerLocation = CircleCenterPoint
     End Sub
 
-
     Private Sub MousePointerTopLeft()
         MousePointerLocation = New Point(30, 30)
     End Sub
@@ -570,24 +566,7 @@ Public Class Form1
 
         ViewState = ViewStateIndex.ParametersView
 
-        MousePointerTopLeft()
-
-
     End Sub
-
-    'Private Sub OverviewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles OverviewButton.MouseMove
-    '    OverviewButton.Invalidate()
-    '    ParametersViewButton.Invalidate()
-
-    'End Sub
-
-    'Private Sub ParametersViewButton_MouseMove(sender As Object, e As MouseEventArgs) Handles ParametersViewButton.MouseMove
-    '    OverviewButton.Invalidate()
-    '    ParametersViewButton.Invalidate()
-
-    'End Sub
-
-
 
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
