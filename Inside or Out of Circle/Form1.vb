@@ -571,13 +571,7 @@ Public Class Form1
 
         UpdateLineDisplays()
 
-        UpdateCircleDisplays()
-
-        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
-
-        'SetTextDisplayTransparent(TextDisplayIndex.Center)
-
-        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+        UpdateCircleDisplaysOnResize()
 
         Invalidate()
 
@@ -608,33 +602,11 @@ Public Class Form1
     Private Sub UpdateTextDisplaysOnResize()
         Using g As Graphics = CreateGraphics()
 
-            Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Center)
-            td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
-            td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
-            td.FontSize = CenterFontSize
-            Dim ThisStringSize = g.MeasureString(td.Text, New Font("Segoe UI", td.FontSize))
-            td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
-            td.Y = CircleCenterPoint.Y
-            td.Font = New Font("Segoe UI", td.FontSize)
-            TextDisplays(TextDisplayIndex.Center) = td
-
-            td = TextDisplays(TextDisplayIndex.Radius)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"Radius {CircleRadius}", $"Radius² {RadiusSquared}")
-            td.FontSize = RadiusFontSize
-            ThisStringSize = g.MeasureString(td.Text, New Font("Segoe UI", td.FontSize))
-            td.X = CircleCenterPoint.X + CircleRadius + 10
-            td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
-            td.Font = New Font("Segoe UI", td.FontSize)
-            TextDisplays(TextDisplayIndex.Radius) = td
-
-
+            Dim td As TextDisplay
+            Dim ThisStringSize As SizeF
 
             td = TextDisplays(TextDisplayIndex.Heading)
-            If ViewState = ViewStateIndex.Overview Then
-                td.Text = $"Inside Circle {IsPointerInsideCircle}"
-            Else
-                td.Text = "Parameters"
-            End If
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
             td.FontSize = HeadingFontSize
             td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
@@ -642,15 +614,46 @@ Public Class Form1
             td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
             TextDisplays(TextDisplayIndex.Heading) = td
 
+            td = TextDisplays(TextDisplayIndex.Center)
+            td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+            'td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
+            td.FontSize = CenterFontSize
+            td.Font = New Font("Segoe UI", td.FontSize)
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
+            td.Y = CircleCenterPoint.Y
+            TextDisplays(TextDisplayIndex.Center) = td
+
+            td = TextDisplays(TextDisplayIndex.Radius)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"Radius {CircleRadius}", $"Radius² {RadiusSquared}")
+            td.FontSize = RadiusFontSize
+            td.Font = New Font("Segoe UI", td.FontSize)
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = CircleCenterPoint.X + CircleRadius + 10
+            td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
+            TextDisplays(TextDisplayIndex.Radius) = td
+
             td = TextDisplays(TextDisplayIndex.Footer)
             td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}")
-            td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
+            'td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
             td.FontSize = FooterFontSize
             td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
             td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
             td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
             TextDisplays(TextDisplayIndex.Footer) = td
+
+
+            td = TextDisplays(TextDisplayIndex.Mouse)
+            'td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
+            td.Brush = Brushes.Transparent
+            'td.FontSize = MouseFontSize
+            'td.Font = New Font("Segoe UI", td.FontSize)
+            'ThisStringSize = g.MeasureString(td.Text, td.Font)
+            'td.X = MousePointerLocation.X + 30
+            'td.Y = MousePointerLocation.Y
+            'TextDisplays(TextDisplayIndex.Mouse) = td
+
 
         End Using
     End Sub
@@ -987,6 +990,26 @@ Public Class Form1
             CircleDisplays(i) = ld
         Next
     End Sub
+    Private Sub UpdateCircleDisplaysOnResize()
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+
+            Select Case i
+                Case CircleDisplayIndex.Circle
+                    SetCircle(ld)
+                Case CircleDisplayIndex.RadiusEndPoint
+                    SetEndpoint(ld, CircleRadius)
+                Case CircleDisplayIndex.CenterPoint
+                    SetEndpoint(ld, 0)
+                Case CircleDisplayIndex.MousePoint
+                    SetMousePoint(ld)
+                Case CircleDisplayIndex.MouseHilight
+                    SetMouseHighlightOnResize(ld)
+            End Select
+
+            CircleDisplays(i) = ld
+        Next
+    End Sub
 
     Private Sub SetCircle(ByRef ld As CircleDisplay)
         ld.X = CircleCenterPoint.X - CircleRadius
@@ -1019,6 +1042,15 @@ Public Class Form1
         ld.Height = 40
         ld.Brush = MouseHilightBrush
     End Sub
+
+    Private Sub SetMouseHighlightOnResize(ByRef ld As CircleDisplay)
+        ld.X = MousePointerLocation.X - 20
+        ld.Y = MousePointerLocation.Y - 20
+        ld.Width = 40
+        ld.Height = 40
+        ld.Brush = Brushes.Transparent
+    End Sub
+
 
     Private Sub UpdateTextDisplays(g As Graphics, distanceSquared As Double)
 
