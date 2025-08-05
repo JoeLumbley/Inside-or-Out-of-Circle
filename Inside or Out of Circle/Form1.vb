@@ -443,38 +443,37 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
 
         Switch2Overview()
 
         UpdateView()
 
-        Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Mouse)
-        td.Brush = Brushes.Transparent
-        TextDisplays(TextDisplayIndex.Mouse) = td
+        ' Hide overlays
+        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+        SetTextDisplayTransparent(TextDisplayIndex.Heading)
+        SetTextDisplayTransparent(TextDisplayIndex.Footer)
 
-        td = TextDisplays(TextDisplayIndex.Heading)
-        td.Brush = Brushes.Transparent
-        TextDisplays(TextDisplayIndex.Heading) = td
-
-        td = TextDisplays(TextDisplayIndex.Footer)
-        td.Brush = Brushes.Transparent
-        TextDisplays(TextDisplayIndex.Footer) = td
-
-
-        Dim cd As CircleDisplay = CircleDisplays(CircleDisplayIndex.MousePoint)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(CircleDisplayIndex.MousePoint) = cd
-
-        cd = CircleDisplays(CircleDisplayIndex.MouseHilight)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
+        ' Hide mouse indicators
+        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
 
         Invalidate()
 
         InvaildateButtons()
 
+    End Sub
+
+    Private Sub SetTextDisplayTransparent(index As TextDisplayIndex)
+        Dim td = TextDisplays(index)
+        td.Brush = Brushes.Transparent
+        TextDisplays(index) = td
+    End Sub
+
+    Private Sub SetCircleDisplayTransparent(index As CircleDisplayIndex)
+        Dim cd = CircleDisplays(index)
+        cd.Brush = Brushes.Transparent
+        CircleDisplays(index) = cd
     End Sub
 
     Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
@@ -483,26 +482,12 @@ Public Class Form1
 
         UpdateView()
 
-        Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Mouse)
-        td.Brush = Brushes.Transparent
-        TextDisplays(TextDisplayIndex.Mouse) = td
+        ' Hide overlays
+        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
 
-        td = TextDisplays(TextDisplayIndex.Heading)
-        td.Brush = Brushes.Black
-        TextDisplays(TextDisplayIndex.Heading) = td
-
-        td = TextDisplays(TextDisplayIndex.Footer)
-        td.Brush = Brushes.Black
-        TextDisplays(TextDisplayIndex.Footer) = td
-
-
-        Dim cd As CircleDisplay = CircleDisplays(CircleDisplayIndex.MousePoint)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(CircleDisplayIndex.MousePoint) = cd
-
-        cd = CircleDisplays(CircleDisplayIndex.MouseHilight)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
+        ' Hide mouse indicators
+        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
 
         Invalidate()
 
@@ -811,7 +796,7 @@ Public Class Form1
         If ViewState = ViewStateIndex.Overview Then
             gridPen = Pens.Transparent
         Else
-            gridPen = Pens.LightGray
+            gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
         End If
 
     End Sub
