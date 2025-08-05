@@ -48,13 +48,21 @@ Public Class Form1
         End Sub
     End Structure
 
-    Private TextDisplays As New List(Of TextDisplay) From {
-        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
-    }
+    'Private TextDisplays As New List(Of TextDisplay) From {
+    '    New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    '    New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    '    New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    '    New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    '    New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
+    '}
+
+    Private TextDisplays() As TextDisplay = {
+    New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
+}
 
     Private Enum TextDisplayIndex
         Heading = 0
@@ -79,12 +87,20 @@ Public Class Form1
         End Sub
     End Structure
 
-    Private LineDisplays As New List(Of LineDisplay) From {
+    'Private LineDisplays As New List(Of LineDisplay) From {
+    '    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+    '    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+    '    New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
+    '    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
+    '}
+
+    Private LineDisplays() As LineDisplay = {
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
     }
+
 
     Private Enum LineDisplayIndex
         RadiusLine = 0
@@ -110,13 +126,24 @@ Public Class Form1
 
     Private MouseHilightBrush As New SolidBrush(Color.FromArgb(128, Color.Yellow))
 
-    Private CircleDisplays As New List(Of CircleDisplay) From {
+    'Private CircleDisplays As New List(Of CircleDisplay) From {
+    '    New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
+    '    New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+    '    New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+    '    New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
+    '    New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
+    '}
+
+    Private CircleDisplays() As CircleDisplay = {
         New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
         New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
         New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
         New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
         New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
     }
+
+
+
 
     Private Enum CircleDisplayIndex
         Circle = 0
@@ -325,109 +352,15 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
-        DistancePen = TransparentPen
-        XYDistancePen = TransparentPen
-        MousePointBrush = Brushes.Transparent
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-
-            Dim td As TextDisplay = TextDisplays(i)
-
-            Select Case i
-                Case TextDisplayIndex.Heading
-                    If ViewState = ViewStateIndex.Overview Then
-                        td.Brush = Brushes.Transparent
-                    Else
-                        td.Brush = Brushes.Black
-
-                    End If
-
-                Case TextDisplayIndex.Radius
-
-                Case TextDisplayIndex.Center
-                    If ViewState = ViewStateIndex.Overview Then
-                        td.Brush = Brushes.Transparent
-                    Else
-                        td.Brush = Brushes.Black
-
-                    End If
-
-                Case TextDisplayIndex.Footer
-
-                    If ViewState = ViewStateIndex.Overview Then
-                        td.Brush = Brushes.Transparent
-                    Else
-                        td.Brush = Brushes.Black
-
-                    End If
-
-                Case Else
-
-                    td.Brush = Brushes.Transparent
-
-            End Select
-
-            TextDisplays(i) = td
-
-        Next
-
-        For i As Integer = 0 To LineDisplays.Count - 1
-
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = CircleCenterPoint.X + CircleRadius
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = RadiusPen
-                Case Else
-                    ld.X1 = 0
-                    ld.Y1 = 0
-                    ld.X2 = 0
-                    ld.Y2 = 0
-                    ld.Pen = Pens.Transparent
-            End Select
-            LineDisplays(i) = ld
-        Next
-
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
-                    ld.Brush = CircleBrush
-                Case CircleDisplayIndex.RadiusEndPoint
-                    ld.X = CircleCenterPoint.X + CircleRadius - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.CenterPoint
-                    ld.X = CircleCenterPoint.X - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-
-            End Select
-
-            CircleDisplays(i) = ld
-
-        Next
+        UpdateViewMouseLeave()
 
         Invalidate()
-        OverviewButton.Invalidate()
-        ParametersViewButton.Invalidate()
+
+        InvaildateButtons()
 
     End Sub
+
 
     Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
         MyBase.OnMouseMove(e)
@@ -771,6 +704,70 @@ Public Class Form1
         End Using
 
         UpdateGridPen()
+
+    End Sub
+
+    Private Sub UpdateViewMouseLeave()
+        ' Update view to mouse leave state
+
+        UpdateBrushesPens2Transparent4MouseLeave()
+
+    End Sub
+
+    Private Sub UpdateBrushesPens2Transparent4MouseLeave()
+        ' Update Brushes and Pens to transparent for mouse leave state
+
+        DistancePen = TransparentPen
+        XYDistancePen = TransparentPen
+        MousePointBrush = Brushes.Transparent
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+
+            Dim td As TextDisplay = TextDisplays(i)
+            Select Case i
+                Case TextDisplayIndex.Heading
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    End If
+                Case TextDisplayIndex.Radius
+                Case TextDisplayIndex.Center
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    End If
+                Case TextDisplayIndex.Footer
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    End If
+                Case Else
+                    td.Brush = Brushes.Transparent
+            End Select
+            TextDisplays(i) = td
+
+        Next
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+
+            Dim ld As LineDisplay = LineDisplays(i)
+            Select Case i
+                Case LineDisplayIndex.RadiusLine
+                Case Else
+                    ld.Pen = Pens.Transparent
+            End Select
+            LineDisplays(i) = ld
+
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case CircleDisplayIndex.MousePoint
+                    ld.Brush = Brushes.Transparent
+                Case CircleDisplayIndex.MouseHilight
+                    ld.Brush = Brushes.Transparent
+            End Select
+            CircleDisplays(i) = ld
+
+        Next
 
     End Sub
 
