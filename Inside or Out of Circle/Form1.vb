@@ -253,73 +253,77 @@ Public Class Form1
 
     Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
 
+
+
+
         DistancePen = ArrowBlack3Pen
         XYDistancePen = Orchid2Pen
         MousePointBrush = Brushes.Gray
 
-        For i As Integer = 0 To TextDisplays.Count - 1
+        'For i As Integer = 0 To TextDisplays.Count - 1
 
-            Dim td As TextDisplay = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Center
-                Case TextDisplayIndex.Footer
-                Case Else
-                    td.Brush = Brushes.Black
-                    TextDisplays(i) = td
+        '    Dim td As TextDisplay = TextDisplays(i)
+        '    Select Case i
+        '        Case TextDisplayIndex.Center
+        '        Case TextDisplayIndex.Footer
+        '        Case Else
+        '            td.Brush = Brushes.Black
+        '            TextDisplays(i) = td
 
-            End Select
+        '    End Select
 
-        Next
+        'Next
 
-        For i As Integer = 0 To LineDisplays.Count - 1
-            Dim ld = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = CircleCenterPoint.X + CircleRadius
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = RadiusPen
-                Case LineDisplayIndex.XDistanceLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = MousePointerLocation.X
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = XYDistancePen
-                Case LineDisplayIndex.YDistanceLine
-                    ld.X1 = MousePointerLocation.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = MousePointerLocation.X
-                    ld.Y2 = MousePointerLocation.Y
-                    ld.Pen = XYDistancePen
-                Case LineDisplayIndex.DistanceLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = MousePointerLocation.X
-                    ld.Y2 = MousePointerLocation.Y
-                    ld.Pen = DistancePen
+        'For i As Integer = 0 To LineDisplays.Count - 1
+        '    Dim ld = LineDisplays(i)
+        '    Select Case i
+        '        Case LineDisplayIndex.RadiusLine
+        '            ld.X1 = CircleCenterPoint.X
+        '            ld.Y1 = CircleCenterPoint.Y
+        '            ld.X2 = CircleCenterPoint.X + CircleRadius
+        '            ld.Y2 = CircleCenterPoint.Y
+        '            ld.Pen = RadiusPen
+        '        Case LineDisplayIndex.XDistanceLine
+        '            ld.X1 = CircleCenterPoint.X
+        '            ld.Y1 = CircleCenterPoint.Y
+        '            ld.X2 = MousePointerLocation.X
+        '            ld.Y2 = CircleCenterPoint.Y
+        '            ld.Pen = XYDistancePen
+        '        Case LineDisplayIndex.YDistanceLine
+        '            ld.X1 = MousePointerLocation.X
+        '            ld.Y1 = CircleCenterPoint.Y
+        '            ld.X2 = MousePointerLocation.X
+        '            ld.Y2 = MousePointerLocation.Y
+        '            ld.Pen = XYDistancePen
+        '        Case LineDisplayIndex.DistanceLine
+        '            ld.X1 = CircleCenterPoint.X
+        '            ld.Y1 = CircleCenterPoint.Y
+        '            ld.X2 = MousePointerLocation.X
+        '            ld.Y2 = MousePointerLocation.Y
+        '            ld.Pen = DistancePen
 
-            End Select
+        '    End Select
 
-            LineDisplays(i) = ld
+        '    LineDisplays(i) = ld
 
-        Next
+        'Next
 
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
-                    ld.Brush = CircleBrush
+        'For i As Integer = 0 To CircleDisplays.Count - 1
+        '    Dim ld = CircleDisplays(i)
+        '    Select Case i
+        '        Case CircleDisplayIndex.Circle
+        '            ld.X = CircleCenterPoint.X - CircleRadius
+        '            ld.Y = CircleCenterPoint.Y - CircleRadius
+        '            ld.Width = CircleRadius * 2
+        '            ld.Height = CircleRadius * 2
+        '            ld.Brush = CircleBrush
 
-            End Select
+        '    End Select
 
-            CircleDisplays(i) = ld
+        '    CircleDisplays(i) = ld
 
-        Next
+        'Next
+        UpdateViewMouseEnter()
 
         Invalidate()
 
@@ -342,12 +346,28 @@ Public Class Form1
 
         IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
 
-        UpdateView()
+        UpdateMousePointBrush()
+
+        UpdateCircleBrush()
+
+        Dim distanceSquared As Double = CalculateDistances()
+
+        'UpdateView()
+        Using g As Graphics = CreateGraphics()
+            UpdateTextDisplays(g, DistanceSquared)
+        End Using
+
+        UpdateLineDisplays()
+
+        UpdateCircleDisplays()
 
         Invalidate()
 
-        OverviewButton.Invalidate()
-        ParametersViewButton.Invalidate()
+        InvaildateButtons()
+
+        'OverviewButton.Invalidate()
+
+        'ParametersViewButton.Invalidate()
 
     End Sub
 
@@ -580,8 +600,16 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateButtonLayout()
-        ParametersViewButton.SetBounds(ClientSize.Width - 100, ClientSize.Height - 100, 90, 90)
-        OverviewButton.SetBounds(ClientSize.Width - 200, ClientSize.Height - 100, 90, 90)
+        ParametersViewButton.Width = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
+        ParametersViewButton.Height = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
+        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        OverviewButton.Width = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
+        OverviewButton.Height = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
+        OverviewButton.Font = New Font("Segoe UI", Math.Max(16, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
+        ParametersViewButton.SetBounds(ClientSize.Width - ParametersViewButton.Width - 10, ClientSize.Height - ParametersViewButton.Height - 10, ParametersViewButton.Width, ParametersViewButton.Height)
+
+        OverviewButton.SetBounds(ClientSize.Width - ParametersViewButton.Width - 10 - OverviewButton.Width - 10, ClientSize.Height - OverviewButton.Height - 10, OverviewButton.Width, OverviewButton.Height)
+
     End Sub
 
     Private Sub UpdateCircleGeometry()
@@ -842,6 +870,14 @@ Public Class Form1
 
     End Sub
 
+    Private Sub UpdateViewMouseEnter()
+        ' Update view to mouse enter state
+
+        UpdateBrushesPens4MouseEnter()
+
+    End Sub
+
+
     Private Sub UpdateBrushesPens2Transparent4MouseLeave()
         ' Update Brushes and Pens to transparent for mouse leave state
 
@@ -898,6 +934,68 @@ Public Class Form1
         Next
 
     End Sub
+
+    Private Sub UpdateBrushesPens4MouseEnter()
+        ' Update Brushes and Pens to transparent for mouse enter state
+
+        UpdateMousePointBrush()
+
+        UpdateCircleBrush()
+
+        DistancePen = ArrowBlack3Pen
+        XYDistancePen = Orchid2Pen
+        MousePointBrush = Brushes.Gray
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+
+            Dim td As TextDisplay = TextDisplays(i)
+            Select Case i
+                Case TextDisplayIndex.Heading
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Black
+                    End If
+                Case TextDisplayIndex.Radius
+                Case TextDisplayIndex.Mouse
+                    'If ViewState = ViewStateIndex.Overview Then
+                    td.Brush = Brushes.Black
+                    'End If
+                Case TextDisplayIndex.Footer
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Black
+                    End If
+                    'Case Else
+                    '    td.Brush = Brushes.Transparent
+            End Select
+            TextDisplays(i) = td
+
+        Next
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+
+            Dim ld As LineDisplay = LineDisplays(i)
+            Select Case i
+                Case LineDisplayIndex.RadiusLine
+                Case Else
+                    ld.Pen = Pens.Transparent
+            End Select
+            LineDisplays(i) = ld
+
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case CircleDisplayIndex.MousePoint
+                    ld.Brush = Brushes.Transparent
+                Case CircleDisplayIndex.MouseHilight
+                    ld.Brush = Brushes.Transparent
+            End Select
+            CircleDisplays(i) = ld
+
+        Next
+
+    End Sub
+
 
     ' update the grid brush in ParametersView
     Private Sub UpdateGridPen()
@@ -1044,13 +1142,8 @@ Public Class Form1
     End Sub
 
     Private Sub SetMouseHighlightOnResize(ByRef ld As CircleDisplay)
-        ld.X = MousePointerLocation.X - 20
-        ld.Y = MousePointerLocation.Y - 20
-        ld.Width = 40
-        ld.Height = 40
         ld.Brush = Brushes.Transparent
     End Sub
-
 
     Private Sub UpdateTextDisplays(g As Graphics, distanceSquared As Double)
 
