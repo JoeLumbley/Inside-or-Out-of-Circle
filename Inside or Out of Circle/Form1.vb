@@ -87,7 +87,6 @@ Public Class Form1
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
     }
 
-
     Private Enum LineDisplayIndex
         RadiusLine = 0
         XDistanceLine = 1
@@ -112,7 +111,6 @@ Public Class Form1
 
     Private MouseHilightBrush As New SolidBrush(Color.FromArgb(128, Color.Yellow))
 
-
     Private CircleDisplays() As CircleDisplay = {
         New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
         New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
@@ -120,9 +118,6 @@ Public Class Form1
         New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
         New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
     }
-
-
-
 
     Private Enum CircleDisplayIndex
         Circle = 0
@@ -357,38 +352,97 @@ Public Class Form1
 
     End Sub
 
+    'Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    '    MyBase.OnPaint(e)
+
+    '    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
+
+    '    ' 🔲 Draw grid (light gray lines every 20 pixels)
+    '    For x As Integer = 0 To ClientSize.Width Step 50
+    '        e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+    '    Next
+    '    For y As Integer = 0 To ClientSize.Height Step 50
+    '        e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+    '    Next
+
+    '    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+    '    e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+
+    '    ' 🟢 Draw filled circles
+    '    For Each circleDisplay As CircleDisplay In CircleDisplays
+    '        e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+    '    Next
+
+    '    ' 📏 Draw lines
+    '    For Each lineDisplay As LineDisplay In LineDisplays
+    '        e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+    '    Next
+
+    '    ' 🔤 Draw text overlays
+    '    For Each textDisplay As TextDisplay In TextDisplays
+    '        e.Graphics.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+    '    Next
+
+    'End Sub
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
+        Dim g = e.Graphics
 
-        ' 🔲 Draw grid (light gray lines every 20 pixels)
+        g.SmoothingMode = Drawing2D.SmoothingMode.None
+
+        DrawGrid(g)
+
+        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        g.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+
+        DrawCircles(g)
+
+        DrawLines(g)
+
+        DrawTextOverlays(g)
+
+    End Sub
+
+    Private Sub DrawGrid(g As Graphics)
+
+        ' 🔲 Draw grid ( lines every 50 pixels)
         For x As Integer = 0 To ClientSize.Width Step 50
-            e.Graphics.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
         Next
         For y As Integer = 0 To ClientSize.Height Step 50
-            e.Graphics.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-        Next
-
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-        e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
-
-        ' 🟢 Draw filled circles
-        For Each circleDisplay As CircleDisplay In CircleDisplays
-            e.Graphics.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-        Next
-
-        ' 📏 Draw lines
-        For Each lineDisplay As LineDisplay In LineDisplays
-            e.Graphics.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-        Next
-
-        ' 🔤 Draw text overlays
-        For Each textDisplay As TextDisplay In TextDisplays
-            e.Graphics.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
         Next
 
     End Sub
+
+    Private Sub DrawCircles(g As Graphics)
+
+        ' 🔵 Draw filled circles
+        For Each circleDisplay As CircleDisplay In CircleDisplays
+            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+        Next
+
+    End Sub
+
+    Private Sub DrawLines(g As Graphics)
+
+        ' 📏 Draw lines
+        For Each lineDisplay As LineDisplay In LineDisplays
+            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+        Next
+
+    End Sub
+
+    Private Sub DrawTextOverlays(g As Graphics)
+
+        ' abc Draw text overlays
+        For Each textDisplay As TextDisplay In TextDisplays
+            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+        Next
+
+    End Sub
+
 
     Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
 
@@ -903,6 +957,48 @@ Public Class Form1
 
     End Sub
 
+    Private Sub UpdateMouseText(ByRef td As TextDisplay, g As Graphics, mouseFont As Font, distanceSquared As Double)
+
+        Dim mp = MousePointerLocation
+        Dim offset = New Point(30, 0)
+
+        Dim text = If(ViewState = ViewStateIndex.Overview,
+                  $"Distance² {distanceSquared}",
+                  $"X {mp.X}, Y {mp.Y}")
+
+        UpdateTextDisplay(td, g, text, mouseFont, MouseFontSize, mp, offset)
+
+    End Sub
+
+    Private Sub UpdateTextDisplay(ByRef td As TextDisplay,
+                              g As Graphics,
+                              text As String,
+                              fontBase As Font,
+                              fontSize As Single,
+                              anchorPoint As Point,
+                              offset As Point,
+                              Optional brush As Brush = Nothing)
+
+        ' Scale font to requested size
+        Dim scaledFont = New Font(fontBase.FontFamily, fontSize, fontBase.Style)
+
+        ' Measure text size
+        Dim size = g.MeasureString(text, scaledFont)
+
+        ' Apply text and styling
+        td.Text = text
+        td.Font = scaledFont
+        td.FontSize = fontSize
+        td.Brush = If(brush, Brushes.Black)
+
+        ' Position relative to anchor + offset, vertically centered
+        td.X = anchorPoint.X + offset.X
+        td.Y = anchorPoint.Y + offset.Y - size.Height \ 2
+
+    End Sub
+
+
+
     Private Sub UpdateHeadingText(ByRef td As TextDisplay, g As Graphics, headingFont As Font)
 
         If ViewState = ViewStateIndex.Overview Then
@@ -920,20 +1016,20 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateMouseText(ByRef td As TextDisplay, g As Graphics, mouseFont As Font, distanceSquared As Double)
-        If ViewState = ViewStateIndex.Overview Then
-            td.Text = $"Distance² {distanceSquared}"
-        Else
-            td.Text = $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}"
-        End If
+    'Private Sub UpdateMouseText(ByRef td As TextDisplay, g As Graphics, mouseFont As Font, distanceSquared As Double)
+    '    If ViewState = ViewStateIndex.Overview Then
+    '        td.Text = $"Distance² {distanceSquared}"
+    '    Else
+    '        td.Text = $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}"
+    '    End If
 
-        td.Brush = Brushes.Black
-        td.FontSize = MouseFontSize
-        Dim size = g.MeasureString(td.Text, mouseFont)
-        td.X = MousePointerLocation.X + 30
-        td.Y = MousePointerLocation.Y - size.Height \ 2
-        td.Font = mouseFont
-    End Sub
+    '    td.Brush = Brushes.Black
+    '    td.FontSize = MouseFontSize
+    '    Dim size = g.MeasureString(td.Text, mouseFont)
+    '    td.X = MousePointerLocation.X + 30
+    '    td.Y = MousePointerLocation.Y - size.Height \ 2
+    '    td.Font = mouseFont
+    'End Sub
 
     Private Sub UpdateCenterText(ByRef td As TextDisplay, g As Graphics, centerFont As Font)
         td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
