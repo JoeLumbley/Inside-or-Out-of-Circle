@@ -466,19 +466,6 @@ Public Class Form1
 
         UpdateView()
 
-
-        'UpdateMousePointBrush()
-
-        'UpdateCircleBrush()
-
-        'Dim distanceSquared As Double = CalculateDistances()
-
-        'Using g As Graphics = CreateGraphics()
-        '    UpdateLineDisplays()
-        '    UpdateCircleDisplays()
-        '    UpdateTextDisplays(g, distanceSquared)
-        'End Using
-
         Dim td As TextDisplay = TextDisplays(TextDisplayIndex.Mouse)
         td.Brush = Brushes.Transparent
         TextDisplays(TextDisplayIndex.Mouse) = td
@@ -499,8 +486,6 @@ Public Class Form1
         cd = CircleDisplays(CircleDisplayIndex.MouseHilight)
         cd.Brush = Brushes.Transparent
         CircleDisplays(CircleDisplayIndex.MouseHilight) = cd
-
-        'UpdateGridPen()
 
         Invalidate()
 
