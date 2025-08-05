@@ -334,8 +334,26 @@ Public Class Form1
             Dim td As TextDisplay = TextDisplays(i)
 
             Select Case i
+                Case TextDisplayIndex.Heading
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    Else
+                        td.Brush = Brushes.Black
+
+                    End If
+
                 Case TextDisplayIndex.Radius
+
                 Case TextDisplayIndex.Center
+                    If ViewState = ViewStateIndex.Overview Then
+                        td.Brush = Brushes.Transparent
+                    Else
+                        td.Brush = Brushes.Black
+
+                    End If
+
+                Case TextDisplayIndex.Footer
+
                     If ViewState = ViewStateIndex.Overview Then
                         td.Brush = Brushes.Transparent
                     Else
@@ -970,7 +988,5 @@ Public Class Form1
         td.Y = CircleCenterPoint.Y - size.Height \ 2
         td.Font = radiusFont
     End Sub
-
-
 
 End Class
