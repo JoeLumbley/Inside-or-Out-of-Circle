@@ -253,76 +253,6 @@ Public Class Form1
 
     Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
 
-
-
-
-        DistancePen = ArrowBlack3Pen
-        XYDistancePen = Orchid2Pen
-        MousePointBrush = Brushes.Gray
-
-        'For i As Integer = 0 To TextDisplays.Count - 1
-
-        '    Dim td As TextDisplay = TextDisplays(i)
-        '    Select Case i
-        '        Case TextDisplayIndex.Center
-        '        Case TextDisplayIndex.Footer
-        '        Case Else
-        '            td.Brush = Brushes.Black
-        '            TextDisplays(i) = td
-
-        '    End Select
-
-        'Next
-
-        'For i As Integer = 0 To LineDisplays.Count - 1
-        '    Dim ld = LineDisplays(i)
-        '    Select Case i
-        '        Case LineDisplayIndex.RadiusLine
-        '            ld.X1 = CircleCenterPoint.X
-        '            ld.Y1 = CircleCenterPoint.Y
-        '            ld.X2 = CircleCenterPoint.X + CircleRadius
-        '            ld.Y2 = CircleCenterPoint.Y
-        '            ld.Pen = RadiusPen
-        '        Case LineDisplayIndex.XDistanceLine
-        '            ld.X1 = CircleCenterPoint.X
-        '            ld.Y1 = CircleCenterPoint.Y
-        '            ld.X2 = MousePointerLocation.X
-        '            ld.Y2 = CircleCenterPoint.Y
-        '            ld.Pen = XYDistancePen
-        '        Case LineDisplayIndex.YDistanceLine
-        '            ld.X1 = MousePointerLocation.X
-        '            ld.Y1 = CircleCenterPoint.Y
-        '            ld.X2 = MousePointerLocation.X
-        '            ld.Y2 = MousePointerLocation.Y
-        '            ld.Pen = XYDistancePen
-        '        Case LineDisplayIndex.DistanceLine
-        '            ld.X1 = CircleCenterPoint.X
-        '            ld.Y1 = CircleCenterPoint.Y
-        '            ld.X2 = MousePointerLocation.X
-        '            ld.Y2 = MousePointerLocation.Y
-        '            ld.Pen = DistancePen
-
-        '    End Select
-
-        '    LineDisplays(i) = ld
-
-        'Next
-
-        'For i As Integer = 0 To CircleDisplays.Count - 1
-        '    Dim ld = CircleDisplays(i)
-        '    Select Case i
-        '        Case CircleDisplayIndex.Circle
-        '            ld.X = CircleCenterPoint.X - CircleRadius
-        '            ld.Y = CircleCenterPoint.Y - CircleRadius
-        '            ld.Width = CircleRadius * 2
-        '            ld.Height = CircleRadius * 2
-        '            ld.Brush = CircleBrush
-
-        '    End Select
-
-        '    CircleDisplays(i) = ld
-
-        'Next
         UpdateViewMouseEnter()
 
         Invalidate()
@@ -352,10 +282,37 @@ Public Class Form1
 
         Dim distanceSquared As Double = CalculateDistances()
 
-        'UpdateView()
+        ' Update mouse text display
         Using g As Graphics = CreateGraphics()
-            UpdateTextDisplays(g, DistanceSquared)
+            Dim td As TextDisplay
+            Dim ThisStringSize As SizeF
+            td = TextDisplays(TextDisplayIndex.Mouse)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
+            td.Brush = Brushes.Black
+            td.FontSize = MouseFontSize
+            td.Font = New Font("Segoe UI", td.FontSize)
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = If(MousePointerLocation.X + ThisStringSize.Width + 30 > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+            'td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+            'td.Y = If(MousePointerLocation.Y + ThisStringSize.Height \ 2 > ClientSize.Height, MousePointerLocation.Y - ThisStringSize.Height, MousePointerLocation.Y - ThisStringSize.Height \ 2)
+            'td.Y = If(MousePointerLocation.Y + ThisStringSize.Height \ 2 < ClientRectangle.Top, MousePointerLocation.Y + ThisStringSize.Height, MousePointerLocation.Y - ThisStringSize.Height \ 2)
+
+            If MousePointerLocation.Y + ThisStringSize.Height \ 2 > ClientSize.Height Then
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height
+            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 2 < ClientRectangle.Top Then
+                'td.Y = MousePointerLocation.Y + ThisStringSize.Height
+                td.Y = MousePointerLocation.Y
+            Else
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+            End If
+
+            TextDisplays(TextDisplayIndex.Mouse) = td
         End Using
+
+        'UpdateView()
+        'Using g As Graphics = CreateGraphics()
+        '    UpdateTextDisplays(g, distanceSquared)
+        'End Using
 
         UpdateLineDisplays()
 
@@ -881,6 +838,8 @@ Public Class Form1
     Private Sub UpdateBrushesPens2Transparent4MouseLeave()
         ' Update Brushes and Pens to transparent for mouse leave state
 
+        UpdateCircleBrush()
+
         DistancePen = TransparentPen
         XYDistancePen = TransparentPen
         MousePointBrush = Brushes.Transparent
@@ -936,68 +895,31 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateBrushesPens4MouseEnter()
-        ' Update Brushes and Pens to transparent for mouse enter state
+        ' Update Brushes and Pens for mouse enter state
 
         UpdateMousePointBrush()
 
-        UpdateCircleBrush()
-
         DistancePen = ArrowBlack3Pen
         XYDistancePen = Orchid2Pen
-        MousePointBrush = Brushes.Gray
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-
-            Dim td As TextDisplay = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Heading
-                    If ViewState = ViewStateIndex.Overview Then
-                        td.Brush = Brushes.Black
-                    End If
-                Case TextDisplayIndex.Radius
-                Case TextDisplayIndex.Mouse
-                    'If ViewState = ViewStateIndex.Overview Then
-                    td.Brush = Brushes.Black
-                    'End If
-                Case TextDisplayIndex.Footer
-                    If ViewState = ViewStateIndex.Overview Then
-                        td.Brush = Brushes.Black
-                    End If
-                    'Case Else
-                    '    td.Brush = Brushes.Transparent
-            End Select
-            TextDisplays(i) = td
-
-        Next
-
-        For i As Integer = 0 To LineDisplays.Count - 1
-
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                Case Else
-                    ld.Pen = Pens.Transparent
-            End Select
-            LineDisplays(i) = ld
-
-        Next
-
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-            End Select
-            CircleDisplays(i) = ld
-
-        Next
+        ' Update mouse text display
+        Using g As Graphics = CreateGraphics()
+            Dim td As TextDisplay
+            Dim ThisStringSize As SizeF
+            td = TextDisplays(TextDisplayIndex.Mouse)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
+            td.Brush = Brushes.Black
+            td.FontSize = MouseFontSize
+            td.Font = New Font("Segoe UI", td.FontSize)
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = If(MousePointerLocation.X + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width, MousePointerLocation.X + 30)
+            'td.Y = MousePointerLocation.Y
+            td.Y = If(MousePointerLocation.Y + ThisStringSize.Height > ClientSize.Height, MousePointerLocation.Y - ThisStringSize.Height, MousePointerLocation.Y)
+            TextDisplays(TextDisplayIndex.Mouse) = td
+        End Using
 
     End Sub
 
-
-    ' update the grid brush in ParametersView
     Private Sub UpdateGridPen()
 
         ' Update the grid pen based on the current view state
@@ -1160,7 +1082,7 @@ Public Class Form1
                 Case TextDisplayIndex.Heading
                     UpdateHeadingText(td, g, headingFont)
                 Case TextDisplayIndex.Mouse
-                    UpdateMouseText(td, g, mouseFont, distanceSquared)
+                    UpdateMouseText()
                 Case TextDisplayIndex.Center
                     UpdateCenterText(td, g, centerFont)
                 Case TextDisplayIndex.Footer
@@ -1174,16 +1096,35 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateMouseText(ByRef td As TextDisplay, g As Graphics, mouseFont As Font, distanceSquared As Double)
+    Private Sub UpdateMouseText()
 
-        Dim mp = MousePointerLocation
-        Dim offset = New Point(30, 0)
+        'Dim mp = MousePointerLocation
+        'Dim offset = New Point(30, 0)
 
-        Dim text = If(ViewState = ViewStateIndex.Overview,
-                  $"Distance² {distanceSquared}",
-                  $"X {mp.X}, Y {mp.Y}")
+        'Dim text = If(ViewState = ViewStateIndex.Overview,
+        '          $"Distance² {distanceSquared}",
+        '          $"X {mp.X}, Y {mp.Y}")
 
-        UpdateTextDisplay(td, g, text, mouseFont, MouseFontSize, mp, offset, td.Brush)
+        'UpdateTextDisplay(td, g, text, mouseFont, MouseFontSize, mp, offset, td.Brush)
+
+
+        ' Update mouse text display
+        Using g As Graphics = CreateGraphics()
+            Dim td As TextDisplay
+            Dim ThisStringSize As SizeF
+            td = TextDisplays(TextDisplayIndex.Mouse)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
+            td.Brush = Brushes.Black
+            td.FontSize = MouseFontSize
+            td.Font = New Font("Segoe UI", td.FontSize)
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            'td.X = If(MousePointerLocation.X + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width, MousePointerLocation.X + 30)
+            td.X = MousePointerLocation.X + 30
+
+            td.Y = MousePointerLocation.Y
+            TextDisplays(TextDisplayIndex.Mouse) = td
+        End Using
+
 
     End Sub
 
