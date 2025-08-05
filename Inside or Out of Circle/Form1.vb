@@ -148,11 +148,6 @@ Public Class Form1
 
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
-    'Private CombinedText As String = String.Empty
-
-    'Dim circleInfo = TextDisplays
-    'Dim mouseInfo = TextDisplays
-    'Dim resultInfo = TextDisplays
 
     Private HeadingFontSize As Integer = 16
     Private MouseFontSize As Integer = 12
