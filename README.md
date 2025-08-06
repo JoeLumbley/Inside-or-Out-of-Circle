@@ -41,42 +41,13 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 
 # Code Walkthrough
 
-Here’s a detailed line-by-line explanation of the provided Visual Basic .NET code for the **Inside or Out of Circle** application, breaking down the functionality and purpose of each section.
+
 
 ```vb
-' Inside or Out of Circle
-' This program demonstrates how to determine if a point is inside or outside a circle.
-' It calculates the squared distance from the point to the center of the circle
-' and compares it to the squared radius of the circle.
-' If the squared distance is less than or equal to the squared radius,
-' the point is inside or on the edge of the circle.
-' If the squared distance is greater than the squared radius, the point is outside the circle.
-' The program also displays the radius, center of the circle, mouse pointer location,
-' and the calculated distances in a graphical window.
-
-' MIT License
-
-' Copyright (c) 2025 Joseph W. Lumbley
-
-' Permission is hereby granted, free of charge, to any person obtaining a copy
-' of this software and associated documentation files (the "Software"), to deal
-' in the Software without restriction, including without limitation the rights
-' to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-' copies of the Software, and to permit persons to whom the Software is
-' furnished to do so, subject to the following conditions:
-' The above copyright notice and this permission notice shall be included in all
-' copies or substantial portions of the Software.
-' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-' IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-' FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-' AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-' LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-' OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-' SOFTWARE.
 
 Public Class Form1
 ```
-- **Comments**: The comments at the top provide an overview of the program's purpose, functionality, and licensing information.
+
 - **Public Class Form1**: This line declares a new class named `Form1`, which serves as the main form for the application.
 
 ### Structure Definitions
