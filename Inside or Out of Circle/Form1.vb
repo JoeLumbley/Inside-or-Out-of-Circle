@@ -295,6 +295,76 @@ Public Class Form1
 
     End Sub
 
+    Function IsPointInsideCircle(pointX As Double, pointY As Double,
+             centerX As Double, centerY As Double, radius As Double) As Boolean
+        ' This function checks if a point (pointX, pointY) is inside or on the edge of a circle
+        ' defined by its center (centerX, centerY) and radius.
+
+        ' Calculate horizontal distance from the point to the center of the circle
+        Dim Xdistance As Double = pointX - centerX
+
+        ' Calculate vertical distance from the point to the center of the circle
+        Dim Ydistance As Double = pointY - centerY
+
+        ' Calculate the squared distance from the point to the center of the circle
+        Dim squaredDistance As Double = Xdistance * Xdistance + Ydistance * Ydistance
+
+        ' Check if the squared distance is less than or equal to the squared radius
+        Return squaredDistance <= radius * radius
+
+        ' It uses the squared distance to avoid the computational cost of taking a square root.
+        ' The function returns True if the point is inside or on the edge of the circle,
+        ' and False if the point is outside the circle.
+
+        ' The function calculates the horizontal and vertical distances from the point to the center of the circle,
+        ' squares these distances, and sums them to get the squared distance.
+        ' It then compares this squared distance to the squared radius of the circle.
+        ' If the squared distance is less than or equal to the squared radius, the point is inside or on the edge of the circle.
+        ' If the squared distance is greater than the squared radius, the point is outside the circle.
+        ' This method is particularly useful in scenarios where performance is critical,
+        ' such as in graphics rendering or physics simulations, where many distance checks may be performed frequently.
+
+    End Function
+
+    Private Sub DrawCircles(g As Graphics)
+
+        ' 🔵 Draw filled circles
+        For Each circleDisplay As CircleDisplay In CircleDisplays
+            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+        Next
+
+    End Sub
+
+    Private Sub DrawLines(g As Graphics)
+
+        ' 📏 Draw lines
+        For Each lineDisplay As LineDisplay In LineDisplays
+            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+        Next
+
+    End Sub
+
+    Private Sub DrawTextOverlays(g As Graphics)
+
+        ' abc Draw text overlays
+        For Each textDisplay As TextDisplay In TextDisplays
+            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+        Next
+
+    End Sub
+
+    Private Sub DrawGrid(g As Graphics)
+
+        ' 🔲 Draw grid ( lines every 50 pixels)
+        For x As Integer = 0 To ClientSize.Width Step 50
+            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+        Next
+        For y As Integer = 0 To ClientSize.Height Step 50
+            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+        Next
+
+    End Sub
+
     Private Sub UpdateButtonLayout()
         ParametersViewButton.Width = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
         ParametersViewButton.Height = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
@@ -416,75 +486,7 @@ Public Class Form1
         ld.Y2 = p2.Y
     End Sub
 
-    Function IsPointInsideCircle(pointX As Double, pointY As Double,
-             centerX As Double, centerY As Double, radius As Double) As Boolean
-        ' This function checks if a point (pointX, pointY) is inside or on the edge of a circle
-        ' defined by its center (centerX, centerY) and radius.
 
-        ' Calculate horizontal distance from the point to the center of the circle
-        Dim Xdistance As Double = pointX - centerX
-
-        ' Calculate vertical distance from the point to the center of the circle
-        Dim Ydistance As Double = pointY - centerY
-
-        ' Calculate the squared distance from the point to the center of the circle
-        Dim squaredDistance As Double = Xdistance * Xdistance + Ydistance * Ydistance
-
-        ' Check if the squared distance is less than or equal to the squared radius
-        Return squaredDistance <= radius * radius
-
-        ' It uses the squared distance to avoid the computational cost of taking a square root.
-        ' The function returns True if the point is inside or on the edge of the circle,
-        ' and False if the point is outside the circle.
-
-        ' The function calculates the horizontal and vertical distances from the point to the center of the circle,
-        ' squares these distances, and sums them to get the squared distance.
-        ' It then compares this squared distance to the squared radius of the circle.
-        ' If the squared distance is less than or equal to the squared radius, the point is inside or on the edge of the circle.
-        ' If the squared distance is greater than the squared radius, the point is outside the circle.
-        ' This method is particularly useful in scenarios where performance is critical,
-        ' such as in graphics rendering or physics simulations, where many distance checks may be performed frequently.
-
-    End Function
-
-    Private Sub DrawGrid(g As Graphics)
-
-        ' 🔲 Draw grid ( lines every 50 pixels)
-        For x As Integer = 0 To ClientSize.Width Step 50
-            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
-        Next
-        For y As Integer = 0 To ClientSize.Height Step 50
-            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-        Next
-
-    End Sub
-
-    Private Sub DrawCircles(g As Graphics)
-
-        ' 🔵 Draw filled circles
-        For Each circleDisplay As CircleDisplay In CircleDisplays
-            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-        Next
-
-    End Sub
-
-    Private Sub DrawLines(g As Graphics)
-
-        ' 📏 Draw lines
-        For Each lineDisplay As LineDisplay In LineDisplays
-            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-        Next
-
-    End Sub
-
-    Private Sub DrawTextOverlays(g As Graphics)
-
-        ' abc Draw text overlays
-        For Each textDisplay As TextDisplay In TextDisplays
-            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
-        Next
-
-    End Sub
 
     Private Sub SetTextDisplayTransparent(index As TextDisplayIndex)
         Dim td = TextDisplays(index)
