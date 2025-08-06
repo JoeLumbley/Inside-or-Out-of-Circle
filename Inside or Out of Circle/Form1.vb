@@ -935,9 +935,7 @@ Public Class Form1
             td.FontSize = MouseFontSize
             td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
-            'td.X = If(MousePointerLocation.X + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width, MousePointerLocation.X + 30)
             td.X = MousePointerLocation.X + 30
-
             td.Y = MousePointerLocation.Y
             TextDisplays(TextDisplayIndex.Mouse) = td
         End Using
