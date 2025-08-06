@@ -291,23 +291,24 @@ Public Class Form1
 
             td = TextDisplays(TextDisplayIndex.Mouse)
             td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
-            td.FontSize = MouseFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
+            'td.FontSize = MouseFontSize
+            'td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = If(MousePointerLocation.X + ThisStringSize.Width + 30 > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
-            If MousePointerLocation.Y + ThisStringSize.Height \ 2 > ClientSize.Height Then
+            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
                 td.Y = MousePointerLocation.Y - ThisStringSize.Height
-            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 2 < ClientRectangle.Top Then
+            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
                 td.Y = MousePointerLocation.Y
             Else
                 td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
             End If
+
             TextDisplays(TextDisplayIndex.Mouse) = td
 
             td = TextDisplays(TextDisplayIndex.Heading)
             td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            td.FontSize = HeadingFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
+            ' td.FontSize = HeadingFontSize
+            'td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
             td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
             td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
@@ -315,8 +316,8 @@ Public Class Form1
 
             td = TextDisplays(TextDisplayIndex.Footer)
             td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
-            td.FontSize = FooterFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
+            'td.FontSize = FooterFontSize
+            'td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
             td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
             td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
