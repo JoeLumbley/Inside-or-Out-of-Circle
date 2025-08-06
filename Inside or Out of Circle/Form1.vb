@@ -167,87 +167,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        gridPen = Pens.Transparent
-
-        DistancePen = TransparentPen
-
-        RadiusPen.CustomStartCap = RadiusArrowCap
-        RadiusPen.CustomEndCap = RadiusArrowCap
-        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
-        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
-        XYDistancePen = TransparentPen
-        MousePointBrush = Brushes.Transparent
-
-        For i As Integer = 0 To TextDisplays.Count - 1
-
-            Dim td As TextDisplay = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Radius
-                    td.Text = $"Radius² {RadiusSquared}"
-
-                    td.Brush = Brushes.Black
-
-                Case Else
-                    td.Brush = Brushes.Transparent
-            End Select
-
-            TextDisplays(i) = td
-
-        Next
-
-        For i As Integer = 0 To LineDisplays.Count - 1
-
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = CircleCenterPoint.X + CircleRadius
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = RadiusPen
-                Case Else
-                    ld.X1 = 0
-                    ld.Y1 = 0
-                    ld.X2 = 0
-                    ld.Y2 = 0
-                    ld.Pen = Pens.Transparent
-            End Select
-
-            LineDisplays(i) = ld
-
-        Next
-
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
-                    ld.Brush = CircleBrush
-                Case CircleDisplayIndex.RadiusEndPoint
-                    ld.X = CircleCenterPoint.X + CircleRadius - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.CenterPoint
-                    ld.X = CircleCenterPoint.X - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-
-            End Select
-
-            CircleDisplays(i) = ld
-
-        Next
+        InitializeApp()
 
     End Sub
 
@@ -278,49 +198,7 @@ Public Class Form1
 
         IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
 
-        UpdateMousePointBrush()
-
-        UpdateCircleBrush()
-
-        Dim distanceSquared As Double = CalculateDistances()
-
-        ' Update mouse text display
-        Using g As Graphics = CreateGraphics()
-            Dim td As TextDisplay
-            Dim ThisStringSize As SizeF
-
-            td = TextDisplays(TextDisplayIndex.Mouse)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
-            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height
-            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
-                td.Y = MousePointerLocation.Y
-            Else
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
-            End If
-            TextDisplays(TextDisplayIndex.Mouse) = td
-
-            td = TextDisplays(TextDisplayIndex.Heading)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Heading) = td
-
-            td = TextDisplays(TextDisplayIndex.Footer)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Footer) = td
-
-        End Using
-
-        UpdateLineDisplays()
-
-        UpdateCircleDisplays()
+        UpdateViewOnMouseMove()
 
         Invalidate()
 
@@ -982,5 +860,144 @@ Public Class Form1
         td.Y = CircleCenterPoint.Y - size.Height \ 2
         td.Font = radiusFont
     End Sub
+
+    Private Sub UpdateViewOnMouseMove()
+
+        UpdateMousePointBrush()
+
+        UpdateCircleBrush()
+
+        Dim distanceSquared As Double = CalculateDistances()
+
+        ' Update mouse text display
+        Using g As Graphics = CreateGraphics()
+            Dim td As TextDisplay
+            Dim ThisStringSize As SizeF
+
+            td = TextDisplays(TextDisplayIndex.Mouse)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height
+            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
+                td.Y = MousePointerLocation.Y
+            Else
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+            End If
+            TextDisplays(TextDisplayIndex.Mouse) = td
+
+            td = TextDisplays(TextDisplayIndex.Heading)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
+            TextDisplays(TextDisplayIndex.Heading) = td
+
+            td = TextDisplays(TextDisplayIndex.Footer)
+            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
+            ThisStringSize = g.MeasureString(td.Text, td.Font)
+            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
+            TextDisplays(TextDisplayIndex.Footer) = td
+
+        End Using
+
+        UpdateLineDisplays()
+
+        UpdateCircleDisplays()
+
+    End Sub
+
+    Private Sub InitializeApp()
+
+        gridPen = Pens.Transparent
+
+        DistancePen = TransparentPen
+
+        RadiusPen.CustomStartCap = RadiusArrowCap
+        RadiusPen.CustomEndCap = RadiusArrowCap
+        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
+        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
+        XYDistancePen = TransparentPen
+        MousePointBrush = Brushes.Transparent
+
+        For i As Integer = 0 To TextDisplays.Count - 1
+
+            Dim td As TextDisplay = TextDisplays(i)
+            Select Case i
+                Case TextDisplayIndex.Radius
+                    td.Text = $"Radius² {RadiusSquared}"
+
+                    td.Brush = Brushes.Black
+
+                Case Else
+                    td.Brush = Brushes.Transparent
+            End Select
+
+            TextDisplays(i) = td
+
+        Next
+
+        For i As Integer = 0 To LineDisplays.Count - 1
+
+            Dim ld As LineDisplay = LineDisplays(i)
+            Select Case i
+                Case LineDisplayIndex.RadiusLine
+                    ld.X1 = CircleCenterPoint.X
+                    ld.Y1 = CircleCenterPoint.Y
+                    ld.X2 = CircleCenterPoint.X + CircleRadius
+                    ld.Y2 = CircleCenterPoint.Y
+                    ld.Pen = RadiusPen
+                Case Else
+                    ld.X1 = 0
+                    ld.Y1 = 0
+                    ld.X2 = 0
+                    ld.Y2 = 0
+                    ld.Pen = Pens.Transparent
+            End Select
+
+            LineDisplays(i) = ld
+
+        Next
+
+        For i As Integer = 0 To CircleDisplays.Count - 1
+            Dim ld = CircleDisplays(i)
+            Select Case i
+                Case CircleDisplayIndex.Circle
+                    ld.X = CircleCenterPoint.X - CircleRadius
+                    ld.Y = CircleCenterPoint.Y - CircleRadius
+                    ld.Width = CircleRadius * 2
+                    ld.Height = CircleRadius * 2
+                    ld.Brush = CircleBrush
+                Case CircleDisplayIndex.RadiusEndPoint
+                    ld.X = CircleCenterPoint.X + CircleRadius - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = RadiusBrush
+                Case CircleDisplayIndex.CenterPoint
+                    ld.X = CircleCenterPoint.X - 3
+                    ld.Y = CircleCenterPoint.Y - 3
+                    ld.Width = 6
+                    ld.Height = 6
+                    ld.Brush = RadiusBrush
+                Case CircleDisplayIndex.MousePoint
+                    ld.Brush = Brushes.Transparent
+                Case CircleDisplayIndex.MouseHilight
+                    ld.Brush = Brushes.Transparent
+
+            End Select
+
+            CircleDisplays(i) = ld
+
+        Next
+
+    End Sub
+
+
+
+
+
 
 End Class
