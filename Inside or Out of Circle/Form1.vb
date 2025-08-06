@@ -842,7 +842,6 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateFooterText(ByRef td As TextDisplay, g As Graphics, footerFont As Font, distanceSquared As Double)
-        'td.Text = $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}"
         td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
         td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Black, Brushes.Black)
         td.FontSize = FooterFontSize
@@ -994,10 +993,6 @@ Public Class Form1
         Next
 
     End Sub
-
-
-
-
 
 
 End Class
