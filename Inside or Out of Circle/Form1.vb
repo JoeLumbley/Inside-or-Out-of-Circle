@@ -494,9 +494,37 @@ Public Class Form1
         TextDisplays(index) = td
     End Sub
 
+    Private Sub SetLineDisplayTransparent(index As LineDisplayIndex)
+        Dim ld = LineDisplays(index)
+        ld.Pen = Pens.Transparent
+        LineDisplays(index) = ld
+    End Sub
+
+    Private Sub SetLineDisplayPen(index As LineDisplayIndex, pen As Pen)
+        Dim ld = LineDisplays(index)
+        ld.Pen = pen
+        LineDisplays(index) = ld
+    End Sub
+
+
+    Private Sub SetTextDisplayBlack(index As TextDisplayIndex)
+        Dim td = TextDisplays(index)
+        td.Brush = Brushes.Black
+        TextDisplays(index) = td
+    End Sub
+
+
+
     Private Sub SetCircleDisplayTransparent(index As CircleDisplayIndex)
         Dim cd = CircleDisplays(index)
         cd.Brush = Brushes.Transparent
+        CircleDisplays(index) = cd
+    End Sub
+
+
+    Private Sub SetCircleDisplayBrush(index As CircleDisplayIndex, brush As SolidBrush)
+        Dim cd = CircleDisplays(index)
+        cd.Brush = brush
         CircleDisplays(index) = cd
     End Sub
 
@@ -616,6 +644,14 @@ Public Class Form1
 
     Private Sub UpdateBrushesPens4MouseEnter()
         ' Update Brushes and Pens for mouse enter state
+
+        ' Mouse enter sets the stage for mouse interaction.
+        ' Mouse Enter sets the brushes, pens and fonts to their normal state.
+
+
+
+
+
 
         UpdateMousePointBrush()
 
@@ -911,90 +947,67 @@ Public Class Form1
     End Sub
 
     Private Sub InitializeApp()
+        ' Initialize the application state
 
-        gridPen = Pens.Transparent
+        InitializePensBrushes()
 
-        DistancePen = TransparentPen
+        InitializeTextDisplays()
 
-        RadiusPen.CustomStartCap = RadiusArrowCap
-        RadiusPen.CustomEndCap = RadiusArrowCap
-        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
-        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
-        XYDistancePen = TransparentPen
-        MousePointBrush = Brushes.Transparent
+        InitializeLineDisplays()
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-
-            Dim td As TextDisplay = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Radius
-                    td.Text = $"Radius² {RadiusSquared}"
-
-                    td.Brush = Brushes.Black
-
-                Case Else
-                    td.Brush = Brushes.Transparent
-            End Select
-
-            TextDisplays(i) = td
-
-        Next
-
-        For i As Integer = 0 To LineDisplays.Count - 1
-
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = CircleCenterPoint.X + CircleRadius
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = RadiusPen
-                Case Else
-                    ld.X1 = 0
-                    ld.Y1 = 0
-                    ld.X2 = 0
-                    ld.Y2 = 0
-                    ld.Pen = Pens.Transparent
-            End Select
-
-            LineDisplays(i) = ld
-
-        Next
-
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
-                    ld.Brush = CircleBrush
-                Case CircleDisplayIndex.RadiusEndPoint
-                    ld.X = CircleCenterPoint.X + CircleRadius - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.CenterPoint
-                    ld.X = CircleCenterPoint.X - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-
-            End Select
-
-            CircleDisplays(i) = ld
-
-        Next
+        InitializeCircleDisplays()
 
     End Sub
 
+    Private Sub InitializePensBrushes()
+        ' Initialize Pens and Brushes used in the application
+
+        gridPen = Pens.Transparent
+
+        DistancePen = Pens.Transparent
+
+        RadiusPen.CustomStartCap = RadiusArrowCap
+        RadiusPen.CustomEndCap = RadiusArrowCap
+
+        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
+        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
+
+        XYDistancePen = Pens.Transparent
+
+        MousePointBrush = Brushes.Transparent
+
+    End Sub
+
+    Private Sub InitializeTextDisplays()
+        ' Set TextDisplays to initial state
+
+        SetTextDisplayTransparent(TextDisplayIndex.Center)
+        SetTextDisplayTransparent(TextDisplayIndex.Footer)
+        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+        SetTextDisplayTransparent(TextDisplayIndex.Heading)
+        SetTextDisplayBlack(TextDisplayIndex.Radius)
+
+    End Sub
+
+    Private Sub InitializeLineDisplays()
+        ' Set LineDisplays to initial state
+
+        SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+        SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+
+    End Sub
+
+    Private Sub InitializeCircleDisplays()
+        ' Set CircleDisplays to initial state
+
+        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+        SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
+        SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
+        SetCircleDisplayBrush(CircleDisplayIndex.CenterPoint, RadiusBrush)
+
+    End Sub
 
 End Class
