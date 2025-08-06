@@ -819,7 +819,7 @@ Public Class Form1
                 Case TextDisplayIndex.Heading
                     UpdateHeadingText(td, g, headingFont)
                 Case TextDisplayIndex.Mouse
-                    UpdateMouseText()
+                    UpdateMouseTextPositionContent()
                 Case TextDisplayIndex.Center
                     UpdateCenterText(td, g, centerFont)
                 Case TextDisplayIndex.Footer
@@ -833,7 +833,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateMouseText()
+    Private Sub UpdateMouseTextPositionContent()
 
         ' Update mouse text display
         Using g As Graphics = CreateGraphics()
@@ -841,12 +841,17 @@ Public Class Form1
             Dim ThisStringSize As SizeF
             td = TextDisplays(TextDisplayIndex.Mouse)
             td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
-            td.Brush = Brushes.Black
             td.FontSize = MouseFontSize
             td.Font = New Font("Segoe UI", td.FontSize)
             ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = MousePointerLocation.X + 30
-            td.Y = MousePointerLocation.Y
+            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height
+            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
+                td.Y = MousePointerLocation.Y
+            Else
+                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+            End If
             TextDisplays(TextDisplayIndex.Mouse) = td
         End Using
 
@@ -904,41 +909,48 @@ Public Class Form1
 
         UpdateCircleBrush()
 
-        Dim distanceSquared As Double = CalculateDistances()
+        DistanceSquared = CalculateDistances()
 
-        ' Update mouse text display
-        Using g As Graphics = CreateGraphics()
-            Dim td As TextDisplay
-            Dim ThisStringSize As SizeF
+        '' Update mouse text display
+        'Using g As Graphics = CreateGraphics()
+        '    Dim td As TextDisplay
+        '    Dim ThisStringSize As SizeF
 
-            td = TextDisplays(TextDisplayIndex.Mouse)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
-            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height
-            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
-                td.Y = MousePointerLocation.Y
-            Else
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
-            End If
-            TextDisplays(TextDisplayIndex.Mouse) = td
+        '    ' Update mouse text display position and content
+        '    td = TextDisplays(TextDisplayIndex.Mouse)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+        '    If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
+        '        td.Y = MousePointerLocation.Y - ThisStringSize.Height
+        '    ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
+        '        td.Y = MousePointerLocation.Y
+        '    Else
+        '        td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+        '    End If
+        '    TextDisplays(TextDisplayIndex.Mouse) = td
 
-            td = TextDisplays(TextDisplayIndex.Heading)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Heading) = td
+        '    td = TextDisplays(TextDisplayIndex.Heading)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        '    td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
+        '    TextDisplays(TextDisplayIndex.Heading) = td
 
-            td = TextDisplays(TextDisplayIndex.Footer)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Footer) = td
+        '    td = TextDisplays(TextDisplayIndex.Footer)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        '    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
+        '    TextDisplays(TextDisplayIndex.Footer) = td
 
-        End Using
+        'End Using
+
+        UpdateMouseTextPositionContent()
+
+        UpdateHeadingText(TextDisplays(TextDisplayIndex.Heading), CreateGraphics(), New Font("Segoe UI", HeadingFontSize))
+        UpdateFooterText(TextDisplays(TextDisplayIndex.Footer), CreateGraphics(), New Font("Segoe UI", FooterFontSize), distanceSquared)
+
 
         UpdateLineDisplays()
 
