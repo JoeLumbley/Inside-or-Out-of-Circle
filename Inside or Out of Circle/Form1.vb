@@ -300,7 +300,6 @@ Public Class Form1
             Else
                 td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
             End If
-
             TextDisplays(TextDisplayIndex.Mouse) = td
 
             td = TextDisplays(TextDisplayIndex.Heading)
