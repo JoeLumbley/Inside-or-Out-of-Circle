@@ -31,6 +31,7 @@ The **Inside or Out of Circle** application is an interactive educational tool d
 - **Interactive Demonstrations**: Useful for workshops or presentations that require real-time visual feedback on spatial relationships.
 - **Development Practice**: A practical example for developers learning about GDI drawing techniques and hit detection algorithms.
 
+<img width="1920" height="1080" alt="014" src="https://github.com/user-attachments/assets/830c3bf6-79f9-4c70-a296-0a089147fdf1" />
 
 The **Inside or Out of Circle** app is not just a simple interactive tool; it is a comprehensive educational platform that combines visual feedback with mathematical principles. By engaging with this application, users can deepen their understanding of geometry and enhance their programming skills in a fun and interactive way.
 
