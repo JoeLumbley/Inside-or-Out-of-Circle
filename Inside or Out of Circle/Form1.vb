@@ -298,6 +298,7 @@ Public Class Form1
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
         SetTextDisplayBlack(TextDisplayIndex.Radius)
+        SetTextDisplayBlack(TextDisplayIndex.Heading)
 
         Invalidate()
 
@@ -359,7 +360,7 @@ Public Class Form1
 
         UpdateLineDisplays()
 
-        UpdateCircleDisplaysOnResize()
+        UpdateCircleDisplaysPostion()
 
         Invalidate()
 
@@ -671,7 +672,7 @@ Public Class Form1
 
         Using g As Graphics = CreateGraphics()
             UpdateLineDisplays()
-            UpdateCircleDisplays()
+            UpdateCircleDisplaysPostion()
             UpdateTextDisplays(g, distanceSquared)
         End Using
 
@@ -855,83 +856,83 @@ Public Class Form1
         Return xDistance * xDistance + yDistance * yDistance
     End Function
 
-    Private Sub UpdateCircleDisplays()
+    Private Sub UpdateCircleDisplaysPostion()
         For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
+            Dim cd = CircleDisplays(i)
 
             Select Case i
                 Case CircleDisplayIndex.Circle
-                    SetCircle(ld)
+                    SetCirclePostion(cd)
                 Case CircleDisplayIndex.RadiusEndPoint
-                    SetEndpoint(ld, CircleRadius)
+                    SetEndpointPostion(cd, CircleRadius)
                 Case CircleDisplayIndex.CenterPoint
-                    SetEndpoint(ld, 0)
+                    SetEndpointPostion(cd, 0)
                 Case CircleDisplayIndex.MousePoint
-                    SetMousePoint(ld)
+                    SetMousePointPostion(cd)
                 Case CircleDisplayIndex.MouseHilight
-                    SetMouseHighlight(ld)
+                    SetMouseHighlightPostion(cd)
             End Select
 
-            CircleDisplays(i) = ld
+            CircleDisplays(i) = cd
         Next
     End Sub
 
-    Private Sub UpdateCircleDisplaysOnResize()
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
+    'Private Sub UpdateCircleDisplaysPostionOnResize()
+    '    For i As Integer = 0 To CircleDisplays.Count - 1
+    '        Dim cd = CircleDisplays(i)
 
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    SetCircle(ld)
-                Case CircleDisplayIndex.RadiusEndPoint
-                    SetEndpoint(ld, CircleRadius)
-                Case CircleDisplayIndex.CenterPoint
-                    SetEndpoint(ld, 0)
-                Case CircleDisplayIndex.MousePoint
-                    SetMousePoint(ld)
-                Case CircleDisplayIndex.MouseHilight
-                    SetMouseHighlightOnResize(ld)
-            End Select
+    '        Select Case i
+    '            Case CircleDisplayIndex.Circle
+    '                SetCirclePostion(cd)
+    '            Case CircleDisplayIndex.RadiusEndPoint
+    '                SetEndpointPostion(cd, CircleRadius)
+    '            Case CircleDisplayIndex.CenterPoint
+    '                SetEndpointPostion(cd, 0)
+    '            Case CircleDisplayIndex.MousePoint
+    '                SetMousePointPostion(cd)
+    '            Case CircleDisplayIndex.MouseHilight
+    '                SetMouseHighlightPostion(cd)
+    '        End Select
 
-            CircleDisplays(i) = ld
-        Next
-    End Sub
+    '        CircleDisplays(i) = cd
+    '    Next
+    'End Sub
 
-    Private Sub SetCircle(ByRef ld As CircleDisplay)
-        ld.X = CircleCenterPoint.X - CircleRadius
-        ld.Y = CircleCenterPoint.Y - CircleRadius
-        ld.Width = CircleRadius * 2
-        ld.Height = CircleRadius * 2
+    Private Sub SetCirclePostion(ByRef cd As CircleDisplay)
+        cd.X = CircleCenterPoint.X - CircleRadius
+        cd.Y = CircleCenterPoint.Y - CircleRadius
+        cd.Width = CircleRadius * 2
+        cd.Height = CircleRadius * 2
         'ld.Brush = CircleBrush
     End Sub
 
-    Private Sub SetEndpoint(ByRef ld As CircleDisplay, offset As Double)
-        ld.X = CircleCenterPoint.X + offset - 3
-        ld.Y = CircleCenterPoint.Y - 3
-        ld.Width = 6
-        ld.Height = 6
+    Private Sub SetEndpointPostion(ByRef cd As CircleDisplay, offset As Double)
+        cd.X = CircleCenterPoint.X + offset - 3
+        cd.Y = CircleCenterPoint.Y - 3
+        cd.Width = 6
+        cd.Height = 6
         'ld.Brush = RadiusBrush
     End Sub
 
-    Private Sub SetMousePoint(ByRef ld As CircleDisplay)
-        ld.X = MousePointerLocation.X - 3
-        ld.Y = MousePointerLocation.Y - 3
-        ld.Width = 6
-        ld.Height = 6
+    Private Sub SetMousePointPostion(ByRef cd As CircleDisplay)
+        cd.X = MousePointerLocation.X - 3
+        cd.Y = MousePointerLocation.Y - 3
+        cd.Width = 6
+        cd.Height = 6
         'ld.Brush = MousePointBrush
     End Sub
 
-    Private Sub SetMouseHighlight(ByRef ld As CircleDisplay)
-        ld.X = MousePointerLocation.X - 20
-        ld.Y = MousePointerLocation.Y - 20
-        ld.Width = 40
-        ld.Height = 40
+    Private Sub SetMouseHighlightPostion(ByRef cd As CircleDisplay)
+        cd.X = MousePointerLocation.X - 20
+        cd.Y = MousePointerLocation.Y - 20
+        cd.Width = 40
+        cd.Height = 40
         'ld.Brush = MouseHilightBrush
     End Sub
 
-    Private Sub SetMouseHighlightOnResize(ByRef ld As CircleDisplay)
-        ld.Brush = Brushes.Transparent
-    End Sub
+    'Private Sub SetMouseHighlightOnResize(ByRef ld As CircleDisplay)
+    '    ld.Brush = Brushes.Transparent
+    'End Sub
 
     Private Sub UpdateTextDisplays(g As Graphics, distanceSquared As Double)
 
@@ -946,15 +947,15 @@ Public Class Form1
 
             Select Case i
                 Case TextDisplayIndex.Heading
-                    UpdateHeadingText(td, g, headingFont)
+                    UpdateHeadingTextPositionContent(td, g, headingFont)
                 Case TextDisplayIndex.Mouse
                     UpdateMouseTextPositionContent()
                 Case TextDisplayIndex.Center
-                    UpdateCenterText(td, g, centerFont)
+                    UpdateCenterTextPositionContent(td, g, centerFont)
                 Case TextDisplayIndex.Footer
-                    UpdateFooterText(td, g, footerFont, distanceSquared)
+                    UpdateFooterTextPositionContent(td, g, footerFont, distanceSquared)
                 Case TextDisplayIndex.Radius
-                    UpdateRadiusText(td, g, radiusFont)
+                    UpdateRadiusTextPositionContent(td, g, radiusFont)
             End Select
 
             TextDisplays(i) = td
@@ -977,11 +978,7 @@ Public Class Form1
                     td.Text = $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}"
                 Case ViewStateIndex.XDistanceView
                     td.Text = $"X {MousePointerLocation.X}"
-
             End Select
-
-
-
 
             td.FontSize = MouseFontSize
             td.Font = New Font("Segoe UI", td.FontSize)
@@ -999,7 +996,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateHeadingText(ByRef td As TextDisplay, g As Graphics, headingFont As Font)
+    Private Sub UpdateHeadingTextPositionContent(ByRef td As TextDisplay, g As Graphics, headingFont As Font)
 
         'If ViewState = ViewStateIndex.Overview Then
         '    td.Text = $"Inside Circle {IsPointerInsideCircle}"
@@ -1019,7 +1016,7 @@ Public Class Form1
 
         End Select
 
-        td.Brush = Brushes.Black
+        'td.Brush = Brushes.Black
         td.FontSize = HeadingFontSize
         Dim size = g.MeasureString(td.Text, headingFont)
         td.X = ClientSize.Width \ 2 - size.Width \ 2
@@ -1028,7 +1025,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateCenterText(ByRef td As TextDisplay, g As Graphics, centerFont As Font)
+    Private Sub UpdateCenterTextPositionContent(ByRef td As TextDisplay, g As Graphics, centerFont As Font)
         'td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
 
         Select Case ViewState
@@ -1043,7 +1040,7 @@ Public Class Form1
 
         End Select
 
-        td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
+        'td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Transparent, Brushes.Black)
         td.FontSize = CenterFontSize
         Dim size = g.MeasureString(td.Text, centerFont)
         td.X = CircleCenterPoint.X - size.Width \ 2
@@ -1051,7 +1048,7 @@ Public Class Form1
         td.Font = centerFont
     End Sub
 
-    Private Sub UpdateFooterText(ByRef td As TextDisplay, g As Graphics, footerFont As Font, distanceSquared As Double)
+    Private Sub UpdateFooterTextPositionContent(ByRef td As TextDisplay, g As Graphics, footerFont As Font, distanceSquared As Double)
         'td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
 
         Select Case ViewState
@@ -1064,7 +1061,7 @@ Public Class Form1
 
         End Select
 
-        td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Black, Brushes.Black)
+        'td.Brush = If(ViewState = ViewStateIndex.Overview, Brushes.Black, Brushes.Black)
         td.FontSize = FooterFontSize
         Dim size = g.MeasureString(td.Text, footerFont)
         td.X = ClientSize.Width \ 2 - size.Width \ 2
@@ -1072,7 +1069,7 @@ Public Class Form1
         td.Font = footerFont
     End Sub
 
-    Private Sub UpdateRadiusText(ByRef td As TextDisplay, g As Graphics, radiusFont As Font)
+    Private Sub UpdateRadiusTextPositionContent(ByRef td As TextDisplay, g As Graphics, radiusFont As Font)
         td.Text = If(ViewState = ViewStateIndex.ParametersView, $"Radius {CircleRadius}", $"Radius² {RadiusSquared}")
         td.FontSize = RadiusFontSize
         Dim size = g.MeasureString(td.Text, radiusFont)
@@ -1089,15 +1086,15 @@ Public Class Form1
 
         UpdateMouseTextPositionContent()
 
-        UpdateHeadingText(TextDisplays(TextDisplayIndex.Heading), CreateGraphics(), New Font("Segoe UI", HeadingFontSize))
+        UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading), CreateGraphics(), New Font("Segoe UI", HeadingFontSize))
 
-        UpdateCenterText(TextDisplays(TextDisplayIndex.Center), CreateGraphics(), New Font("Segoe UI", CenterFontSize))
+        UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center), CreateGraphics(), New Font("Segoe UI", CenterFontSize))
 
-        UpdateFooterText(TextDisplays(TextDisplayIndex.Footer), CreateGraphics(), New Font("Segoe UI", FooterFontSize), distanceSquared)
+        UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), CreateGraphics(), New Font("Segoe UI", FooterFontSize), DistanceSquared)
 
         UpdateLineDisplays()
 
-        UpdateCircleDisplays()
+        UpdateCircleDisplaysPostion()
 
     End Sub
 
