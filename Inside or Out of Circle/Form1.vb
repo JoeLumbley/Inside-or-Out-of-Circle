@@ -174,30 +174,28 @@ Public Class Form1
 
     Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
 
-
-
         UpdateViewMouseEnter()
 
-        Select Case ViewState
-            Case ViewStateIndex.Overview
-                SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
-                SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
-                SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
-                SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
-                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
-                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+        'Select Case ViewState
+        '    Case ViewStateIndex.Overview
+        '        SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+        '        SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+        '        SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
+        '        SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
 
-            Case ViewStateIndex.ParametersView
-                SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
-                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
-                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+        '    Case ViewStateIndex.ParametersView
+        '        SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
 
-            Case ViewStateIndex.XDistanceView
-                SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
-                SetTextDisplayTransparent(TextDisplayIndex.Radius)
-                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
-                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
-        End Select
+        '    Case ViewStateIndex.XDistanceView
+        '        SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
+        '        SetTextDisplayTransparent(TextDisplayIndex.Radius)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+        '        SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+        'End Select
 
         Invalidate()
 
@@ -208,8 +206,6 @@ Public Class Form1
     Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
 
         UpdateViewMouseLeave()
-
-
 
         Invalidate()
 
@@ -766,65 +762,106 @@ Public Class Form1
         ' Mouse enter sets the stage for mouse interaction.
         ' Mouse Enter sets the brushes, pens and fonts to their normal state.
 
-
-
-
-
-
         UpdateMousePointBrush()
 
         DistancePen = ArrowBlack3Pen
         XYDistancePen = Orchid2Pen
 
-        ' Update mouse text display
-        Using g As Graphics = CreateGraphics()
-            Dim td As TextDisplay
-            Dim ThisStringSize As SizeF
-            td = TextDisplays(TextDisplayIndex.Mouse)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
-            td.Brush = Brushes.Black
-            td.FontSize = MouseFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = If(MousePointerLocation.X + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width, MousePointerLocation.X + 30)
-            'td.Y = MousePointerLocation.Y
-            td.Y = If(MousePointerLocation.Y + ThisStringSize.Height > ClientSize.Height, MousePointerLocation.Y - ThisStringSize.Height, MousePointerLocation.Y)
 
-            td = TextDisplays(TextDisplayIndex.Heading)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            td.Brush = Brushes.Black
-            TextDisplays(TextDisplayIndex.Mouse) = td
+        Select Case ViewState
+            Case ViewStateIndex.Overview
+                SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+                SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+                SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
+                SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+                SetTextDisplayBlack(TextDisplayIndex.Mouse)
+                SetTextDisplayBlack(TextDisplayIndex.Heading)
+                SetTextDisplayBlack(TextDisplayIndex.Footer)
 
-            td.FontSize = HeadingFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Heading) = td
 
-            td = TextDisplays(TextDisplayIndex.Footer)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}")
-            td.Brush = Brushes.Black
+            Case ViewStateIndex.ParametersView
+                SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+                SetTextDisplayBlack(TextDisplayIndex.Mouse)
 
-            td.FontSize = FooterFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Footer) = td
+            Case ViewStateIndex.XDistanceView
+                SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
+                SetTextDisplayTransparent(TextDisplayIndex.Radius)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+                SetTextDisplayBlack(TextDisplayIndex.Mouse)
+                SetTextDisplayBlack(TextDisplayIndex.Heading)
+                SetTextDisplayBlack(TextDisplayIndex.Footer)
 
-        End Using
+        End Select
+
+        UpdateTextDisplays(CreateGraphics(), DistanceSquared)
+
+
+
+        '' Update mouse text display
+        'Using g As Graphics = CreateGraphics()
+        '    Dim td As TextDisplay
+        '    Dim ThisStringSize As SizeF
+        '    td = TextDisplays(TextDisplayIndex.Mouse)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {DistanceSquared}")
+        '    td.Brush = Brushes.Black
+        '    td.FontSize = MouseFontSize
+        '    td.Font = New Font("Segoe UI", td.FontSize)
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = If(MousePointerLocation.X + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width, MousePointerLocation.X + 30)
+        '    'td.Y = MousePointerLocation.Y
+        '    td.Y = If(MousePointerLocation.Y + ThisStringSize.Height > ClientSize.Height, MousePointerLocation.Y - ThisStringSize.Height, MousePointerLocation.Y)
+
+        '    td = TextDisplays(TextDisplayIndex.Heading)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
+        '    td.Brush = Brushes.Black
+        '    TextDisplays(TextDisplayIndex.Mouse) = td
+
+        '    td.FontSize = HeadingFontSize
+        '    td.Font = New Font("Segoe UI", td.FontSize)
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        '    td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
+        '    TextDisplays(TextDisplayIndex.Heading) = td
+
+        '    td = TextDisplays(TextDisplayIndex.Footer)
+        '    td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}")
+        '    td.Brush = Brushes.Black
+
+        '    td.FontSize = FooterFontSize
+        '    td.Font = New Font("Segoe UI", td.FontSize)
+        '    ThisStringSize = g.MeasureString(td.Text, td.Font)
+        '    td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        '    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
+        '    TextDisplays(TextDisplayIndex.Footer) = td
+
+        'End Using
 
     End Sub
 
     Private Sub UpdateGridPen()
 
+        '' Update the grid pen based on the current view state
+        'If ViewState = ViewStateIndex.Overview Then
+        '    gridPen = Pens.Transparent
+        'Else
+        '    gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+        'End If
+
         ' Update the grid pen based on the current view state
-        If ViewState = ViewStateIndex.Overview Then
-            gridPen = Pens.Transparent
-        Else
-            gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
-        End If
+        Select Case ViewState
+            Case ViewStateIndex.Overview
+                gridPen = Pens.Transparent
+            Case ViewStateIndex.ParametersView
+                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+            Case ViewStateIndex.XDistanceView
+                gridPen = Pens.Transparent
+        End Select
+
 
     End Sub
 
@@ -833,10 +870,36 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateCircleBrush()
-        CircleBrush = If(ViewState = ViewStateIndex.Overview,
-                     If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray),
-                     If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.LightSkyBlue)), New SolidBrush(Color.FromArgb(128, Color.LightGray))))
+
+
+
+
+
+        'CircleBrush = If(ViewState = ViewStateIndex.Overview,
+        '             If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray),
+        '             If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.LightSkyBlue)), New SolidBrush(Color.FromArgb(128, Color.LightGray))))
+
+
+        Select Case ViewState
+            Case ViewStateIndex.Overview
+                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+
+            Case ViewStateIndex.ParametersView
+                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+
+            Case ViewStateIndex.XDistanceView
+                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+
+        End Select
+
+
+
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
+
+
+
+
+
     End Sub
 
     Private Function CalculateDistances() As Double
