@@ -885,7 +885,7 @@ Public Class Form1
                 CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
 
             Case ViewStateIndex.ParametersView
-                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+                CircleBrush = If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.LightSkyBlue)), New SolidBrush(Color.FromArgb(128, Color.LightGray)))
 
             Case ViewStateIndex.XDistanceView
                 CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
