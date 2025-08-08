@@ -653,6 +653,8 @@ Public Class Form1
 
         UpdateCircleBrush()
 
+        SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
+
         Dim distanceSquared As Double = CalculateDistances()
 
         Using g As Graphics = CreateGraphics()
@@ -683,6 +685,9 @@ Public Class Form1
         ' Update Brushes and Pens to transparent for mouse leave state
 
         UpdateCircleBrush()
+
+        SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
+
 
         DistancePen = TransparentPen
         XYDistancePen = TransparentPen
@@ -894,7 +899,6 @@ Public Class Form1
 
 
 
-        SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
 
 
@@ -1121,6 +1125,8 @@ Public Class Form1
         UpdateMousePointBrush()
 
         UpdateCircleBrush()
+
+        SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
         Using g As Graphics = CreateGraphics()
             UpdateMouseTextPositionContent(TextDisplays(TextDisplayIndex.Mouse), g, New Font("Segoe UI", MouseFontSize))
