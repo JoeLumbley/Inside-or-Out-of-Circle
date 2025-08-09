@@ -596,6 +596,7 @@ Public Class Form1
 
         UpdateMousePointBrush()
 
+
         UpdateCircleBrush()
 
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
@@ -742,6 +743,8 @@ Public Class Form1
 
     Private Sub UpdateMousePointBrush()
         MousePointBrush = If(IsPointerInsideCircle, Brushes.Lime, Brushes.Tomato)
+        SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+
     End Sub
 
     Private Sub UpdateCircleBrush()
