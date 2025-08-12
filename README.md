@@ -47,7 +47,6 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 
 # Code Walkthrough
 
-# Inside or Out of Circle: Code Walkthrough
 
 Welcome to the detailed walkthrough of the **Inside or Out of Circle** application. This program is designed to visually demonstrate whether a point (the mouse pointer) is inside or outside a circle using squared distance calculations. In this guide, we will break down the code line by line, explaining each part in a way that is easy to understand for beginners.
 
