@@ -69,6 +69,8 @@ Public Class Form1
 ```
 Here, we declare a public class named `Form1`. This class represents the main form of our application where all the graphical elements will be drawn and where interactions will occur.
 
+[Table of Contents](#table-of-contents)
+
 ## Structures and Enumerations
 
 ### TextDisplay Structure
