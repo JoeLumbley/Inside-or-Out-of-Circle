@@ -1006,6 +1006,96 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sure! Here’s a structured **Table of Contents** for the **Inside or Out of Circle** application walkthrough:
+
+# Table of Contents
+
+1. [Overview](#overview)
+2. [Class Declaration](#class-declaration)
+3. [Structures and Enumerations](#structures-and-enumerations)
+   - 3.1 [TextDisplay Structure](#textdisplay-structure)
+   - 3.2 [Text Displays Array](#text-displays-array)
+   - 3.3 [TextDisplayIndex Enumeration](#textdisplayindex-enumeration)
+   - 3.4 [LineDisplay Structure](#linedisplay-structure)
+   - 3.5 [Line Displays Array](#line-displays-array)
+   - 3.6 [LineDisplayIndex Enumeration](#linedisplayindex-enumeration)
+   - 3.7 [CircleDisplay Structure](#circledisplay-structure)
+   - 3.8 [Circle Displays Array](#circle-displays-array)
+   - 3.9 [CircleDisplayIndex Enumeration](#circledisplayindex-enumeration)
+4. [Variables for Circle Properties](#variables-for-circle-properties)
+5. [Pens and Brushes](#pens-and-brushes)
+6. [Font Sizes](#font-sizes)
+7. [Grid Pen](#grid-pen)
+8. [View State Enumeration](#view-state-enumeration)
+9. [View State Variable](#view-state-variable)
+10. [Form Load Event](#form-load-event)
+11. [Mouse Events](#mouse-events)
+    - 11.1 [Mouse Enter Event](#mouse-enter-event)
+    - 11.2 [Mouse Leave Event](#mouse-leave-event)
+    - 11.3 [Mouse Move Event](#mouse-move-event)
+12. [Paint Event](#paint-event)
+13. [Button Click Events](#button-click-events)
+    - 13.1 [Overview Button Click Event](#overview-button-click-event)
+    - 13.2 [Parameters View Button Click Event](#parameters-view-button-click-event)
+    - 13.3 [XDistance View Button Click Event](#xdistance-view-button-click-event)
+    - 13.4 [YDistance View Button Click Event](#ydistance-view-button-click-event)
+14. [Resize Event](#resize-event)
+15. [Point Inside Circle Function](#point-inside-circle-function)
+16. [Drawing Methods](#drawing-methods)
+    - 16.1 [Draw Circles Method](#draw-circles-method)
+    - 16.2 [Draw Lines Method](#draw-lines-method)
+    - 16.3 [Draw Text Overlays Method](#draw-text-overlays-method)
+    - 16.4 [Draw Grid Method](#draw-grid-method)
+17. [Update Methods](#update-methods)
+    - 17.1 [Update Button Layout Method](#update-button-layout-method)
+    - 17.2 [Update Circle Geometry Method](#update-circle-geometry-method)
+    - 17.3 [Update Font Sizes Method](#update-font-sizes-method)
+    - 17.4 [Update Line Displays Method](#update-line-displays-method)
+    - 17.5 [Set Line Method](#set-line-method)
+    - 17.6 [Update Circle Displays Position Method](#update-circle-displays-position-method)
+    - 17.7 [Set Circle Position Method](#set-circle-position-method)
+    - 17.8 [Set Endpoint Position Method](#set-endpoint-position-method)
+    - 17.9 [Set Mouse Point Position Method](#set-mouse-point-position-method)
+    - 17.10 [Set Mouse Highlight Position Method](#set-mouse-highlight-position-method)
+18. [Update Text Displays Method](#update-text-displays-method)
+    - 18.1 [Update Mouse Text Position Content Method](#update-mouse-text-position-content-method)
+    - 18.2 [Update Heading Text Position Content Method](#update-heading-text-position-content-method)
+    - 18.3 [Update Center Text Position Content Method](#update-center-text-position-content-method)
+    - 18.4 [Update Footer Text Position Content Method](#update-footer-text-position-content-method)
+    - 18.5 [Update Radius Text Position Content Method](#update-radius-text-position-content-method)
+19. [Initialize Application Method](#initialize-application-method)
+    - 19.1 [Initialize Pens and Brushes Method](#initialize-pens-and-brushes-method)
+    - 19.2 [Initialize Text Displays Method](#initialize-text-displays-method)
+    - 19.3 [Initialize Line Displays Method](#initialize-line-displays-method)
+    - 19.4 [Initialize Circle Displays Method](#initialize-circle-displays-method)
+20. [Conclusion](#conclusion)
+
+Feel free to use this table of contents for easy navigation through the document! If you need any modifications or more sections added, just let me know!
+
+
+
+
+
+
+
+
+
+
+
 
 
 
