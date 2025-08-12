@@ -837,7 +837,9 @@ Public Class Form1
             Case ViewStateIndex.ParametersView
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
             Case ViewStateIndex.XDistanceView
-                gridPen = Pens.Transparent
+                'gridPen = Pens.Transparent
+                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+
             Case ViewStateIndex.YDistanceView
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
@@ -860,13 +862,23 @@ Public Class Form1
                 CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
 
             Case ViewStateIndex.ParametersView
-                CircleBrush = If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.LightSkyBlue)), New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+                CircleBrush = If(IsPointerInsideCircle,
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightGray, Brushes.LightGray)
 
             Case ViewStateIndex.XDistanceView
-                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+                CircleBrush = If(IsPointerInsideCircle,
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+
+                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
 
             Case ViewStateIndex.YDistanceView
-                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+                CircleBrush = If(IsPointerInsideCircle,
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
+                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
 
         End Select
 
