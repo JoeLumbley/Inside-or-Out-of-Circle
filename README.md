@@ -40,6 +40,9 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 
 <img width="1920" height="1080" alt="Untitled" src="https://github.com/user-attachments/assets/8746ec44-a54b-4bae-9ed4-0cd7eaf39016" />
 
+
+<img width="1920" height="1080" alt="003" src="https://github.com/user-attachments/assets/99c288f1-f09c-455c-9640-55aab69dafd5" />
+
 ---
 
 # Code Walkthrough
