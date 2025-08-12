@@ -50,6 +50,8 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 
 This program is designed to visually demonstrate whether a point (the mouse pointer) is inside or outside a circle using squared distance calculations. In this guide, we will break down the code line by line, explaining each part in a way that is easy to understand.
 
+ [Table of Contents](#table-of-contents)
+
 ## Overview
 
 This program calculates the squared distance from a point to the center of a circle and compares it to the squared radius. If the squared distance is less than or equal to the squared radius, the point is considered to be inside or on the edge of the circle. If it is greater, the point is outside the circle. The application also displays various information such as the radius, center of the circle, mouse pointer location, and calculated distances in a graphical window.
@@ -1017,6 +1019,7 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
+ [Table of Contents](#table-of-contents)
 
 
 
