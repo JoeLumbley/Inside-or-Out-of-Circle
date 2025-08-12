@@ -162,6 +162,7 @@ Public Class Form1
         Overview
         ParametersView
         XDistanceView
+        YDistanceView
     End Enum
 
     Private ViewState As ViewStateIndex = ViewStateIndex.Overview
@@ -178,7 +179,7 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
 
@@ -188,7 +189,7 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
 
@@ -201,13 +202,15 @@ Public Class Form1
 
         XDistance = e.X - CircleCenterPoint.X
 
+        YDistance = e.Y - CircleCenterPoint.Y
+
         DistanceSquared = CalculateDistances()
 
         UpdateViewOnMouseMove()
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
 
@@ -254,7 +257,7 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
 
@@ -281,7 +284,7 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
     Private Sub XDistanceViewButton_Click(sender As Object, e As EventArgs) Handles XDistanceViewButton.Click
@@ -307,9 +310,50 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
+
+
+
+    Private Sub YDistanceViewButton_Click(sender As Object, e As EventArgs) Handles YDistanceViewButton.Click
+
+        Switch2YDistanceView()
+
+        UpdateView()
+
+        ' Hide overlays
+        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+        SetTextDisplayTransparent(TextDisplayIndex.Heading)
+        SetTextDisplayTransparent(TextDisplayIndex.Footer)
+        SetTextDisplayTransparent(TextDisplayIndex.Radius)
+
+        ' Hide mouse indicators
+        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+        SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
+        'SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+
+        SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+
+        SetTextDisplayBlack(TextDisplayIndex.Center)
+
+        Invalidate()
+
+        InvalidateAllButtons()
+
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
 
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
@@ -329,7 +373,7 @@ Public Class Form1
 
         Invalidate()
 
-        InvaildateButtons()
+        InvalidateAllButtons()
 
     End Sub
 
@@ -568,16 +612,43 @@ Public Class Form1
         CircleDisplays(index) = cd
     End Sub
 
-    Private Sub InvaildateButtons()
-        ' Invalidate the buttons to update their appearance
+    'Private Sub InvaildateButtons()
+    '    ' Invalidate the buttons to update their appearance
 
-        OverviewButton.Invalidate()
+    '    OverviewButton.Invalidate()
 
-        ParametersViewButton.Invalidate()
+    '    ParametersViewButton.Invalidate()
 
-        XDistanceViewButton.Invalidate()
+    '    XDistanceViewButton.Invalidate()
 
+    'End Sub
+
+    'Private Sub InvalidateButtons()
+    '    Dim buttons() As Control = {OverviewButton, ParametersViewButton, XDistanceViewButton}
+    '    For Each btn In buttons
+    '        btn.Invalidate()
+    '    Next
+    'End Sub
+
+
+    Private Sub InvalidateAllButtonsRecursive(parent As Control)
+        For Each ctrl As Control In parent.Controls
+            If TypeOf ctrl Is Button Then
+                ctrl.Invalidate()
+            ElseIf ctrl.HasChildren Then
+                InvalidateAllButtonsRecursive(ctrl)
+            End If
+        Next
     End Sub
+
+    ' Call this from anywhere:
+    Private Sub InvalidateAllButtons()
+        InvalidateAllButtonsRecursive(Me)
+    End Sub
+
+
+
+
 
     Private Sub Switch2Overview()
         ' Switch to Overview
@@ -597,6 +668,13 @@ Public Class Form1
         ' Switch to XDistanceView
 
         ViewState = ViewStateIndex.XDistanceView
+
+    End Sub
+
+    Private Sub Switch2YDistanceView()
+        ' Switch to YDistanceView
+
+        ViewState = ViewStateIndex.YDistanceView
 
     End Sub
 
@@ -658,6 +736,11 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
 
             Case ViewStateIndex.XDistanceView
+                SetTextDisplayTransparent(TextDisplayIndex.Heading)
+                SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+                SetTextDisplayTransparent(TextDisplayIndex.Footer)
+
+            Case ViewStateIndex.YDistanceView
                 SetTextDisplayTransparent(TextDisplayIndex.Heading)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
@@ -728,6 +811,17 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
 
+            Case ViewStateIndex.YDistanceView
+                'SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
+                SetLineDisplayPen(LineDisplayIndex.YDistanceLine, DistancePen)
+
+                SetTextDisplayTransparent(TextDisplayIndex.Radius)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+                SetTextDisplayBlack(TextDisplayIndex.Mouse)
+                SetTextDisplayBlack(TextDisplayIndex.Heading)
+                SetTextDisplayBlack(TextDisplayIndex.Footer)
+
         End Select
 
         UpdateTextDisplays(CreateGraphics(), DistanceSquared)
@@ -744,12 +838,16 @@ Public Class Form1
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
             Case ViewStateIndex.XDistanceView
                 gridPen = Pens.Transparent
+            Case ViewStateIndex.YDistanceView
+                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+
         End Select
 
 
     End Sub
 
     Private Sub UpdateMousePointBrush()
+
         MousePointBrush = If(IsPointerInsideCircle, Brushes.Lime, Brushes.Tomato)
         SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
 
@@ -765,6 +863,9 @@ Public Class Form1
                 CircleBrush = If(IsPointerInsideCircle, New SolidBrush(Color.FromArgb(128, Color.LightSkyBlue)), New SolidBrush(Color.FromArgb(128, Color.LightGray)))
 
             Case ViewStateIndex.XDistanceView
+                CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
+
+            Case ViewStateIndex.YDistanceView
                 CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
 
         End Select
@@ -864,6 +965,8 @@ Public Class Form1
                 td.Text = $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}"
             Case ViewStateIndex.XDistanceView
                 td.Text = $"X {MousePointerLocation.X}"
+            Case ViewStateIndex.YDistanceView
+                td.Text = $"Y {MousePointerLocation.Y}"
 
         End Select
 
@@ -890,6 +993,8 @@ Public Class Form1
                 td.Text = "Parameters"
             Case ViewStateIndex.XDistanceView
                 td.Text = $"X Distance {XDistance}"
+            Case ViewStateIndex.YDistanceView
+                td.Text = $"Y Distance {YDistance}"
 
         End Select
 
@@ -908,6 +1013,8 @@ Public Class Form1
 
             Case ViewStateIndex.XDistanceView
                 td.Text = $"X {CircleCenterPoint.X}"
+            Case ViewStateIndex.YDistanceView
+                td.Text = $"Y {CircleCenterPoint.Y}"
 
         End Select
 
@@ -926,6 +1033,8 @@ Public Class Form1
                 td.Text = $"What is Known"
             Case ViewStateIndex.XDistanceView
                 td.Text = $"{XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}"
+            Case ViewStateIndex.YDistanceView
+                td.Text = $"{YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}"
 
         End Select
 
