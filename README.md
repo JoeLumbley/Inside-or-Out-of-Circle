@@ -227,6 +227,8 @@ End Enum
 ```
 - **Purpose**: This enumeration provides easier access to the indices of the `CircleDisplays` array.
 
+[Table of Contents](#table-of-contents)
+
 ## Variables for Circle Properties
 
 ```vb
@@ -245,6 +247,8 @@ Private RadiusSquared As Double = CircleRadius * CircleRadius
   - `IsPointerInsideCircle`: A boolean flag indicating if the mouse pointer is inside the circle.
   - `DistanceSquared`: Holds the squared distance from the mouse pointer to the circle's center.
   - `RadiusSquared`: Pre-calculates the squared radius of the circle for efficient distance comparisons.
+
+[Table of Contents](#table-of-contents)
 
 ## Pens and Brushes
 
@@ -266,6 +270,8 @@ Private Orchid2Pen As New Pen(Color.Orchid, 2)
   - `RadiusPen`: A pen used for drawing the radius line.
   - `XYDistancePen`, `Orchid2Pen`: Pens used for drawing distance lines.
 
+[Table of Contents](#table-of-contents)
+
 ## Font Sizes
 
 ```vb
@@ -277,12 +283,16 @@ Private FooterFontSize As Integer = 10
 ```
 - **Purpose**: These variables set the default font sizes for different text displays in the application.
 
+[Table of Contents](#table-of-contents)
+
 ## Grid Pen
 
 ```vb
 Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 ```
 - **Purpose**: Initializes a pen for drawing a grid in the background of the application.
+
+[Table of Contents](#table-of-contents)
 
 ## View State Enumeration
 
@@ -296,12 +306,16 @@ End Enum
 ```
 - **Purpose**: This enumeration defines the different states of the application view (Overview, ParametersView, XDistanceView, YDistanceView).
 
+[Table of Contents](#table-of-contents)
+
 ## View State Variable
 
 ```vb
 Private ViewState As ViewStateIndex = ViewStateIndex.Overview
 ```
 - **Purpose**: Initializes the current view state to Overview.
+
+[Table of Contents](#table-of-contents)
 
 ## Form Load Event
 
@@ -311,6 +325,8 @@ Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
 End Sub
 ```
 - **Purpose**: This event handler runs when the form loads. It calls the `InitializeApp` method to set up the initial state of the application.
+
+[Table of Contents](#table-of-contents)
 
 ## Mouse Events
 
@@ -353,6 +369,8 @@ End Sub
 ```
 - **Purpose**: This method overrides the default mouse move event to track the mouse pointer's location and check if it is inside the circle. It updates the view and refreshes the display.
 
+[Table of Contents](#table-of-contents)
+
 ## Paint Event
 
 ```vb
@@ -373,6 +391,8 @@ End Sub
   - `g`: Represents the graphics context for drawing.
   - `SmoothingMode`: Sets the rendering quality for smoother graphics.
   - Calls methods to render the grid, circles, lines, and text overlays.
+
+[Table of Contents](#table-of-contents)
 
 ## Button Click Events
 
@@ -468,6 +488,8 @@ End Sub
 ```
 - **Purpose**: This event handler is triggered when the Y distance view button is clicked. It switches to the Y distance view and updates the display while hiding specific overlays and indicators.
 
+[Table of Contents](#table-of-contents)
+
 ## Resize Event
 
 ```vb
@@ -484,6 +506,8 @@ Protected Overrides Sub OnResize(e As EventArgs)
 End Sub
 ```
 - **Purpose**: This method overrides the resize event to adjust the layout of buttons, circle geometry, font sizes, and other graphical elements when the form is resized.
+
+[Table of Contents](#table-of-contents)
 
 ## Point Inside Circle Function
 
@@ -511,6 +535,8 @@ End Function
   - It calculates the horizontal and vertical distances from the point to the center of the circle.
   - It computes the squared distance and compares it to the squared radius of the circle.
   - Returns `True` if the point is inside or on the edge, and `False` if outside.
+
+[Table of Contents](#table-of-contents)
 
 ## Drawing Methods
 
@@ -572,6 +598,8 @@ End Sub
 - **Details**:
   - Vertical lines are drawn every 50 pixels across the width of the form.
   - Horizontal lines are drawn every 50 pixels across the height of the form.
+
+[Table of Contents](#table-of-contents)
 
 ## Update Methods
 
@@ -766,6 +794,8 @@ End Sub
 ```
 - **Purpose**: This method sets the position of the mouse highlight display.
 
+[Table of Contents](#table-of-contents)
+
 ## Update Text Displays Method
 
 ```vb
@@ -923,6 +953,8 @@ Private Sub UpdateRadiusTextPositionContent(ByRef td As TextDisplay, g As Graphi
 End Sub
 ```
 - **Purpose**: This method updates the position and content of the radius text display based on the current view state.
+
+[Table of Contents](#table-of-contents)
 
 ## Initialize Application Method
 
