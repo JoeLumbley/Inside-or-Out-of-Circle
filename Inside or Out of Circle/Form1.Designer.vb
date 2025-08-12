@@ -25,12 +25,13 @@ Partial Class Form1
         ParametersViewButton = New Button()
         OverviewButton = New Button()
         XDistanceViewButton = New Button()
+        YDistanceViewButton = New Button()
         SuspendLayout()
         ' 
         ' ParametersViewButton
         ' 
         ParametersViewButton.Font = New Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ParametersViewButton.Location = New Point(1118, 605)
+        ParametersViewButton.Location = New Point(1048, 605)
         ParametersViewButton.Name = "ParametersViewButton"
         ParametersViewButton.Size = New Size(64, 64)
         ParametersViewButton.TabIndex = 0
@@ -40,7 +41,7 @@ Partial Class Form1
         ' OverviewButton
         ' 
         OverviewButton.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        OverviewButton.Location = New Point(1048, 605)
+        OverviewButton.Location = New Point(978, 605)
         OverviewButton.Name = "OverviewButton"
         OverviewButton.Size = New Size(64, 64)
         OverviewButton.TabIndex = 1
@@ -50,17 +51,28 @@ Partial Class Form1
         ' XDistanceViewButton
         ' 
         XDistanceViewButton.Font = New Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        XDistanceViewButton.Location = New Point(1188, 605)
+        XDistanceViewButton.Location = New Point(1118, 605)
         XDistanceViewButton.Name = "XDistanceViewButton"
         XDistanceViewButton.Size = New Size(64, 64)
         XDistanceViewButton.TabIndex = 2
         XDistanceViewButton.Text = "↔"
         XDistanceViewButton.UseVisualStyleBackColor = True
         ' 
+        ' YDistanceViewButton
+        ' 
+        YDistanceViewButton.Font = New Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        YDistanceViewButton.Location = New Point(1188, 605)
+        YDistanceViewButton.Name = "YDistanceViewButton"
+        YDistanceViewButton.Size = New Size(64, 64)
+        YDistanceViewButton.TabIndex = 3
+        YDistanceViewButton.Text = "↕"
+        YDistanceViewButton.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
         AutoScaleMode = AutoScaleMode.None
         ClientSize = New Size(1264, 681)
+        Controls.Add(YDistanceViewButton)
         Controls.Add(XDistanceViewButton)
         Controls.Add(OverviewButton)
         Controls.Add(ParametersViewButton)
@@ -75,5 +87,6 @@ Partial Class Form1
     Friend WithEvents ParametersViewButton As Button
     Friend WithEvents OverviewButton As Button
     Friend WithEvents XDistanceViewButton As Button
+    Friend WithEvents YDistanceViewButton As Button
 
 End Class

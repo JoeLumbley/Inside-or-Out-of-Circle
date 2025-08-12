@@ -408,26 +408,34 @@ Public Class Form1
         Dim ButtonSize As Integer = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
         Dim Pad As Integer = 10
 
+        YDistanceViewButton.Width = ButtonSize
+        YDistanceViewButton.Height = ButtonSize
+        YDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 30))
+        YDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
+                                      ClientSize.Height - ButtonSize - Pad,
+                                      ButtonSize,
+                                      ButtonSize)
+
         XDistanceViewButton.Width = ButtonSize
         XDistanceViewButton.Height = ButtonSize
-        XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(16, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
-        XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
+        XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
+        XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
                                       ButtonSize)
 
         ParametersViewButton.Width = ButtonSize
         ParametersViewButton.Height = ButtonSize
-        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
-        ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
+        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
                                        ClientSize.Height - ButtonSize - Pad,
                                        ButtonSize,
                                        ButtonSize)
 
         OverviewButton.Width = ButtonSize
         OverviewButton.Height = ButtonSize
-        OverviewButton.Font = New Font("Segoe UI", Math.Max(16, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
-        OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
+        OverviewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 30))
+        OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 4 - Pad * 4,
                                  ClientSize.Height - ButtonSize - Pad,
                                  ButtonSize,
                                  ButtonSize)
