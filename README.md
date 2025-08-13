@@ -1053,7 +1053,7 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
- [Table of Contents](#table-of-contents)
+
 
 
 
@@ -1119,9 +1119,40 @@ Sure! Here’s a structured **Table of Contents** for the **Inside or Out of Cir
     - 19.2 [Initialize Text Displays Method](#initialize-text-displays-method)
     - 19.3 [Initialize Line Displays Method](#initialize-line-displays-method)
     - 19.4 [Initialize Circle Displays Method](#initialize-circle-displays-method)
-20. [Conclusion](#conclusion)
 
-Feel free to use this table of contents for easy navigation through the document! If you need any modifications or more sections added, just let me know!
+
+
+
+
+
+
+
+
+
+
+---
+
+
+# Clones
+
+
+
+
+
+
+<img width="1920" height="1080" alt="004" src="https://github.com/user-attachments/assets/761cde86-2340-4122-9b3e-9f4feb7dfdd0" />
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
