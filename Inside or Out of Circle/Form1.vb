@@ -81,6 +81,8 @@ Public Class Form1
 
 
     Private LineDisplays() As LineDisplay = {
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
@@ -88,10 +90,12 @@ Public Class Form1
     }
 
     Private Enum LineDisplayIndex
-        RadiusLine = 0
-        XDistanceLine = 1
-        YDistanceLine = 2
-        DistanceLine = 3
+        CircleCenterVerticalLine
+        MouseCenterVerticalLine
+        RadiusLine
+        XDistanceLine
+        YDistanceLine
+        DistanceLine
     End Enum
 
     Private Structure CircleDisplay
@@ -251,6 +255,7 @@ Public Class Form1
         SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
         SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
 
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
 
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
@@ -276,6 +281,7 @@ Public Class Form1
         SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
 
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
 
         SetTextDisplayBlack(TextDisplayIndex.Radius)
@@ -292,7 +298,12 @@ Public Class Form1
 
         Switch2XDistanceView()
 
+        'SetLineDisplayPen(LineDisplayIndex.CircleCenterVerticalLine, XYDistancePen)
+
         UpdateView()
+
+        SetLineDisplayPen(LineDisplayIndex.CircleCenterVerticalLine, XYDistancePen)
+
 
         ' Hide overlays
         SetTextDisplayTransparent(TextDisplayIndex.Mouse)
@@ -306,8 +317,15 @@ Public Class Form1
         SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
 
         SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+        SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+
 
         SetTextDisplayBlack(TextDisplayIndex.Center)
+
+        'UpdateView()
+
 
         Invalidate()
 
@@ -333,6 +351,8 @@ Public Class Form1
         SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
 
         SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
+
 
         SetTextDisplayBlack(TextDisplayIndex.Center)
 
@@ -435,13 +455,13 @@ Public Class Form1
 
     Private Sub UpdateButtonLayout()
 
-        Dim ButtonSize As Integer = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 12)
+        Dim ButtonSize As Integer = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 13)
         Dim Pad As Integer = 10
 
 
         SquaredDistanceViewButton.Width = ButtonSize
         SquaredDistanceViewButton.Height = ButtonSize
-        SquaredDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        SquaredDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         SquaredDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -449,7 +469,7 @@ Public Class Form1
 
         YDistanceViewButton.Width = ButtonSize
         YDistanceViewButton.Height = ButtonSize
-        YDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        YDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         YDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -457,7 +477,7 @@ Public Class Form1
 
         XDistanceViewButton.Width = ButtonSize
         XDistanceViewButton.Height = ButtonSize
-        XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -465,7 +485,7 @@ Public Class Form1
 
         ParametersViewButton.Width = ButtonSize
         ParametersViewButton.Height = ButtonSize
-        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 50))
+        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 55))
         ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 4 - Pad * 4,
                                        ClientSize.Height - ButtonSize - Pad,
                                        ButtonSize,
@@ -473,7 +493,7 @@ Public Class Form1
 
         OverviewButton.Width = ButtonSize
         OverviewButton.Height = ButtonSize
-        OverviewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+        OverviewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 5 - Pad * 5,
                                  ClientSize.Height - ButtonSize - Pad,
                                  ButtonSize,
@@ -501,6 +521,23 @@ Public Class Form1
             Dim ld = LineDisplays(i)
 
             Select Case i
+
+                ' Circle center vertical line
+                Case LineDisplayIndex.CircleCenterVerticalLine
+
+
+                    SetLine(ld,
+                            New Point(CircleCenterPoint.X, ClientRectangle.Top),
+                            New Point(CircleCenterPoint.X, ClientRectangle.Bottom))
+
+
+                Case LineDisplayIndex.MouseCenterVerticalLine
+
+
+                    SetLine(ld,
+                            New Point(MousePointerLocation.X, ClientRectangle.Top),
+                            New Point(MousePointerLocation.X, ClientRectangle.Bottom))
+
                 Case LineDisplayIndex.RadiusLine
                     SetLine(ld, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
                 Case LineDisplayIndex.XDistanceLine
@@ -642,8 +679,8 @@ Public Class Form1
 
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
-        DistancePen = TransparentPen
-        XYDistancePen = TransparentPen
+        'DistancePen = TransparentPen
+        'XYDistancePen = TransparentPen
         MousePointBrush = Brushes.Transparent
 
         Select Case ViewState
@@ -652,6 +689,10 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Center)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+                SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+
+                SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+                SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
 
             Case ViewStateIndex.ParametersView
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
@@ -661,24 +702,31 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
 
+                SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
+                SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+
             Case ViewStateIndex.YDistanceView
                 SetTextDisplayTransparent(TextDisplayIndex.Heading)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
+                SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
 
         End Select
 
-        For i As Integer = 0 To LineDisplays.Count - 1
+        'For i As Integer = 0 To LineDisplays.Count - 1
 
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                Case Else
-                    ld.Pen = Pens.Transparent
-            End Select
-            LineDisplays(i) = ld
+        '    Dim ld As LineDisplay = LineDisplays(i)
+        '    Select Case i
+        '        Case LineDisplayIndex.RadiusLine
+        '        Case LineDisplayIndex.CircleCenterVerticalLine
+        '        Case LineDisplayIndex.MouseCenterVerticalLine
+        '            SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
+        '        Case Else
+        '            ld.Pen = Pens.Transparent
+        '    End Select
+        '    LineDisplays(i) = ld
 
-        Next
+        'Next
 
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
@@ -699,8 +747,8 @@ Public Class Form1
 
         UpdateMousePointBrush()
 
-        DistancePen = ArrowBlack3Pen
-        XYDistancePen = Orchid2Pen
+        'DistancePen = ArrowBlack3Pen
+        'XYDistancePen = Orchid2Pen
 
 
         Select Case ViewState
@@ -730,6 +778,9 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
+
+                SetLineDisplayPen(LineDisplayIndex.CircleCenterVerticalLine, XYDistancePen)
+                SetLineDisplayPen(LineDisplayIndex.MouseCenterVerticalLine, XYDistancePen)
 
             Case ViewStateIndex.YDistanceView
                 'SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
@@ -1045,6 +1096,10 @@ Public Class Form1
 
         MousePointBrush = Brushes.Transparent
 
+        DistancePen = ArrowBlack3Pen
+        XYDistancePen = Orchid2Pen
+
+
     End Sub
 
     Private Sub InitializeTextDisplays()
@@ -1064,6 +1119,8 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
 
     End Sub
