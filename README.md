@@ -1047,18 +1047,6 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
-
-
-
-
-
-
-
-
-
-
-Sure! Here’s a structured **Table of Contents** for the **Inside or Out of Circle** application walkthrough:
-
 # Table of Contents
 
 1. [Overview](#overview)
