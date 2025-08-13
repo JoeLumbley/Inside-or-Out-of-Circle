@@ -378,6 +378,36 @@ Public Class Form1
 
     End Sub
 
+
+    Private Sub SquaredDistanceViewButton_Click(sender As Object, e As EventArgs) Handles SquaredDistanceViewButton.Click
+        ' Switch to SquaredDistanceView
+        ViewState = ViewStateIndex.SquaredDistanceView
+
+        UpdateView()
+
+        ' Hide overlays
+        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+        SetTextDisplayTransparent(TextDisplayIndex.Heading)
+        SetTextDisplayTransparent(TextDisplayIndex.Footer)
+        SetTextDisplayTransparent(TextDisplayIndex.Radius)
+
+        ' Hide mouse indicators
+        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+        SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
+        SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
+
+        SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+        SetTextDisplayBlack(TextDisplayIndex.Center)
+
+        Invalidate()
+        InvalidateAllButtons()
+
+    End Sub
+
+
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
 
@@ -754,6 +784,11 @@ Public Class Form1
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
 
+
+            Case ViewStateIndex.SquaredDistanceView
+
+                SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+
         End Select
 
         'For i As Integer = 0 To LineDisplays.Count - 1
@@ -836,6 +871,11 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
 
+            Case ViewStateIndex.SquaredDistanceView
+                SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+                SetTextDisplayBlack(TextDisplayIndex.Heading)
+                SetTextDisplayBlack(TextDisplayIndex.Footer)
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
         End Select
 
         UpdateTextDisplays(CreateGraphics(), DistanceSquared)
@@ -1018,6 +1058,8 @@ Public Class Form1
                 td.Text = $"X Distance {XDistance}"
             Case ViewStateIndex.YDistanceView
                 td.Text = $"Y Distance {YDistance}"
+            Case ViewStateIndex.SquaredDistanceView
+                td.Text = $"Distance² = X Distance² + Y Distance²"
 
         End Select
 
@@ -1058,6 +1100,8 @@ Public Class Form1
                 td.Text = $"{XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}"
             Case ViewStateIndex.YDistanceView
                 td.Text = $"{YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}"
+            Case ViewStateIndex.SquaredDistanceView
+                td.Text = $"{distanceSquared} = {XDistance} * {XDistance} + {YDistance} * {YDistance}"
 
         End Select
 
