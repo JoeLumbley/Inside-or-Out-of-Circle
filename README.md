@@ -48,800 +48,1088 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 # Code Walkthrough
 
 
+This program is designed to visually demonstrate whether a point (the mouse pointer) is inside or outside a circle using squared distance calculations. In this guide, we will break down the code line by line, explaining each part in a way that is easy to understand.
+
+[Table of Contents](#table-of-contents)
+
+## Overview
+
+This program calculates the squared distance from a point to the center of a circle and compares it to the squared radius. If the squared distance is less than or equal to the squared radius, the point is considered to be inside or on the edge of the circle. If it is greater, the point is outside the circle. The application also displays various information such as the radius, center of the circle, mouse pointer location, and calculated distances in a graphical window.
 
 ```vb
+' MIT License
+' Copyright (c) 2025 Joseph W. Lumbley
+```
+This section specifies the licensing terms under which the code is published, allowing others to use and modify it under certain conditions.
 
+## Class Declaration
+
+```vb
 Public Class Form1
 ```
+Here, we declare a public class named `Form1`. This class represents the main form of our application where all the graphical elements will be drawn and where interactions will occur.
 
-- **Public Class Form1**: This line declares a new class named `Form1`, which serves as the main form for the application.
+[Table of Contents](#table-of-contents)
 
-### Structure Definitions
+## Structures and Enumerations
+
+### TextDisplay Structure
+
 ```vb
-    Private Structure TextDisplay
-        Public X As Integer
-        Public Y As Integer
-        Public Text As String
-        Public Brush As SolidBrush
-        Public FontSize As Integer
-        Public Font As Font
-        Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush, fontSize As Integer, font As Font)
-            Me.X = x
-            Me.Y = y
-            Me.Text = text
-            Me.Brush = brush
-            Me.FontSize = fontSize
-            Me.Font = font
-        End Sub
-    End Structure
-```
-- **Structure TextDisplay**: Defines a structure to manage the properties of text overlays displayed in the application.
-  - **Public X, Y**: Coordinates for the position of the text.
-  - **Public Text**: The string to be displayed.
-  - **Public Brush**: The brush used for rendering the text color.
-  - **Public FontSize, Font**: Font size and font type for the text.
-  - **Constructor**: Initializes the properties of the `TextDisplay` structure.
-
-### Text Display Array
-```vb
-    Private TextDisplays() As TextDisplay = {
-        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
-    }
-```
-- **TextDisplays Array**: Initializes an array of `TextDisplay` structures to manage different text overlays (heading, mouse position, radius, center, footer).
-- Each `TextDisplay` is initialized with default values, including position (0, 0), transparent brush, font size, and font type.
-
-### Enum Definitions
-```vb
-    Private Enum TextDisplayIndex
-        Heading = 0
-        Mouse = 1
-        Radius = 2
-        Center = 3
-        Footer = 4
-    End Enum
-```
-- **TextDisplayIndex Enum**: Defines an enumeration to easily reference the indices of the `TextDisplays` array for better readability.
-
-### Line Display Structure
-```vb
-    Private Structure LineDisplay
-        Public X1 As Integer
-        Public Y1 As Integer
-        Public X2 As Integer
-        Public Y2 As Integer
-        Public Pen As Pen
-        Public Sub New(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, pen As Pen)
-            Me.X1 = x1
-            Me.Y1 = y1
-            Me.X2 = x2
-            Me.Y2 = y2
-            Me.Pen = pen
-        End Sub
-    End Structure
-```
-- **Structure LineDisplay**: Manages properties for lines drawn on the canvas.
-  - **Public X1, Y1, X2, Y2**: Coordinates for the start and end points of the line.
-  - **Public Pen**: The pen used for drawing the line.
-  - **Constructor**: Initializes the properties of the `LineDisplay` structure.
-
-### Line Display Array
-```vb
-    Private LineDisplays() As LineDisplay = {
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
-    }
-```
-- **LineDisplays Array**: Initializes an array of `LineDisplay` structures to represent lines drawn in the application.
-- Each line is initialized with specific coordinates and a pen color (chartreuse) with a width of 2.
-
-### Enum for Line Display Indices
-```vb
-    Private Enum LineDisplayIndex
-        RadiusLine = 0
-        XDistanceLine = 1
-        YDistanceLine = 2
-        DistanceLine = 3
-    End Enum
-```
-- **LineDisplayIndex Enum**: Defines an enumeration for indexing the `LineDisplays` array, making the code more readable.
-
-### Circle Display Structure
-```vb
-    Private Structure CircleDisplay
-        Public X As Integer
-        Public Y As Integer
-        Public Width As Integer
-        Public Height As Integer
-        Public Brush As SolidBrush
-        Public Sub New(x As Integer, y As Integer, width As Integer, height As Integer, brush As Brush)
-            Me.X = x
-            Me.Y = y
-            Me.Width = width
-            Me.Height = height
-            Me.Brush = brush
-        End Sub
-    End Structure
-```
-- **Structure CircleDisplay**: Manages properties for the circle and its graphical representation.
-  - **Public X, Y**: Coordinates for the top-left corner of the bounding rectangle of the circle.
-  - **Public Width, Height**: Dimensions of the circle.
-  - **Public Brush**: The brush used for filling the circle.
-  - **Constructor**: Initializes the properties of the `CircleDisplay` structure.
-
-### Circle Display Array
-```vb
-    Private CircleDisplays() As CircleDisplay = {
-        New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
-        New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
-        New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
-        New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
-        New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
-    }
-```
-- **CircleDisplays Array**: Initializes an array of `CircleDisplay` structures to manage the graphical representation of the circle and its components (center point, radius endpoint, mouse highlight).
-- Each circle display is initialized with specific coordinates, dimensions, and brush colors.
-
-### Enum for Circle Display Indices
-```vb
-    Private Enum CircleDisplayIndex
-        Circle = 0
-        RadiusEndPoint = 1
-        CenterPoint = 2
-        MouseHilight = 3
-        MousePoint = 4
-    End Enum
-```
-- **CircleDisplayIndex Enum**: Defines an enumeration for indexing the `CircleDisplays` array, improving code clarity.
-
-### Variables for Circle Properties
-```vb
-    Private CircleCenterPoint As New Point(150, 150)
-    Private MousePointerLocation As New Point(0, 0)
-    Private CircleRadius As Integer = 300
-    Private IsPointerInsideCircle As Boolean = False
-    Private DistanceSquared As Double
-    Private RadiusSquared As Double = CircleRadius * CircleRadius
-```
-- **CircleCenterPoint**: Initializes the center point of the circle.
-- **MousePointerLocation**: Tracks the current location of the mouse pointer.
-- **CircleRadius**: Sets the radius of the circle.
-- **IsPointerInsideCircle**: Boolean flag to indicate if the mouse pointer is inside the circle.
-- **DistanceSquared**: Variable to hold the squared distance from the mouse pointer to the circle's center.
-- **RadiusSquared**: Pre-calculates the squared radius of the circle for efficient distance comparisons.
-
-### Pens and Brushes
-```vb
-    Private DistanceArrowCap As New Drawing2D.AdjustableArrowCap(5, 5, True)
-    Private DistancePen As New Pen(Color.Black, 3)
-    Private ArrowBlack3Pen As New Pen(Color.Black, 3)
-    Private TransparentPen As New Pen(Color.Transparent, 3)
-
-    Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
-    Private RadiusPen As New Pen(Color.Gray, 2)
-    Private XYDistancePen As New Pen(Color.Orchid, 2)
-    Private Orchid2Pen As New Pen(Color.Orchid, 2)
-
-    Private XDistance As Double = 0
-    Private YDistance As Double = 0
-    Private MousePointBrush As SolidBrush = Brushes.Gray
-
-    Private CircleBrush As SolidBrush = Brushes.LightGray
-    Private RadiusBrush As SolidBrush = Brushes.Gray
-```
-- **AdjustableArrowCap**: Creates custom arrow caps for the lines drawn.
-- **Pens**: Initializes various pens with specific colors and widths for drawing lines.
-- **Brushes**: Initializes brushes for filling shapes (circle, radius).
-
-### Font Sizes
-```vb
-    Private HeadingFontSize As Integer = 16
-    Private MouseFontSize As Integer = 12
-    Private RadiusFontSize As Integer = 12
-    Private CenterFontSize As Integer = 12
-    Private FooterFontSize As Integer = 10
-```
-- **Font Sizes**: Sets default font sizes for different text displays in the application.
-
-### Grid Pen
-```vb
-    Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
-```
-- **gridPen**: Initializes a pen for drawing a grid in the background of the application.
-
-### View State Enum
-```vb
-    Private Enum ViewStateIndex
-        Overview
-        ParametersView
-    End Enum
-```
-- **ViewStateIndex Enum**: Defines the different states of the application view (Overview and ParametersView).
-
-### View State Variable
-```vb
-    Private ViewState As ViewStateIndex = ViewStateIndex.Overview
-```
-- **ViewState**: Initializes the current view state to Overview.
-
-### Form Load Event
-```vb
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        InitializeApp()
+Private Structure TextDisplay
+    Public X As Integer
+    Public Y As Integer
+    Public Text As String
+    Public Brush As SolidBrush
+    Public FontSize As Integer
+    Public Font As Font
+    Public Sub New(x As Integer, y As Integer, text As String, brush As SolidBrush, fontSize As Integer, font As Font)
+        Me.X = x
+        Me.Y = y
+        Me.Text = text
+        Me.Brush = brush
+        Me.FontSize = fontSize
+        Me.Font = font
     End Sub
+End Structure
 ```
-- **Form1_Load**: Event handler that runs when the form loads, calling the `InitializeApp` method to set up the initial state of the application.
+- **Purpose**: This structure is used to manage the properties of text that will be displayed on the form.
+- **Members**:
+  - `X` and `Y`: Coordinates for the text position.
+  - `Text`: The string to be displayed.
+  - `Brush`: The brush used for rendering the text color.
+  - `FontSize` and `Font`: Specify the size and type of font for the text.
+- **Constructor**: Initializes the properties of the `TextDisplay` structure.
+
+### Text Displays Array
+
+```vb
+Private TextDisplays() As TextDisplay = {
+    New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+    New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
+}
+```
+- **Purpose**: Initializes an array of `TextDisplay` structures to manage different text overlays (like headings, mouse position, radius, etc.) that will be shown on the form.
+
+### TextDisplayIndex Enumeration
+
+```vb
+Private Enum TextDisplayIndex
+    Heading = 0
+    Mouse = 1
+    Radius = 2
+    Center = 3
+    Footer = 4
+End Enum
+```
+- **Purpose**: This enumeration provides easier access to the indices of the `TextDisplays` array, making the code more readable.
+
+### LineDisplay Structure
+
+```vb
+Private Structure LineDisplay
+    Public X1 As Integer
+    Public Y1 As Integer
+    Public X2 As Integer
+    Public Y2 As Integer
+    Public Pen As Pen
+    Public Sub New(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, pen As Pen)
+        Me.X1 = x1
+        Me.Y1 = y1
+        Me.X2 = x2
+        Me.Y2 = y2
+        Me.Pen = pen
+    End Sub
+End Structure
+```
+- **Purpose**: This structure manages the properties for lines drawn on the canvas.
+- **Members**:
+  - `X1`, `Y1`: Coordinates for the starting point of the line.
+  - `X2`, `Y2`: Coordinates for the ending point of the line.
+  - `Pen`: The pen used for drawing the line.
+- **Constructor**: Initializes the properties of the `LineDisplay` structure.
+
+### Line Displays Array
+
+```vb
+Private LineDisplays() As LineDisplay = {
+    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+    New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
+    New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
+}
+```
+- **Purpose**: Initializes an array of `LineDisplay` structures to represent lines drawn in the application, such as the radius line and distance lines.
+
+### LineDisplayIndex Enumeration
+
+```vb
+Private Enum LineDisplayIndex
+    RadiusLine = 0
+    XDistanceLine = 1
+    YDistanceLine = 2
+    DistanceLine = 3
+End Enum
+```
+- **Purpose**: This enumeration provides easier access to the indices of the `LineDisplays` array.
+
+### CircleDisplay Structure
+
+```vb
+Private Structure CircleDisplay
+    Public X As Integer
+    Public Y As Integer
+    Public Width As Integer
+    Public Height As Integer
+    Public Brush As SolidBrush
+    Public Sub New(x As Integer, y As Integer, width As Integer, height As Integer, brush As Brush)
+        Me.X = x
+        Me.Y = y
+        Me.Width = width
+        Me.Height = height
+        Me.Brush = brush
+    End Sub
+End Structure
+```
+- **Purpose**: This structure manages properties for circles and their graphical representation.
+- **Members**:
+  - `X`, `Y`: Coordinates for the top-left corner of the bounding rectangle of the circle.
+  - `Width`, `Height`: Dimensions of the circle.
+  - `Brush`: The brush used for filling the circle.
+- **Constructor**: Initializes the properties of the `CircleDisplay` structure.
+
+### Circle Displays Array
+
+```vb
+Private CircleDisplays() As CircleDisplay = {
+    New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
+    New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+    New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
+    New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
+    New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
+}
+```
+- **Purpose**: Initializes an array of `CircleDisplay` structures to manage the graphical representation of the circle and its components (center point, radius endpoint, mouse highlight).
+
+### CircleDisplayIndex Enumeration
+
+```vb
+Private Enum CircleDisplayIndex
+    Circle = 0
+    RadiusEndPoint = 1
+    CenterPoint = 2
+    MouseHilight = 3
+    MousePoint = 4
+End Enum
+```
+- **Purpose**: This enumeration provides easier access to the indices of the `CircleDisplays` array.
+
+[Table of Contents](#table-of-contents)
+
+## Variables for Circle Properties
+
+```vb
+Private CircleCenterPoint As New Point(150, 150)
+Private MousePointerLocation As New Point(0, 0)
+Private CircleRadius As Integer = 300
+Private IsPointerInsideCircle As Boolean = False
+Private DistanceSquared As Double
+Private RadiusSquared As Double = CircleRadius * CircleRadius
+```
+- **Purpose**: These variables store important properties for the circle and the mouse pointer.
+- **Members**:
+  - `CircleCenterPoint`: Initializes the center point of the circle.
+  - `MousePointerLocation`: Tracks the current location of the mouse pointer.
+  - `CircleRadius`: Sets the radius of the circle.
+  - `IsPointerInsideCircle`: A boolean flag indicating if the mouse pointer is inside the circle.
+  - `DistanceSquared`: Holds the squared distance from the mouse pointer to the circle's center.
+  - `RadiusSquared`: Pre-calculates the squared radius of the circle for efficient distance comparisons.
+
+[Table of Contents](#table-of-contents)
+
+## Pens and Brushes
+
+```vb
+Private DistanceArrowCap As New Drawing2D.AdjustableArrowCap(5, 5, True)
+Private DistancePen As New Pen(Color.Black, 3)
+Private ArrowBlack3Pen As New Pen(Color.Black, 3)
+Private TransparentPen As New Pen(Color.Transparent, 3)
+Private RadiusArrowCap As New Drawing2D.AdjustableArrowCap(4, 4, True)
+Private RadiusPen As New Pen(Color.Gray, 2)
+Private XYDistancePen As New Pen(Color.Orchid, 2)
+Private Orchid2Pen As New Pen(Color.Orchid, 2)
+```
+- **Purpose**: These variables define the pens and brushes used for drawing elements in the application.
+- **Members**:
+  - `DistanceArrowCap`: Custom arrow cap for distance lines.
+  - `DistancePen`, `ArrowBlack3Pen`: Pens used for drawing lines.
+  - `TransparentPen`: A pen that is transparent.
+  - `RadiusPen`: A pen used for drawing the radius line.
+  - `XYDistancePen`, `Orchid2Pen`: Pens used for drawing distance lines.
+
+[Table of Contents](#table-of-contents)
+
+## Font Sizes
+
+```vb
+Private HeadingFontSize As Integer = 16
+Private MouseFontSize As Integer = 12
+Private RadiusFontSize As Integer = 12
+Private CenterFontSize As Integer = 12
+Private FooterFontSize As Integer = 10
+```
+- **Purpose**: These variables set the default font sizes for different text displays in the application.
+
+[Table of Contents](#table-of-contents)
+
+## Grid Pen
+
+```vb
+Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
+```
+- **Purpose**: Initializes a pen for drawing a grid in the background of the application.
+
+[Table of Contents](#table-of-contents)
+
+## View State Enumeration
+
+```vb
+Private Enum ViewStateIndex
+    Overview
+    ParametersView
+    XDistanceView
+    YDistanceView
+End Enum
+```
+- **Purpose**: This enumeration defines the different states of the application view (Overview, ParametersView, XDistanceView, YDistanceView).
+
+[Table of Contents](#table-of-contents)
+
+## View State Variable
+
+```vb
+Private ViewState As ViewStateIndex = ViewStateIndex.Overview
+```
+- **Purpose**: Initializes the current view state to Overview.
+
+[Table of Contents](#table-of-contents)
+
+## Form Load Event
+
+```vb
+Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+    InitializeApp()
+End Sub
+```
+- **Purpose**: This event handler runs when the form loads. It calls the `InitializeApp` method to set up the initial state of the application.
+
+[Table of Contents](#table-of-contents)
+
+## Mouse Events
 
 ### Mouse Enter Event
+
 ```vb
-    Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
-        UpdateViewMouseEnter()
-        Invalidate()
-        InvaildateButtons()
-    End Sub
+Private Sub Form1_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
+    UpdateViewMouseEnter()
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **Form1_MouseEnter**: Event handler that triggers when the mouse enters the form. It updates the view and invalidates the form to refresh the display.
+- **Purpose**: This event handler triggers when the mouse enters the form. It updates the view and refreshes the display.
 
 ### Mouse Leave Event
+
 ```vb
-    Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
-        UpdateViewMouseLeave()
-        Invalidate()
-        InvaildateButtons()
-    End Sub
+Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) Handles Me.MouseLeave
+    UpdateViewMouseLeave()
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **Form1_MouseLeave**: Event handler that triggers when the mouse leaves the form. It updates the view to reflect the mouse leave state and refreshes the display.
+- **Purpose**: This event handler triggers when the mouse leaves the form. It updates the view to reflect the mouse leave state and refreshes the display.
 
 ### Mouse Move Event
-```vb
-    Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
-        MyBase.OnMouseMove(e)
-        MousePointerLocation = e.Location
-        IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
-        UpdateViewOnMouseMove()
-        Invalidate()
-        InvaildateButtons()
-    End Sub
-```
-- **OnMouseMove**: Overrides the default mouse move event to track the mouse pointer's location and check if it is inside the circle. It updates the view and refreshes the display.
 
-### Paint Event
 ```vb
-    Protected Overrides Sub OnPaint(e As PaintEventArgs)
-        MyBase.OnPaint(e)
-        Dim g = e.Graphics
-        g.SmoothingMode = Drawing2D.SmoothingMode.None
-        DrawGrid(g)
-        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-        g.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
-        DrawCircles(g)
-        DrawLines(g)
-        DrawTextOverlays(g)
-    End Sub
+Protected Overrides Sub OnMouseMove(e As MouseEventArgs)
+    MyBase.OnMouseMove(e)
+    MousePointerLocation = e.Location
+    IsPointerInsideCircle = IsPointInsideCircle(e.X, e.Y, CircleCenterPoint.X, CircleCenterPoint.Y, CircleRadius)
+    XDistance = e.X - CircleCenterPoint.X
+    YDistance = e.Y - CircleCenterPoint.Y
+    DistanceSquared = CalculateDistances()
+    UpdateViewOnMouseMove()
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **OnPaint**: Overrides the paint event to draw the graphical elements on the form.
-  - **g**: Represents the graphics context for drawing.
-  - **SmoothingMode**: Sets the rendering quality for smoother graphics.
-  - **DrawGrid, DrawCircles, DrawLines, DrawTextOverlays**: Calls methods to render the grid, circles, lines, and text overlays.
+- **Purpose**: This method overrides the default mouse move event to track the mouse pointer's location and check if it is inside the circle. It updates the view and refreshes the display.
+
+[Table of Contents](#table-of-contents)
+
+## Paint Event
+
+```vb
+Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    MyBase.OnPaint(e)
+    Dim g = e.Graphics
+    g.SmoothingMode = Drawing2D.SmoothingMode.None
+    DrawGrid(g)
+    g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+    g.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+    DrawCircles(g)
+    DrawLines(g)
+    DrawTextOverlays(g)
+End Sub
+```
+- **Purpose**: This method overrides the paint event to draw the graphical elements on the form.
+- **Details**:
+  - `g`: Represents the graphics context for drawing.
+  - `SmoothingMode`: Sets the rendering quality for smoother graphics.
+  - Calls methods to render the grid, circles, lines, and text overlays.
+
+[Table of Contents](#table-of-contents)
+
+## Button Click Events
 
 ### Overview Button Click Event
+
 ```vb
-    Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
-        Switch2Overview()
-        UpdateView()
-        ' Hide overlays
-        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
-        SetTextDisplayTransparent(TextDisplayIndex.Heading)
-        SetTextDisplayTransparent(TextDisplayIndex.Footer)
-        ' Hide mouse indicators
-        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
-        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
-        Invalidate()
-        InvaildateButtons()
-    End Sub
+Private Sub OverviewButton_Click(sender As Object, e As EventArgs) Handles OverviewButton.Click
+    Switch2Overview()
+    UpdateView()
+    ' Hide overlays
+    SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+    SetTextDisplayTransparent(TextDisplayIndex.Heading)
+    SetTextDisplayTransparent(TextDisplayIndex.Footer)
+    SetTextDisplayTransparent(TextDisplayIndex.Center)
+    ' Hide mouse indicators
+    SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+    SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+    SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+    SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
+    SetTextDisplayBlack(TextDisplayIndex.Radius)
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **OverviewButton_Click**: Event handler for the overview button. It switches to the overview view, updates the display, and hides specific overlays and indicators.
+- **Purpose**: This event handler is triggered when the overview button is clicked. It switches to the overview view and updates the display while hiding specific overlays and indicators.
 
 ### Parameters View Button Click Event
+
 ```vb
-    Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
-        Switch2ParametersView()
-        UpdateView()
-        ' Hide overlays
-        SetTextDisplayTransparent(TextDisplayIndex.Mouse)
-        ' Hide mouse indicators
-        SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
-        SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
-        Invalidate()
-        InvaildateButtons()
-    End Sub
+Private Sub ParametersViewButton_Click(sender As Object, e As EventArgs) Handles ParametersViewButton.Click
+    Switch2ParametersView()
+    UpdateView()
+    ' Hide overlays
+    SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+    ' Hide mouse indicators
+    SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+    SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+    SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+    SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
+    SetTextDisplayBlack(TextDisplayIndex.Radius)
+    SetTextDisplayBlack(TextDisplayIndex.Heading)
+    SetTextDisplayBlack(TextDisplayIndex.Footer)
+    SetTextDisplayBlack(TextDisplayIndex.Center)
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **ParametersViewButton_Click**: Event handler for the parameters view button. It switches to the parameters view and updates the display while hiding specific overlays and indicators.
+- **Purpose**: This event handler is triggered when the parameters view button is clicked. It switches to the parameters view and updates the display while hiding specific overlays and indicators.
 
-### Mouse Enter for Buttons
+### XDistance View Button Click Event
+
 ```vb
-    Private Sub OverviewButton_MouseEnter(sender As Object, e As EventArgs) Handles OverviewButton.MouseEnter
-        InvaildateButtons()
-    End Sub
-
-    Private Sub ParametersViewButton_MouseEnter(sender As Object, e As EventArgs) Handles ParametersViewButton.MouseEnter
-        InvaildateButtons()
-    End Sub
+Private Sub XDistanceViewButton_Click(sender As Object, e As EventArgs) Handles XDistanceViewButton.Click
+    Switch2XDistanceView()
+    UpdateView()
+    ' Hide overlays
+    SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+    SetTextDisplayTransparent(TextDisplayIndex.Heading)
+    SetTextDisplayTransparent(TextDisplayIndex.Footer)
+    SetTextDisplayTransparent(TextDisplayIndex.Radius)
+    ' Hide mouse indicators
+    SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+    SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+    SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
+    SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+    SetTextDisplayBlack(TextDisplayIndex.Center)
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **Mouse Enter Events**: Event handlers that trigger when the mouse enters the buttons, refreshing their appearance.
+- **Purpose**: This event handler is triggered when the X distance view button is clicked. It switches to the X distance view and updates the display while hiding specific overlays and indicators.
 
-### Resize Event
+### YDistance View Button Click Event
+
 ```vb
-    Protected Overrides Sub OnResize(e As EventArgs)
-        MyBase.OnResize(e)
-        UpdateButtonLayout()
-        UpdateCircleGeometry()
-        UpdateFontSizes()
-        UpdateTextDisplaysOnResize()
-        UpdateLineDisplays()
-        UpdateCircleDisplaysOnResize()
-        Invalidate()
-        InvaildateButtons()
-    End Sub
+Private Sub YDistanceViewButton_Click(sender As Object, e As EventArgs) Handles YDistanceViewButton.Click
+    Switch2YDistanceView()
+    UpdateView()
+    ' Hide overlays
+    SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+    SetTextDisplayTransparent(TextDisplayIndex.Heading)
+    SetTextDisplayTransparent(TextDisplayIndex.Footer)
+    SetTextDisplayTransparent(TextDisplayIndex.Radius)
+    ' Hide mouse indicators
+    SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+    SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+    SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
+    SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
+    SetTextDisplayBlack(TextDisplayIndex.Center)
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **OnResize**: Overrides the resize event to adjust the layout of buttons, circle geometry, font sizes, and other graphical elements when the form is resized.
+- **Purpose**: This event handler is triggered when the Y distance view button is clicked. It switches to the Y distance view and updates the display while hiding specific overlays and indicators.
 
-### Point Inside Circle Function
+[Table of Contents](#table-of-contents)
+
+## Resize Event
+
 ```vb
-    Function IsPointInsideCircle(pointX As Double, pointY As Double, centerX As Double, centerY As Double, radius As Double) As Boolean
-        ' This function checks if a point (pointX, pointY) is inside or on the edge of a circle
-        ' defined by its center (centerX, centerY) and radius.
-
-        ' Calculate horizontal distance from the point to the center of the circle
-        Dim Xdistance As Double = pointX - centerX
-
-        ' Calculate vertical distance from the point to the center of the circle
-        Dim Ydistance As Double = pointY - centerY
-
-        ' Calculate the squared distance from the point to the center of the circle
-        Dim squaredDistance As Double = Xdistance * Xdistance + Ydistance * Ydistance
-
-        ' Check if the squared distance is less than or equal to the squared radius
-        Return squaredDistance <= radius * radius
-
-        ' It uses the squared distance to avoid the computational cost of taking a square root.
-        ' The function returns True if the point is inside or on the edge of the circle,
-        ' and False if the point is outside the circle.
-
-        ' The function calculates the horizontal and vertical distances from the point to the center of the circle,
-        ' squares these distances, and sums them to get the squared distance.
-        ' It then compares this squared distance to the squared radius of the circle.
-        ' If the squared distance is less than or equal to the squared radius, the point is inside or on the edge of the circle.
-        ' If the squared distance is greater than the squared radius, the point is outside the circle.
-        ' This method is particularly useful in scenarios where performance is critical,
-        ' such as in graphics rendering or physics simulations, where many distance checks may be performed frequently.
-    End Function
+Protected Overrides Sub OnResize(e As EventArgs)
+    MyBase.OnResize(e)
+    UpdateButtonLayout()
+    UpdateCircleGeometry()
+    UpdateFontSizes()
+    UpdateTextDisplays(CreateGraphics, DistanceSquared)
+    UpdateLineDisplays()
+    UpdateCircleDisplaysPostion()
+    Invalidate()
+    InvalidateAllButtons()
+End Sub
 ```
-- **IsPointInsideCircle**: Function that checks if a given point is inside or on the edge of a circle.
-  - **Parameters**: Accepts coordinates of the point, center of the circle, and the radius.
-  - **Calculations**: Computes the squared distance from the point to the center of the circle and compares it to the squared radius.
-  - **Return Value**: Returns `True` if the point is inside or on the edge, and `False` if outside.
+- **Purpose**: This method overrides the resize event to adjust the layout of buttons, circle geometry, font sizes, and other graphical elements when the form is resized.
+
+[Table of Contents](#table-of-contents)
+
+## Point Inside Circle Function
+
+```vb
+Function IsPointInsideCircle(pointX As Double, pointY As Double,
+         centerX As Double, centerY As Double, radius As Double) As Boolean
+    ' This function checks if a point (pointX, pointY) is inside or on the edge of a circle
+    ' defined by its center (centerX, centerY) and radius.
+
+    ' Calculate horizontal distance from the point to the center of the circle
+    Dim Xdistance As Double = pointX - centerX
+
+    ' Calculate vertical distance from the point to the center of the circle
+    Dim Ydistance As Double = pointY - centerY
+
+    ' Calculate the squared distance from the point to the center of the circle
+    Dim squaredDistance As Double = Xdistance * Xdistance + Ydistance * Ydistance
+
+    ' Check if the squared distance is less than or equal to the squared radius
+    Return squaredDistance <= radius * radius
+End Function
+```
+- **Purpose**: This function checks if a given point is inside or on the edge of a circle.
+- **Details**:
+  - It calculates the horizontal and vertical distances from the point to the center of the circle.
+  - It computes the squared distance and compares it to the squared radius of the circle.
+  - Returns `True` if the point is inside or on the edge, and `False` if outside.
+
+[Table of Contents](#table-of-contents)
+
+## Drawing Methods
 
 ### Draw Circles Method
+
 ```vb
-    Private Sub DrawCircles(g As Graphics)
-        ' 🔵 Draw filled circles
-        For Each circleDisplay As CircleDisplay In CircleDisplays
-            g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
-        Next
-    End Sub
+Private Sub DrawCircles(g As Graphics)
+    ' 🔵 Draw filled circles
+    For Each circleDisplay As CircleDisplay In CircleDisplays
+        g.FillEllipse(circleDisplay.Brush, circleDisplay.X, circleDisplay.Y, circleDisplay.Width, circleDisplay.Height)
+    Next
+End Sub
 ```
-- **DrawCircles**: Method that draws filled circles on the graphical interface.
-  - **Parameter g**: Represents the graphics context for drawing.
-  - **Loop**: Iterates through `CircleDisplays` to draw each circle using the specified brush and dimensions.
+- **Purpose**: This method draws filled circles on the graphical interface.
+- **Parameter**: `g`: Represents the graphics context for drawing.
 
 ### Draw Lines Method
+
 ```vb
-    Private Sub DrawLines(g As Graphics)
-        ' 📏 Draw lines
-        For Each lineDisplay As LineDisplay In LineDisplays
-            g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
-        Next
-    End Sub
+Private Sub DrawLines(g As Graphics)
+    ' 📏 Draw lines
+    For Each lineDisplay As LineDisplay In LineDisplays
+        g.DrawLine(lineDisplay.Pen, lineDisplay.X1, lineDisplay.Y1, lineDisplay.X2, lineDisplay.Y2)
+    Next
+End Sub
 ```
-- **DrawLines**: Method that draws lines on the graphical interface.
-  - **Parameter g**: Represents the graphics context for drawing.
-  - **Loop**: Iterates through `LineDisplays` to draw each line using the specified pen.
+- **Purpose**: This method draws lines on the graphical interface.
+- **Parameter**: `g`: Represents the graphics context for drawing.
 
 ### Draw Text Overlays Method
+
 ```vb
-    Private Sub DrawTextOverlays(g As Graphics)
-        ' abc Draw text overlays
-        For Each textDisplay As TextDisplay In TextDisplays
-            g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
-        Next
-    End Sub
+Private Sub DrawTextOverlays(g As Graphics)
+    ' abc Draw text overlays
+    For Each textDisplay As TextDisplay In TextDisplays
+        g.DrawString(textDisplay.Text, textDisplay.Font, textDisplay.Brush, textDisplay.X, textDisplay.Y)
+    Next
+End Sub
 ```
-- **DrawTextOverlays**: Method that draws text overlays on the graphical interface.
-  - **Parameter g**: Represents the graphics context for drawing.
-  - **Loop**: Iterates through `TextDisplays` to render each text string at the specified coordinates with the specified font and brush.
+- **Purpose**: This method draws text overlays on the graphical interface.
+- **Parameter**: `g`: Represents the graphics context for drawing.
 
 ### Draw Grid Method
+
 ```vb
-    Private Sub DrawGrid(g As Graphics)
-        ' 🔲 Draw grid ( lines every 50 pixels)
-        For x As Integer = 0 To ClientSize.Width Step 50
-            g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
-        Next
-        For y As Integer = 0 To ClientSize.Height Step 50
-            g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
-        Next
-    End Sub
+Private Sub DrawGrid(g As Graphics)
+
+    ' 🔲 Draw grid (lines every 50 pixels)
+    For x As Integer = 0 To ClientSize.Width Step 50
+        g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
+    Next
+    For y As Integer = 0 To ClientSize.Height Step 50
+        g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
+    Next
+End Sub
 ```
-- **DrawGrid**: Method that draws a grid on the background of the graphical interface.
-  - **Parameter g**: Represents the graphics context for drawing.
-  - **Loops**: Draw vertical lines every 50 pixels across the width and horizontal lines every 50 pixels across the height.
+- **Purpose**: This method draws a grid on the background of the graphical interface.
+- **Parameter**: `g`: Represents the graphics context for drawing.
+- **Details**:
+  - Vertical lines are drawn every 50 pixels across the width of the form.
+  - Horizontal lines are drawn every 50 pixels across the height of the form.
+
+[Table of Contents](#table-of-contents)
+
+## Update Methods
 
 ### Update Button Layout Method
+
 ```vb
-    Private Sub UpdateButtonLayout()
-        ParametersViewButton.Width = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
-        ParametersViewButton.Height = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
-        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
-        OverviewButton.Width = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
-        OverviewButton.Height = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
-        OverviewButton.Font = New Font("Segoe UI", Math.Max(16, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
-        ParametersViewButton.SetBounds(ClientSize.Width - ParametersViewButton.Width - 10, ClientSize.Height - ParametersViewButton.Height - 10, ParametersViewButton.Width, ParametersViewButton.Height)
-        OverviewButton.SetBounds(ClientSize.Width - ParametersViewButton.Width - 10 - OverviewButton.Width - 10, ClientSize.Height - OverviewButton.Height - 10, OverviewButton.Width, OverviewButton.Height)
-    End Sub
+Private Sub UpdateButtonLayout()
+    Dim ButtonSize As Integer = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 11)
+    Dim Pad As Integer = 10
+
+    YDistanceViewButton.Width = ButtonSize
+    YDistanceViewButton.Height = ButtonSize
+    YDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 30))
+    YDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
+                                  ClientSize.Height - ButtonSize - Pad,
+                                  ButtonSize,
+                                  ButtonSize)
+
+    XDistanceViewButton.Width = ButtonSize
+    XDistanceViewButton.Height = ButtonSize
+    XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 25))
+    XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
+                                  ClientSize.Height - ButtonSize - Pad,
+                                  ButtonSize,
+                                  ButtonSize)
+
+    ParametersViewButton.Width = ButtonSize
+    ParametersViewButton.Height = ButtonSize
+    ParametersViewButton.Font = New Font("Segoe UI", Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 40))
+    ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
+                                   ClientSize.Height - ButtonSize - Pad,
+                                   ButtonSize,
+                                   ButtonSize)
+
+    OverviewButton.Width = ButtonSize
+    OverviewButton.Height = ButtonSize
+    OverviewButton.Font = New Font("Segoe UI", Math.Max(12, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 30))
+    OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 4 - Pad * 4,
+                             ClientSize.Height - ButtonSize - Pad,
+                             ButtonSize,
+                             ButtonSize)
+End Sub
 ```
-- **UpdateButtonLayout**: Method that adjusts the size and position of the buttons based on the current client size of the form.
-  - **Width and Height**: Sets minimum dimensions for the buttons.
-  - **Font**: Adjusts the font size based on the form size.
-  - **SetBounds**: Positions the buttons at the bottom right of the form.
+- **Purpose**: This method adjusts the size and position of the buttons based on the current client size of the form.
+- **Details**:
+  - The size of each button is calculated to ensure it fits well within the form.
+  - The buttons are positioned at the bottom right of the form, taking into account padding.
 
 ### Update Circle Geometry Method
+
 ```vb
-    Private Sub UpdateCircleGeometry()
-        CircleCenterPoint = New Point(ClientSize.Width \ 2, ClientSize.Height \ 2)
-        CircleRadius = Math.Min(ClientSize.Width, ClientSize.Height) \ 3.4
-        RadiusSquared = CircleRadius * CircleRadius
-    End Sub
+Private Sub UpdateCircleGeometry()
+    CircleCenterPoint = New Point(ClientSize.Width \ 2, ClientSize.Height \ 2)
+    CircleRadius = Math.Min(ClientSize.Width, ClientSize.Height) \ 3.4
+    RadiusSquared = CircleRadius * CircleRadius
+End Sub
 ```
-- **UpdateCircleGeometry**: Method that recalculates the center point and radius of the circle based on the current size of the form.
-  - **CircleCenterPoint**: Centers the circle in the form.
-  - **CircleRadius**: Sets the radius to a fraction of the smaller dimension of the form.
-  - **RadiusSquared**: Updates the squared radius for efficient distance calculations.
+- **Purpose**: This method recalculates the center point and radius of the circle based on the current size of the form.
+- **Details**:
+  - The circle is centered in the form.
+  - The radius is set to a fraction of the smaller dimension of the form for better responsiveness.
+  - The squared radius is updated for efficient distance calculations.
 
 ### Update Font Sizes Method
+
 ```vb
-    Private Sub UpdateFontSizes()
-        Dim baseSize = Math.Min(ClientSize.Width, ClientSize.Height) \ 20
-        MouseFontSize = Math.Max(10, baseSize)
-        RadiusFontSize = MouseFontSize
-        CenterFontSize = MouseFontSize
-        HeadingFontSize = MouseFontSize
-        FooterFontSize = MouseFontSize
-    End Sub
+Private Sub UpdateFontSizes()
+    Dim baseSize = Math.Min(ClientSize.Width, ClientSize.Height) \ 20
+    MouseFontSize = Math.Max(10, baseSize)
+    RadiusFontSize = MouseFontSize
+    CenterFontSize = MouseFontSize
+    HeadingFontSize = MouseFontSize
+    FooterFontSize = MouseFontSize
+End Sub
 ```
-- **UpdateFontSizes**: Method that adjusts the font sizes for text displays based on the current size of the form.
-  - **baseSize**: Sets a base size based on the smaller dimension of the form.
-  - **Font Sizes**: Ensures that font sizes do not fall below a minimum value.
-
-### Update Text Displays on Resize Method
-```vb
-    Private Sub UpdateTextDisplaysOnResize()
-        Using g As Graphics = CreateGraphics()
-            Dim td As TextDisplay
-            Dim ThisStringSize As SizeF
-
-            td = TextDisplays(TextDisplayIndex.Heading)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            td.FontSize = HeadingFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Heading) = td
-
-            td = TextDisplays(TextDisplayIndex.Center)
-            td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
-            td.FontSize = CenterFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
-            td.Y = CircleCenterPoint.Y
-            TextDisplays(TextDisplayIndex.Center) = td
-
-            td = TextDisplays(TextDisplayIndex.Radius)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"Radius {CircleRadius}", $"Radius² {RadiusSquared}")
-            td.FontSize = RadiusFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = CircleCenterPoint.X + CircleRadius + 10
-            td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
-            TextDisplays(TextDisplayIndex.Radius) = td
-
-            td = TextDisplays(TextDisplayIndex.Footer)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}")
-            td.FontSize = FooterFontSize
-            td.Font = New Font("Segoe UI", td.FontSize)
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Footer) = td
-
-            td = TextDisplays(TextDisplayIndex.Mouse)
-            td.Brush = Brushes.Transparent
-        End Using
-    End Sub
-```
-- **UpdateTextDisplaysOnResize**: Method that updates the positions and contents of text displays when the form is resized.
-  - **Graphics Context**: Creates a graphics context for measuring text sizes.
-  - **Text Updates**: Adjusts the text and positions of each display based on the current view state and form size.
+- **Purpose**: This method adjusts the font sizes for text displays based on the current size of the form.
+- **Details**:
+  - A base size is calculated based on the smaller dimension of the form.
+  - Ensures that font sizes do not fall below a minimum value.
 
 ### Update Line Displays Method
+
 ```vb
-    Private Sub UpdateLineDisplays()
-        For i As Integer = 0 To LineDisplays.Count - 1
-            Dim ld = LineDisplays(i)
+Private Sub UpdateLineDisplays()
+    For i As Integer = 0 To LineDisplays.Count - 1
+        Dim ld = LineDisplays(i)
 
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    SetLine(ld, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+        Select Case i
+            Case LineDisplayIndex.RadiusLine
+                SetLine(ld, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+            Case LineDisplayIndex.XDistanceLine
+                SetLine(ld, CircleCenterPoint, New Point(MousePointerLocation.X, CircleCenterPoint.Y))
+            Case LineDisplayIndex.YDistanceLine
+                SetLine(ld, New Point(MousePointerLocation.X, CircleCenterPoint.Y), MousePointerLocation)
+            Case LineDisplayIndex.DistanceLine
+                SetLine(ld, CircleCenterPoint, MousePointerLocation)
+        End Select
 
-                Case LineDisplayIndex.XDistanceLine
-                    SetLine(ld, CircleCenterPoint, New Point(MousePointerLocation.X, CircleCenterPoint.Y))
-                    If ViewState = ViewStateIndex.Overview Then
-                        ld.Pen = XYDistancePen
-                    Else
-                        ld.Pen = Pens.Transparent
-                    End If
-
-                Case LineDisplayIndex.YDistanceLine
-                    SetLine(ld, New Point(MousePointerLocation.X, CircleCenterPoint.Y), MousePointerLocation)
-                    If ViewState = ViewStateIndex.Overview Then
-                        ld.Pen = XYDistancePen
-                    Else
-                        ld.Pen = Pens.Transparent
-                    End If
-
-                Case LineDisplayIndex.DistanceLine
-                    SetLine(ld, CircleCenterPoint, MousePointerLocation)
-                    If ViewState = ViewStateIndex.Overview Then
-                        ld.Pen = DistancePen
-                    Else
-                        ld.Pen = Pens.Transparent
-                    End If
-            End Select
-
-            LineDisplays(i) = ld
-        Next
-    End Sub
+        LineDisplays(i) = ld
+    Next
+End Sub
 ```
-- **UpdateLineDisplays**: Method that updates the positions and visibility of lines based on the current state of the application.
-  - **Loop**: Iterates through the `LineDisplays` to set their positions and pens based on the view state.
+- **Purpose**: This method updates the positions and visibility of lines based on the current state of the application.
+- **Details**:
+  - Iterates through the `LineDisplays` array and sets their positions based on the current mouse pointer location and circle properties.
 
 ### Set Line Method
+
 ```vb
-    Private Sub SetLine(ByRef ld As LineDisplay, p1 As Point, p2 As Point)
-        ld.X1 = p1.X
-        ld.Y1 = p1.Y
-        ld.X2 = p2.X
-        ld.Y2 = p2.Y
-    End Sub
+Private Sub SetLine(ByRef ld As LineDisplay, p1 As Point, p2 As Point)
+    ld.X1 = p1.X
+    ld.Y1 = p1.Y
+    ld.X2 = p2.X
+    ld.Y2 = p2.Y
+End Sub
 ```
-- **SetLine**: Helper method that sets the coordinates of a line display based on two points.
+- **Purpose**: This helper method sets the coordinates of a line display based on two points.
 
-### Set Text Display Transparent Method
+### Update Circle Displays Position Method
+
 ```vb
-    Private Sub SetTextDisplayTransparent(index As TextDisplayIndex)
-        Dim td = TextDisplays(index)
-        td.Brush = Brushes.Transparent
-        TextDisplays(index) = td
-    End Sub
-```
-- **SetTextDisplayTransparent**: Method that makes a text display transparent by setting its brush to transparent.
+Private Sub UpdateCircleDisplaysPostion()
+    For i As Integer = 0 To CircleDisplays.Count - 1
+        Dim cd = CircleDisplays(i)
 
-### Set Circle Display Transparent Method
+        Select Case i
+            Case CircleDisplayIndex.Circle
+                SetCirclePostion(cd)
+            Case CircleDisplayIndex.RadiusEndPoint
+                SetEndpointPostion(cd, CircleRadius)
+            Case CircleDisplayIndex.CenterPoint
+                SetEndpointPostion(cd, 0)
+            Case CircleDisplayIndex.MousePoint
+                SetMousePointPostion(cd)
+            Case CircleDisplayIndex.MouseHilight
+                SetMouseHighlightPostion(cd)
+        End Select
+
+        CircleDisplays(i) = cd
+    Next
+End Sub
+```
+- **Purpose**: This method updates the positions of the circle displays based on the current state of the application.
+- **Details**:
+  - Each display is updated based on its type (main circle, radius endpoint, center point, mouse point, highlight).
+
+### Set Circle Position Method
+
 ```vb
-    Private Sub SetCircleDisplayTransparent(index As CircleDisplayIndex)
-        Dim cd = CircleDisplays(index)
-        cd.Brush = Brushes.Transparent
-        CircleDisplays(index) = cd
-    End Sub
+Private Sub SetCirclePostion(ByRef cd As CircleDisplay)
+    cd.X = CircleCenterPoint.X - CircleRadius
+    cd.Y = CircleCenterPoint.Y - CircleRadius
+    cd.Width = CircleRadius * 2
+    cd.Height = CircleRadius * 2
+End Sub
 ```
-- **SetCircleDisplayTransparent**: Method that makes a circle display transparent by setting its brush to transparent.
+- **Purpose**: This method sets the position and size of the main circle based on its center point and radius.
 
-### Invalidate Buttons Method
+### Set Endpoint Position Method
+
 ```vb
-    Private Sub InvaildateButtons()
-        ' Invalidate the buttons to update their appearance
-        OverviewButton.Invalidate()
-        ParametersViewButton.Invalidate()
-    End Sub
+Private Sub SetEndpointPostion(ByRef cd As CircleDisplay, offset As Double)
+    cd.X = CircleCenterPoint.X + offset - 3
+    cd.Y = CircleCenterPoint.Y - 3
+    cd.Width = 6
+    cd.Height = 6
+End Sub
 ```
-- **InvaildateButtons**: Method that refreshes the appearance of the buttons to reflect any changes in state.
+- **Purpose**: This method sets the position of the radius endpoint based on the circle's center and radius.
 
-### Switch to Overview Method
+### Set Mouse Point Position Method
+
 ```vb
-    Private Sub Switch2Overview()
-        ' Switch to Overview
-        ViewState = ViewStateIndex.Overview
-    End Sub
+Private Sub SetMousePointPostion(ByRef cd As CircleDisplay)
+    cd.X = MousePointerLocation.X - 3
+    cd.Y = MousePointerLocation.Y - 3
+    cd.Width = 6
+    cd.Height = 6
+End Sub
 ```
-- **Switch2Overview**: Method that sets the view state to Overview.
+- **Purpose**: This method sets the position of the mouse pointer display.
 
-### Switch to Parameters View Method
+### Set Mouse Highlight Position Method
+
 ```vb
-    Private Sub Switch2ParametersView()
-        ' Switch to ParametersView
-        ViewState = ViewStateIndex.ParametersView
-    End Sub
+Private Sub SetMouseHighlightPostion(ByRef cd As CircleDisplay)
+    cd.X = MousePointerLocation.X - 20
+    cd.Y = MousePointerLocation.Y - 20
+    cd.Width = 40
+    cd.Height = 40
+End Sub
 ```
-- **Switch2ParametersView**: Method that sets the view state to ParametersView.
+- **Purpose**: This method sets the position of the mouse highlight display.
 
-### Update View Method
+[Table of Contents](#table-of-contents)
+
+## Update Text Displays Method
+
 ```vb
-    Private Sub UpdateView()
-        UpdateMousePointBrush()
-        UpdateCircleBrush()
-        Dim distanceSquared As Double = CalculateDistances()
-        Using g As Graphics = CreateGraphics()
-            UpdateLineDisplays()
-            UpdateCircleDisplays()
-            UpdateTextDisplays(g, distanceSquared)
-        End Using
-        UpdateGridPen()
-    End Sub
-```
-- **UpdateView**: Method that updates the visual elements of the application based on the current state.
-  - **Update Methods**: Calls methods to update the brushes, line displays, circle displays, text displays, and grid pen.
+Private Sub UpdateTextDisplays(g As Graphics, distanceSquared As Double)
+    Dim headingFont As New Font("Segoe UI", HeadingFontSize)
+    Dim mouseFont As New Font("Segoe UI", MouseFontSize)
+    Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
+    Dim centerFont As New Font("Segoe UI", CenterFontSize)
+    Dim footerFont As New Font("Segoe UI", FooterFontSize)
 
-### Update View on Mouse Move Method
+    For i As Integer = 0 To TextDisplays.Count - 1
+        Dim td As TextDisplay = TextDisplays(i)
+
+        Select Case i
+            Case TextDisplayIndex.Heading
+                UpdateHeadingTextPositionContent(td, g, headingFont)
+            Case TextDisplayIndex.Mouse
+                UpdateMouseTextPositionContent(td, g, mouseFont)
+            Case TextDisplayIndex.Center
+                UpdateCenterTextPositionContent(td, g, centerFont)
+            Case TextDisplayIndex.Footer
+                UpdateFooterTextPositionContent(td, g, footerFont, distanceSquared)
+            Case TextDisplayIndex.Radius
+                UpdateRadiusTextPositionContent(td, g, radiusFont)
+        End Select
+
+        TextDisplays(i) = td
+    Next
+End Sub
+```
+- **Purpose**: This method updates the positions and contents of text displays based on the current state of the application.
+- **Details**:
+  - Each text display is updated according to its type, using specific methods to set the text and position.
+
+### Update Mouse Text Position Content Method
+
 ```vb
-    Private Sub UpdateViewOnMouseMove()
-        UpdateMousePointBrush()
-        UpdateCircleBrush()
-        Dim distanceSquared As Double = CalculateDistances()
-        ' Update mouse text display
-        Using g As Graphics = CreateGraphics()
-            Dim td As TextDisplay
-            Dim ThisStringSize As SizeF
-            td = TextDisplays(TextDisplayIndex.Mouse)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}", $"Distance² {distanceSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
-            If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height
-            ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
-                td.Y = MousePointerLocation.Y
-            Else
-                td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
-            End If
-            TextDisplays(TextDisplayIndex.Mouse) = td
-            td = TextDisplays(TextDisplayIndex.Heading)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Heading) = td
-            td = TextDisplays(TextDisplayIndex.Footer)
-            td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}")
-            ThisStringSize = g.MeasureString(td.Text, td.Font)
-            td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-            td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-            TextDisplays(TextDisplayIndex.Footer) = td
-        End Using
-        UpdateLineDisplays()
-        UpdateCircleDisplays()
-    End Sub
-```
-- **UpdateViewOnMouseMove**: Method that updates the visual elements based on the mouse movement.
-  - **Text Updates**: Adjusts the text displays for mouse position and other relevant information.
+Private Sub UpdateMouseTextPositionContent(ByRef td As TextDisplay, g As Graphics, mouseFont As Font)
+    ' Update mouse text display
+    Select Case ViewState
+        Case ViewStateIndex.Overview
+            td.Text = $"Distance² {DistanceSquared}"
+        Case ViewStateIndex.ParametersView
+            td.Text = $"X {MousePointerLocation.X}, Y {MousePointerLocation.Y}"
+        Case ViewStateIndex.XDistanceView
+            td.Text = $"X {MousePointerLocation.X}"
+        Case ViewStateIndex.YDistanceView
+            td.Text = $"Y {MousePointerLocation.Y}"
+    End Select
 
-### Initialize Application Method
+    td.FontSize = MouseFontSize
+    td.Font = mouseFont
+    Dim ThisStringSize As SizeF = g.MeasureString(td.Text, td.Font)
+
+    td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+    If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
+        td.Y = MousePointerLocation.Y - ThisStringSize.Height
+    ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
+        td.Y = MousePointerLocation.Y
+    Else
+        td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
+    End If
+    TextDisplays(TextDisplayIndex.Mouse) = td
+End Sub
+```
+- **Purpose**: This method updates the position and content of the mouse text display based on the current view state.
+
+### Update Heading Text Position Content Method
+
 ```vb
-    Private Sub InitializeApp()
-        gridPen = Pens.Transparent
-        DistancePen = TransparentPen
-        RadiusPen.CustomStartCap = RadiusArrowCap
-        RadiusPen.CustomEndCap = RadiusArrowCap
-        ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
-        ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
-        XYDistancePen = TransparentPen
-        MousePointBrush = Brushes.Transparent
+Private Sub UpdateHeadingTextPositionContent(ByRef td As TextDisplay, g As Graphics, headingFont As Font)
+    Select Case ViewState
+        Case ViewStateIndex.Overview
+            td.Text = $"Inside Circle {IsPointerInsideCircle}"
+        Case ViewStateIndex.ParametersView
+            td.Text = "Parameters"
+        Case ViewStateIndex.XDistanceView
+            td.Text = $"X Distance {XDistance}"
+        Case ViewStateIndex.YDistanceView
+            td.Text = $"Y Distance {YDistance}"
+    End Select
 
-        For i As Integer = 0 To TextDisplays.Count - 1
-            Dim td As TextDisplay = TextDisplays(i)
-            Select Case i
-                Case TextDisplayIndex.Radius
-                    td.Text = $"Radius² {RadiusSquared}"
-                    td.Brush = Brushes.Black
-                Case Else
-                    td.Brush = Brushes.Transparent
-            End Select
-            TextDisplays(i) = td
-        Next
-
-        For i As Integer = 0 To LineDisplays.Count - 1
-            Dim ld As LineDisplay = LineDisplays(i)
-            Select Case i
-                Case LineDisplayIndex.RadiusLine
-                    ld.X1 = CircleCenterPoint.X
-                    ld.Y1 = CircleCenterPoint.Y
-                    ld.X2 = CircleCenterPoint.X + CircleRadius
-                    ld.Y2 = CircleCenterPoint.Y
-                    ld.Pen = RadiusPen
-                Case Else
-                    ld.X1 = 0
-                    ld.Y1 = 0
-                    ld.X2 = 0
-                    ld.Y2 = 0
-                    ld.Pen = Pens.Transparent
-            End Select
-            LineDisplays(i) = ld
-        Next
-
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.Circle
-                    ld.X = CircleCenterPoint.X - CircleRadius
-                    ld.Y = CircleCenterPoint.Y - CircleRadius
-                    ld.Width = CircleRadius * 2
-                    ld.Height = CircleRadius * 2
-                    ld.Brush = CircleBrush
-                Case CircleDisplayIndex.RadiusEndPoint
-                    ld.X = CircleCenterPoint.X + CircleRadius - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.CenterPoint
-                    ld.X = CircleCenterPoint.X - 3
-                    ld.Y = CircleCenterPoint.Y - 3
-                    ld.Width = 6
-                    ld.Height = 6
-                    ld.Brush = RadiusBrush
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-            End Select
-
-            CircleDisplays(i) = ld
-        Next
-    End Sub
+    td.FontSize = HeadingFontSize
+    Dim ThisStringSize = g.MeasureString(td.Text, headingFont)
+    td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+    td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
+    td.Font = headingFont
+End Sub
 ```
-- **InitializeApp**: This method sets up the initial state of various graphical elements in the application.
-  - **Grid Pen**: Sets the grid pen to transparent initially.
-  - **Line Pens**: Configures the start and end caps for the radius and distance lines.
-  - **Mouse Point Brush**: Initializes the mouse point brush as transparent.
-  
-- **Text Displays Loop**: Iterates through each `TextDisplay` in the `TextDisplays` array:
-  - **Radius Display**: Sets the text for the radius display and assigns a black brush.
-  - **Other Displays**: Sets the brush to transparent for all other text displays.
+- **Purpose**: This method updates the position and content of the heading text display based on the current view state.
 
-- **Line Displays Loop**: Iterates through each `LineDisplay` in the `LineDisplays` array:
-  - **Radius Line**: Sets the coordinates for the radius line and assigns the radius pen.
-  - **Other Lines**: Initializes other lines to start and end at (0,0) with a transparent pen.
+### Update Center Text Position Content Method
 
-- **Circle Displays Loop**: Iterates through each `CircleDisplay` in the `CircleDisplays` array:
-  - **Circle**: Sets the position and size of the main circle based on the center point and radius.
-  - **Radius End Point**: Sets the position for the endpoint of the radius line.
-  - **Center Point**: Sets the position for the center point of the circle.
-  - **Mouse Point and Highlight**: Initializes these displays to be transparent.
+```vb
+Private Sub UpdateCenterTextPositionContent(ByRef td As TextDisplay, g As Graphics, centerFont As Font)
+    Select Case ViewState
+        Case ViewStateIndex.Overview
+        Case ViewStateIndex.ParametersView
+            td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
+        Case ViewStateIndex.XDistanceView
+            td.Text = $"X {CircleCenterPoint.X}"
+        Case ViewStateIndex.YDistanceView
+            td.Text = $"Y {CircleCenterPoint.Y}"
+    End Select
+
+    td.FontSize = CenterFontSize
+    Dim size = g.MeasureString(td.Text, centerFont)
+    td.X = CircleCenterPoint.X - size.Width \ 2
+    td.Y = CircleCenterPoint.Y
+    td.Font = centerFont
+End Sub
+```
+- **Purpose**: This method updates the position and content of the center text display based on the current view state.
+
+### Update Footer Text Position Content Method
+
+```vb
+Private Sub UpdateFooterTextPositionContent(ByRef td As TextDisplay, g As Graphics, footerFont As Font, distanceSquared As Double)
+    Select Case ViewState
+        Case ViewStateIndex.Overview
+            td.Text = $"{IsPointerInsideCircle} = {distanceSquared} <= {RadiusSquared}"
+        Case ViewStateIndex.ParametersView
+            td.Text = $"What is Known"
+        Case ViewStateIndex.XDistanceView
+            td.Text = $"{XDistance} = {MousePointerLocation.X} - {CircleCenterPoint.X}"
+        Case ViewStateIndex.YDistanceView
+            td.Text = $"{YDistance} = {MousePointerLocation.Y} - {CircleCenterPoint.Y}"
+    End Select
+
+    td.FontSize = FooterFontSize
+    Dim size = g.MeasureString(td.Text, footerFont)
+    td.X = ClientSize.Width \ 2 - size.Width \ 2
+    td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
+    td.Font = footerFont
+End Sub
+```
+- **Purpose**: This method updates the position and content of the footer text display based on the current view state.
+
+### Update Radius Text Position Content Method
+
+```vb
+Private Sub UpdateRadiusTextPositionContent(ByRef td As TextDisplay, g As Graphics, radiusFont As Font)
+    Select Case ViewState
+        Case ViewStateIndex.Overview
+            td.Text = $"Radius² {RadiusSquared}"
+        Case ViewStateIndex.ParametersView
+            td.Text = $"Radius {CircleRadius}"
+    End Select
+
+    td.FontSize = RadiusFontSize
+    Dim size = g.MeasureString(td.Text, radiusFont)
+    td.X = CircleCenterPoint.X + CircleRadius + 10
+    td.Y = CircleCenterPoint.Y - size.Height \ 2
+    td.Font = radiusFont
+End Sub
+```
+- **Purpose**: This method updates the position and content of the radius text display based on the current view state.
+
+[Table of Contents](#table-of-contents)
+
+## Initialize Application Method
+
+```vb
+Private Sub InitializeApp()
+    ' Initialize the application state
+    InitializePensBrushes()
+    InitializeTextDisplays()
+    InitializeLineDisplays()
+    InitializeCircleDisplays()
+End Sub
+```
+- **Purpose**: This method sets up the initial state of various graphical elements in the application.
+
+### Initialize Pens and Brushes Method
+
+```vb
+Private Sub InitializePensBrushes()
+    ' Initialize Pens and Brushes used in the application
+    gridPen = Pens.Transparent
+    DistancePen = Pens.Transparent
+    RadiusPen.CustomStartCap = RadiusArrowCap
+    RadiusPen.CustomEndCap = RadiusArrowCap
+    ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
+    ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
+    XYDistancePen = Pens.Transparent
+    MousePointBrush = Brushes.Transparent
+End Sub
+```
+- **Purpose**: This method initializes the pens and brushes used throughout the application.
+
+### Initialize Text Displays Method
+
+```vb
+Private Sub InitializeTextDisplays()
+    ' Set TextDisplays to initial state
+    SetTextDisplayTransparent(TextDisplayIndex.Center)
+    SetTextDisplayTransparent(TextDisplayIndex.Footer)
+    SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+    SetTextDisplayTransparent(TextDisplayIndex.Heading)
+    SetTextDisplayBlack(TextDisplayIndex.Radius)
+End Sub
+```
+- **Purpose**: This method sets the text displays to their initial states, making some of them transparent and others visible.
+
+### Initialize Line Displays Method
+
+```vb
+Private Sub InitializeLineDisplays()
+    ' Set LineDisplays to initial state
+    SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+    SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+    SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+    SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
+End Sub
+```
+- **Purpose**: This method sets the line displays to their initial states, making some of them transparent and configuring the radius line.
+
+### Initialize Circle Displays Method
+
+```vb
+Private Sub InitializeCircleDisplays()
+    ' Set CircleDisplays to initial state
+    SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
+    SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+    SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
+    SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
+    SetCircleDisplayBrush(CircleDisplayIndex.CenterPoint, RadiusBrush)
+End Sub
+```
+- **Purpose**: This method sets the circle displays to their initial states, making some of them transparent and configuring the main circle and its components.
 
 
-This detailed breakdown covers the entire code structure and functionality of the **Inside or Out of Circle** application. The application is designed to provide a visual representation of whether a point (the mouse pointer) is inside or outside a circle, utilizing efficient squared distance calculations to enhance performance.
 
-### Summary of Key Components
-- **Structures and Enums**: Define how text, lines, and circles are represented.
-- **Event Handlers**: Manage user interactions such as mouse movements and button clicks.
-- **Drawing Methods**: Handle the rendering of circles, lines, text, and grids on the form.
-- **Initialization Methods**: Set up the application state and graphical elements when the form loads or resizes.
+This detailed walkthrough covers the entire code structure and functionality of the **Inside or Out of Circle** application. The application is designed to provide a visual representation of whether a point (the mouse pointer) is inside or outside a circle, utilizing efficient squared distance calculations to enhance performance.
+
+By engaging with this application, users can deepen their understanding of geometry and enhance their programming skills in a fun and interactive way. 
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+# Table of Contents
+
+1. [Overview](#overview)
+2. [Class Declaration](#class-declaration)
+3. [Structures and Enumerations](#structures-and-enumerations)
+   - 3.1 [TextDisplay Structure](#textdisplay-structure)
+   - 3.2 [Text Displays Array](#text-displays-array)
+   - 3.3 [TextDisplayIndex Enumeration](#textdisplayindex-enumeration)
+   - 3.4 [LineDisplay Structure](#linedisplay-structure)
+   - 3.5 [Line Displays Array](#line-displays-array)
+   - 3.6 [LineDisplayIndex Enumeration](#linedisplayindex-enumeration)
+   - 3.7 [CircleDisplay Structure](#circledisplay-structure)
+   - 3.8 [Circle Displays Array](#circle-displays-array)
+   - 3.9 [CircleDisplayIndex Enumeration](#circledisplayindex-enumeration)
+4. [Variables for Circle Properties](#variables-for-circle-properties)
+5. [Pens and Brushes](#pens-and-brushes)
+6. [Font Sizes](#font-sizes)
+7. [Grid Pen](#grid-pen)
+8. [View State Enumeration](#view-state-enumeration)
+9. [View State Variable](#view-state-variable)
+10. [Form Load Event](#form-load-event)
+11. [Mouse Events](#mouse-events)
+    - 11.1 [Mouse Enter Event](#mouse-enter-event)
+    - 11.2 [Mouse Leave Event](#mouse-leave-event)
+    - 11.3 [Mouse Move Event](#mouse-move-event)
+12. [Paint Event](#paint-event)
+13. [Button Click Events](#button-click-events)
+    - 13.1 [Overview Button Click Event](#overview-button-click-event)
+    - 13.2 [Parameters View Button Click Event](#parameters-view-button-click-event)
+    - 13.3 [XDistance View Button Click Event](#xdistance-view-button-click-event)
+    - 13.4 [YDistance View Button Click Event](#ydistance-view-button-click-event)
+14. [Resize Event](#resize-event)
+15. [Point Inside Circle Function](#point-inside-circle-function)
+16. [Drawing Methods](#drawing-methods)
+    - 16.1 [Draw Circles Method](#draw-circles-method)
+    - 16.2 [Draw Lines Method](#draw-lines-method)
+    - 16.3 [Draw Text Overlays Method](#draw-text-overlays-method)
+    - 16.4 [Draw Grid Method](#draw-grid-method)
+17. [Update Methods](#update-methods)
+    - 17.1 [Update Button Layout Method](#update-button-layout-method)
+    - 17.2 [Update Circle Geometry Method](#update-circle-geometry-method)
+    - 17.3 [Update Font Sizes Method](#update-font-sizes-method)
+    - 17.4 [Update Line Displays Method](#update-line-displays-method)
+    - 17.5 [Set Line Method](#set-line-method)
+    - 17.6 [Update Circle Displays Position Method](#update-circle-displays-position-method)
+    - 17.7 [Set Circle Position Method](#set-circle-position-method)
+    - 17.8 [Set Endpoint Position Method](#set-endpoint-position-method)
+    - 17.9 [Set Mouse Point Position Method](#set-mouse-point-position-method)
+    - 17.10 [Set Mouse Highlight Position Method](#set-mouse-highlight-position-method)
+18. [Update Text Displays Method](#update-text-displays-method)
+    - 18.1 [Update Mouse Text Position Content Method](#update-mouse-text-position-content-method)
+    - 18.2 [Update Heading Text Position Content Method](#update-heading-text-position-content-method)
+    - 18.3 [Update Center Text Position Content Method](#update-center-text-position-content-method)
+    - 18.4 [Update Footer Text Position Content Method](#update-footer-text-position-content-method)
+    - 18.5 [Update Radius Text Position Content Method](#update-radius-text-position-content-method)
+19. [Initialize Application Method](#initialize-application-method)
+    - 19.1 [Initialize Pens and Brushes Method](#initialize-pens-and-brushes-method)
+    - 19.2 [Initialize Text Displays Method](#initialize-text-displays-method)
+    - 19.3 [Initialize Line Displays Method](#initialize-line-displays-method)
+    - 19.4 [Initialize Circle Displays Method](#initialize-circle-displays-method)
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+# Clones
+
+
+
+
+
+
+<img width="1920" height="1080" alt="004" src="https://github.com/user-attachments/assets/761cde86-2340-4122-9b3e-9f4feb7dfdd0" />
+
 
 
 
