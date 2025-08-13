@@ -83,6 +83,8 @@ Public Class Form1
     Private LineDisplays() As LineDisplay = {
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
+        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
         New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
@@ -92,6 +94,8 @@ Public Class Form1
     Private Enum LineDisplayIndex
         CircleCenterVerticalLine
         MouseCenterVerticalLine
+        CircleCenterHorizontallLine
+        MouseCenterHorizontalLine
         RadiusLine
         XDistanceLine
         YDistanceLine
@@ -256,6 +260,7 @@ Public Class Form1
         SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
 
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
 
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
@@ -282,6 +287,8 @@ Public Class Form1
 
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
+
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
 
         SetTextDisplayBlack(TextDisplayIndex.Radius)
@@ -320,6 +327,7 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
 
 
         SetTextDisplayBlack(TextDisplayIndex.Center)
@@ -353,6 +361,14 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
 
+        SetLineDisplayPen(LineDisplayIndex.CircleCenterHorizontallLine, XYDistancePen)
+
+        SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+        SetLineDisplayPen(LineDisplayIndex.MouseCenterHorizontalLine, XYDistancePen)
+
+        'SetLineDisplayPen(LineDisplayIndex.XDistanceLine, TransparentPen)
+
+        SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
 
         SetTextDisplayBlack(TextDisplayIndex.Center)
 
@@ -517,7 +533,7 @@ Public Class Form1
     End Sub
 
     Private Sub UpdateLineDisplays()
-        For i As Integer = 0 To LineDisplays.Count - 1
+        For i As Integer = 0 To LineDisplays.Length - 1
             Dim ld = LineDisplays(i)
 
             Select Case i
@@ -530,6 +546,12 @@ Public Class Form1
                             New Point(CircleCenterPoint.X, ClientRectangle.Top),
                             New Point(CircleCenterPoint.X, ClientRectangle.Bottom))
 
+                Case LineDisplayIndex.CircleCenterHorizontallLine
+
+
+                    SetLine(ld,
+                            New Point(ClientRectangle.Left, CircleCenterPoint.Y),
+                            New Point(ClientRectangle.Right, CircleCenterPoint.Y))
 
                 Case LineDisplayIndex.MouseCenterVerticalLine
 
@@ -538,12 +560,32 @@ Public Class Form1
                             New Point(MousePointerLocation.X, ClientRectangle.Top),
                             New Point(MousePointerLocation.X, ClientRectangle.Bottom))
 
+                Case LineDisplayIndex.MouseCenterHorizontalLine
+
+
+                    SetLine(ld,
+                            New Point(ClientRectangle.Left, MousePointerLocation.Y),
+                            New Point(ClientRectangle.Right, MousePointerLocation.Y))
+
+
                 Case LineDisplayIndex.RadiusLine
                     SetLine(ld, CircleCenterPoint, New Point(CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y))
+
                 Case LineDisplayIndex.XDistanceLine
                     SetLine(ld, CircleCenterPoint, New Point(MousePointerLocation.X, CircleCenterPoint.Y))
+
                 Case LineDisplayIndex.YDistanceLine
-                    SetLine(ld, New Point(MousePointerLocation.X, CircleCenterPoint.Y), MousePointerLocation)
+
+                    If ViewState = ViewStateIndex.YDistanceView Then
+                        SetLine(ld,
+                                New Point(CircleCenterPoint.X, CircleCenterPoint.Y),
+                                New Point(CircleCenterPoint.X, MousePointerLocation.Y))
+
+                    Else
+                        SetLine(ld, New Point(MousePointerLocation.X, CircleCenterPoint.Y), MousePointerLocation)
+                    End If
+
+
                 Case LineDisplayIndex.DistanceLine
                     SetLine(ld, CircleCenterPoint, MousePointerLocation)
 
@@ -710,6 +752,7 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+                SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
 
         End Select
 
@@ -783,7 +826,7 @@ Public Class Form1
                 SetLineDisplayPen(LineDisplayIndex.MouseCenterVerticalLine, XYDistancePen)
 
             Case ViewStateIndex.YDistanceView
-                'SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
+                SetLineDisplayPen(LineDisplayIndex.MouseCenterHorizontalLine, XYDistancePen)
                 SetLineDisplayPen(LineDisplayIndex.YDistanceLine, DistancePen)
 
                 SetTextDisplayTransparent(TextDisplayIndex.Radius)
@@ -1121,6 +1164,10 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
+        SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
+
+
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
 
     End Sub
