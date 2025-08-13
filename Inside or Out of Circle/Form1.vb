@@ -163,6 +163,7 @@ Public Class Form1
         ParametersView
         XDistanceView
         YDistanceView
+        SquaredDistanceView
     End Enum
 
     Private ViewState As ViewStateIndex = ViewStateIndex.Overview
@@ -891,7 +892,9 @@ Public Class Form1
     End Function
 
     Private Sub UpdateCircleDisplaysPostion()
-        For i As Integer = 0 To CircleDisplays.Count - 1
+        'For i As Integer = 0 To CircleDisplays.Count - 1
+        For i As Integer = 0 To CircleDisplays.Length - 1
+
             Dim cd = CircleDisplays(i)
 
             Select Case i
