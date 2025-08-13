@@ -502,54 +502,6 @@ Public Class Form1
         FooterFontSize = MouseFontSize
     End Sub
 
-    'Private Sub UpdateTextDisplaysOnResize()
-    '    Using g As Graphics = CreateGraphics()
-
-    '        Dim td As TextDisplay
-    '        Dim ThisStringSize As SizeF
-
-    '        td = TextDisplays(TextDisplayIndex.Heading)
-    '        td.Text = If(ViewState = ViewStateIndex.ParametersView, "Parameters", $"Inside Circle {IsPointerInsideCircle}")
-    '        td.FontSize = HeadingFontSize
-    '        td.Font = New Font("Segoe UI", td.FontSize)
-    '        ThisStringSize = g.MeasureString(td.Text, td.Font)
-    '        td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-    '        td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-    '        TextDisplays(TextDisplayIndex.Heading) = td
-
-    '        td = TextDisplays(TextDisplayIndex.Center)
-    '        td.Text = $"X {CircleCenterPoint.X}, Y {CircleCenterPoint.Y}"
-    '        td.FontSize = CenterFontSize
-    '        td.Font = New Font("Segoe UI", td.FontSize)
-    '        ThisStringSize = g.MeasureString(td.Text, td.Font)
-    '        td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
-    '        td.Y = CircleCenterPoint.Y
-    '        TextDisplays(TextDisplayIndex.Center) = td
-
-    '        td = TextDisplays(TextDisplayIndex.Radius)
-    '        td.Text = If(ViewState = ViewStateIndex.ParametersView, $"Radius {CircleRadius}", $"Radius² {RadiusSquared}")
-    '        td.FontSize = RadiusFontSize
-    '        td.Font = New Font("Segoe UI", td.FontSize)
-    '        ThisStringSize = g.MeasureString(td.Text, td.Font)
-    '        td.X = CircleCenterPoint.X + CircleRadius + 10
-    '        td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
-    '        TextDisplays(TextDisplayIndex.Radius) = td
-
-    '        td = TextDisplays(TextDisplayIndex.Footer)
-    '        td.Text = If(ViewState = ViewStateIndex.ParametersView, $"What is Known", $"{IsPointerInsideCircle} = {DistanceSquared} <= {RadiusSquared}")
-    '        td.FontSize = FooterFontSize
-    '        td.Font = New Font("Segoe UI", td.FontSize)
-    '        ThisStringSize = g.MeasureString(td.Text, td.Font)
-    '        td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
-    '        td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-    '        TextDisplays(TextDisplayIndex.Footer) = td
-
-    '        td = TextDisplays(TextDisplayIndex.Mouse)
-    '        td.Brush = Brushes.Transparent
-
-    '    End Using
-    'End Sub
-
     Private Sub UpdateLineDisplays()
         For i As Integer = 0 To LineDisplays.Count - 1
             Dim ld = LineDisplays(i)
@@ -613,24 +565,9 @@ Public Class Form1
         CircleDisplays(index) = cd
     End Sub
 
-    'Private Sub InvaildateButtons()
-    '    ' Invalidate the buttons to update their appearance
-
-    '    OverviewButton.Invalidate()
-
-    '    ParametersViewButton.Invalidate()
-
-    '    XDistanceViewButton.Invalidate()
-
-    'End Sub
-
-    'Private Sub InvalidateButtons()
-    '    Dim buttons() As Control = {OverviewButton, ParametersViewButton, XDistanceViewButton}
-    '    For Each btn In buttons
-    '        btn.Invalidate()
-    '    Next
-    'End Sub
-
+    Private Sub InvalidateAllButtons()
+        InvalidateAllButtonsRecursive(Me)
+    End Sub
 
     Private Sub InvalidateAllButtonsRecursive(parent As Control)
         For Each ctrl As Control In parent.Controls
@@ -641,15 +578,6 @@ Public Class Form1
             End If
         Next
     End Sub
-
-    ' Call this from anywhere:
-    Private Sub InvalidateAllButtons()
-        InvalidateAllButtonsRecursive(Me)
-    End Sub
-
-
-
-
 
     Private Sub Switch2Overview()
         ' Switch to Overview
@@ -682,7 +610,6 @@ Public Class Form1
     Private Sub UpdateView()
 
         UpdateMousePointBrush()
-
 
         UpdateCircleBrush()
 
@@ -721,7 +648,6 @@ Public Class Form1
 
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
-
         DistancePen = TransparentPen
         XYDistancePen = TransparentPen
         MousePointBrush = Brushes.Transparent
@@ -747,7 +673,6 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
 
         End Select
-
 
         For i As Integer = 0 To LineDisplays.Count - 1
 
@@ -846,7 +771,6 @@ Public Class Form1
 
         End Select
 
-
     End Sub
 
     Private Sub UpdateMousePointBrush()
@@ -866,17 +790,13 @@ Public Class Form1
                 CircleBrush = If(IsPointerInsideCircle,
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)),
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)))
-                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightGray, Brushes.LightGray)
 
             Case ViewStateIndex.XDistanceView
                 CircleBrush = If(IsPointerInsideCircle,
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)),
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)))
 
-                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
-
             Case ViewStateIndex.YDistanceView
-                'CircleBrush = If(IsPointerInsideCircle, Brushes.LightSkyBlue, Brushes.LightGray)
                 CircleBrush = If(IsPointerInsideCircle,
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)),
                     New SolidBrush(Color.FromArgb(128, Color.LightGray)))
