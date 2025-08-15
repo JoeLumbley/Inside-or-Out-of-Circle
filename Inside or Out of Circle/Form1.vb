@@ -489,11 +489,11 @@ Public Class Form1
 
     Private Sub DrawGrid(g As Graphics)
 
-        ' 🔲 Draw grid ( lines every 50 pixels)
-        For x As Integer = 0 To ClientSize.Width Step 50
+        ' 🔲 Draw grid ( lines every 100 pixels)
+        For x As Integer = 0 To ClientSize.Width Step 100
             g.DrawLine(gridPen, x, 0, x, ClientSize.Height)
         Next
-        For y As Integer = 0 To ClientSize.Height Step 50
+        For y As Integer = 0 To ClientSize.Height Step 100
             g.DrawLine(gridPen, 0, y, ClientSize.Width, y)
         Next
 
