@@ -776,23 +776,10 @@ Public Class Form1
             Case ViewStateIndex.SquaredDistanceView
 
                 SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
+                SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+                SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
 
         End Select
-
-        'For i As Integer = 0 To LineDisplays.Count - 1
-
-        '    Dim ld As LineDisplay = LineDisplays(i)
-        '    Select Case i
-        '        Case LineDisplayIndex.RadiusLine
-        '        Case LineDisplayIndex.CircleCenterVerticalLine
-        '        Case LineDisplayIndex.MouseCenterVerticalLine
-        '            SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
-        '        Case Else
-        '            ld.Pen = Pens.Transparent
-        '    End Select
-        '    LineDisplays(i) = ld
-
-        'Next
 
         For i As Integer = 0 To CircleDisplays.Count - 1
             Dim ld = CircleDisplays(i)
@@ -864,6 +851,12 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+
+                SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
+                SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
+
+
+
         End Select
 
         UpdateTextDisplays(CreateGraphics(), DistanceSquared)
