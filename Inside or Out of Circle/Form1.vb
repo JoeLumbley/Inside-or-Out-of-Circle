@@ -305,12 +305,9 @@ Public Class Form1
 
         Switch2XDistanceView()
 
-        'SetLineDisplayPen(LineDisplayIndex.CircleCenterVerticalLine, XYDistancePen)
-
         UpdateView()
 
         SetLineDisplayPen(LineDisplayIndex.CircleCenterVerticalLine, XYDistancePen)
-
 
         ' Hide overlays
         SetTextDisplayTransparent(TextDisplayIndex.Mouse)
@@ -329,11 +326,7 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
 
-
         SetTextDisplayBlack(TextDisplayIndex.Center)
-
-        'UpdateView()
-
 
         Invalidate()
 
@@ -378,7 +371,6 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub SquaredDistanceViewButton_Click(sender As Object, e As EventArgs) Handles SquaredDistanceViewButton.Click
         ' Switch to SquaredDistanceView
         ViewState = ViewStateIndex.SquaredDistanceView
@@ -399,14 +391,13 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
 
-        SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+        'SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
         SetTextDisplayBlack(TextDisplayIndex.Center)
 
         Invalidate()
         InvalidateAllButtons()
 
     End Sub
-
 
     Protected Overrides Sub OnResize(e As EventArgs)
         MyBase.OnResize(e)
