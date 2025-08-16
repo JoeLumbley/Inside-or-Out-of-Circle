@@ -391,9 +391,6 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
 
-        'SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
-        SetTextDisplayBlack(TextDisplayIndex.Center)
-
         Invalidate()
         InvalidateAllButtons()
 
