@@ -166,6 +166,11 @@ Public Class Form1
 
     Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
+    Private LightGray128Brush As SolidBrush = Brushes.Gray
+
+
+
+
     Private Enum ViewStateIndex
         Overview
         ParametersView
@@ -870,9 +875,7 @@ Public Class Form1
             Case ViewStateIndex.ParametersView
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
             Case ViewStateIndex.XDistanceView
-                'gridPen = Pens.Transparent
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
-
             Case ViewStateIndex.YDistanceView
                 gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
@@ -883,6 +886,7 @@ Public Class Form1
     Private Sub UpdateMousePointBrush()
 
         MousePointBrush = If(IsPointerInsideCircle, Brushes.Lime, Brushes.Tomato)
+
         SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
 
     End Sub
@@ -895,18 +899,18 @@ Public Class Form1
 
             Case ViewStateIndex.ParametersView
                 CircleBrush = If(IsPointerInsideCircle,
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+                    LightGray128Brush,
+                    LightGray128Brush)
 
             Case ViewStateIndex.XDistanceView
                 CircleBrush = If(IsPointerInsideCircle,
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+                    LightGray128Brush,
+                    LightGray128Brush)
 
             Case ViewStateIndex.YDistanceView
                 CircleBrush = If(IsPointerInsideCircle,
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)),
-                    New SolidBrush(Color.FromArgb(128, Color.LightGray)))
+                    LightGray128Brush,
+                    LightGray128Brush)
 
         End Select
 
