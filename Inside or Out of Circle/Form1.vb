@@ -778,6 +778,8 @@ Public Class Form1
                 SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+                SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+
 
         End Select
 
@@ -850,6 +852,11 @@ Public Class Form1
                 SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
+                SetTextDisplayBlack(TextDisplayIndex.Mouse)
+
+
+
+
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
 
                 SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
