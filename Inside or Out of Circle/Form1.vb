@@ -164,7 +164,10 @@ Public Class Form1
     Private CenterFontSize As Integer = 12
     Private FooterFontSize As Integer = 10
 
-    Private gridPen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
+
+    Private LightGray128W2Pen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
+
+    Private gridPen As Pen = LightGray128W2Pen
 
     Private LightGray128Brush As SolidBrush = Brushes.Gray
 
@@ -783,7 +786,10 @@ Public Class Form1
                 SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
+
+                SetTextDisplayTransparent(TextDisplayIndex.Heading)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+                SetTextDisplayTransparent(TextDisplayIndex.Footer)
 
 
         End Select
@@ -873,11 +879,13 @@ Public Class Form1
             Case ViewStateIndex.Overview
                 gridPen = Pens.Transparent
             Case ViewStateIndex.ParametersView
-                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+                gridPen = LightGray128W2Pen
             Case ViewStateIndex.XDistanceView
-                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+                gridPen = LightGray128W2Pen
             Case ViewStateIndex.YDistanceView
-                gridPen = New Pen(Color.FromArgb(128, Color.LightGray), 2)
+                gridPen = LightGray128W2Pen
+            Case ViewStateIndex.SquaredDistanceView
+                gridPen = LightGray128W2Pen
 
         End Select
 
