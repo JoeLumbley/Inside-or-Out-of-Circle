@@ -923,7 +923,7 @@ Public Class Form1
     End Function
 
     Private Sub UpdateCircleDisplaysPostion()
-        'For i As Integer = 0 To CircleDisplays.Count - 1
+
         For i As Integer = 0 To CircleDisplays.Length - 1
 
             Dim cd = CircleDisplays(i)
@@ -943,6 +943,7 @@ Public Class Form1
 
             CircleDisplays(i) = cd
         Next
+
     End Sub
 
     Private Sub SetCirclePostion(ByRef cd As CircleDisplay)
@@ -1013,6 +1014,8 @@ Public Class Form1
                 td.Text = $"X {MousePointerLocation.X}"
             Case ViewStateIndex.YDistanceView
                 td.Text = $"Y {MousePointerLocation.Y}"
+            Case ViewStateIndex.SquaredDistanceView
+                td.Text = $"Distance² {DistanceSquared}"
 
         End Select
 
