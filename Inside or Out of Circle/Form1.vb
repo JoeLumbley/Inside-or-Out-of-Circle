@@ -169,10 +169,7 @@ Public Class Form1
 
     Private gridPen As Pen = LightGray128W2Pen
 
-    Private LightGray128Brush As SolidBrush = Brushes.Gray
-
-
-
+    Private LightGray128Brush As New SolidBrush(Color.FromArgb(128, Color.LightGray))
 
     Private Enum ViewStateIndex
         Overview
@@ -747,8 +744,6 @@ Public Class Form1
 
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
-        'DistancePen = TransparentPen
-        'XYDistancePen = TransparentPen
         MousePointBrush = Brushes.Transparent
 
         Select Case ViewState
@@ -1180,7 +1175,6 @@ Public Class Form1
         DistancePen = ArrowBlack3Pen
         XYDistancePen = Orchid2Pen
 
-
     End Sub
 
     Private Sub InitializeTextDisplays()
@@ -1204,7 +1198,6 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
-
 
         SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
 
