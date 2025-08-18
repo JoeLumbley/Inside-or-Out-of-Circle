@@ -802,11 +802,8 @@ Public Class Form1
 
         UpdateMousePointBrush()
 
-        'DistancePen = ArrowBlack3Pen
-        'XYDistancePen = Orchid2Pen
-
-
         Select Case ViewState
+
             Case ViewStateIndex.Overview
                 SetLineDisplayPen(LineDisplayIndex.RadiusLine, RadiusPen)
                 SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
@@ -817,7 +814,6 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
-
 
             Case ViewStateIndex.ParametersView
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
@@ -854,15 +850,10 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
 
-
-
-
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
 
                 SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
                 SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
-
-
 
         End Select
 
