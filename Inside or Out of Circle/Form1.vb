@@ -1077,7 +1077,7 @@ Public Class Form1
 
         td.FontSize = CenterFontSize
         ThisStringSize = g.MeasureString(td.Text, centerFont)
-        td.X = CircleCenterPoint.X - size.Width \ 2
+        td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
         td.Y = CircleCenterPoint.Y
         td.Font = centerFont
     End Sub
@@ -1099,8 +1099,8 @@ Public Class Form1
 
         td.FontSize = FooterFontSize
         ThisStringSize = g.MeasureString(td.Text, footerFont)
-        td.X = ClientSize.Width \ 2 - size.Width \ 2
-        td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
+        td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
         td.Font = footerFont
     End Sub
 
@@ -1117,7 +1117,7 @@ Public Class Form1
         td.FontSize = RadiusFontSize
         ThisStringSize = g.MeasureString(td.Text, radiusFont)
         td.X = CircleCenterPoint.X + CircleRadius + 10
-        td.Y = CircleCenterPoint.Y - size.Height \ 2
+        td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
         td.Font = radiusFont
     End Sub
 
