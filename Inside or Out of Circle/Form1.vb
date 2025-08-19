@@ -171,6 +171,9 @@ Public Class Form1
 
     Private LightGray128Brush As New SolidBrush(Color.FromArgb(128, Color.LightGray))
 
+    Dim ThisStringSize As SizeF
+
+
     Private Enum ViewStateIndex
         Overview
         ParametersView
@@ -1024,7 +1027,7 @@ Public Class Form1
 
         td.FontSize = MouseFontSize
         td.Font = mouseFont
-        Dim ThisStringSize As SizeF = g.MeasureString(td.Text, td.Font)
+        ThisStringSize = g.MeasureString(td.Text, td.Font)
 
         td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
         If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
@@ -1053,7 +1056,7 @@ Public Class Form1
         End Select
 
         td.FontSize = HeadingFontSize
-        Dim ThisStringSize = g.MeasureString(td.Text, headingFont)
+        ThisStringSize = g.MeasureString(td.Text, headingFont)
         td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
         td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
         td.Font = headingFont
@@ -1073,7 +1076,7 @@ Public Class Form1
         End Select
 
         td.FontSize = CenterFontSize
-        Dim size = g.MeasureString(td.Text, centerFont)
+        ThisStringSize = g.MeasureString(td.Text, centerFont)
         td.X = CircleCenterPoint.X - size.Width \ 2
         td.Y = CircleCenterPoint.Y
         td.Font = centerFont
@@ -1095,7 +1098,7 @@ Public Class Form1
         End Select
 
         td.FontSize = FooterFontSize
-        Dim size = g.MeasureString(td.Text, footerFont)
+        ThisStringSize = g.MeasureString(td.Text, footerFont)
         td.X = ClientSize.Width \ 2 - size.Width \ 2
         td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (size.Height \ 2)
         td.Font = footerFont
@@ -1112,7 +1115,7 @@ Public Class Form1
         End Select
 
         td.FontSize = RadiusFontSize
-        Dim size = g.MeasureString(td.Text, radiusFont)
+        ThisStringSize = g.MeasureString(td.Text, radiusFont)
         td.X = CircleCenterPoint.X + CircleRadius + 10
         td.Y = CircleCenterPoint.Y - size.Height \ 2
         td.Font = radiusFont
