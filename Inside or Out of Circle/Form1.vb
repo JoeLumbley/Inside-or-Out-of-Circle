@@ -390,11 +390,13 @@ Public Class Form1
         SetTextDisplayTransparent(TextDisplayIndex.Heading)
         SetTextDisplayTransparent(TextDisplayIndex.Footer)
         SetTextDisplayTransparent(TextDisplayIndex.Radius)
+        SetTextDisplayTransparent(TextDisplayIndex.Center)
 
         ' Hide mouse indicators
         SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
         SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
         SetCircleDisplayTransparent(CircleDisplayIndex.RadiusEndPoint)
+
         SetLineDisplayTransparent(LineDisplayIndex.RadiusLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterVerticalLine)
         SetLineDisplayTransparent(LineDisplayIndex.CircleCenterHorizontallLine)
@@ -497,7 +499,7 @@ Public Class Form1
 
     Private Sub UpdateButtonLayout()
 
-        Dim ButtonSize As Integer = Math.Max(40, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 13)
+        Dim ButtonSize As Integer = Math.Max(32, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 15)
         Dim Pad As Integer = 10
 
 
@@ -914,6 +916,11 @@ Public Class Form1
                     LightGray128Brush)
 
             Case ViewStateIndex.YDistanceView
+                CircleBrush = If(IsPointerInsideCircle,
+                    LightGray128Brush,
+                    LightGray128Brush)
+
+            Case ViewStateIndex.SquaredDistanceView
                 CircleBrush = If(IsPointerInsideCircle,
                     LightGray128Brush,
                     LightGray128Brush)
