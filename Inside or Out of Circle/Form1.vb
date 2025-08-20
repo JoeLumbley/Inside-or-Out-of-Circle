@@ -49,12 +49,12 @@ Public Class Form1
     End Structure
 
     Private TextDisplays() As TextDisplay = {
-    New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-    New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-    New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-    New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-    New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
-}
+        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
+        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
+    }
 
     Private Enum TextDisplayIndex
         Heading = 0
@@ -164,7 +164,6 @@ Public Class Form1
     Private CenterFontSize As Integer = 12
     Private FooterFontSize As Integer = 10
 
-
     Private LightGray128W2Pen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
     Private gridPen As Pen = LightGray128W2Pen
@@ -172,7 +171,6 @@ Public Class Form1
     Private LightGray128Brush As New SolidBrush(Color.FromArgb(128, Color.LightGray))
 
     Dim ThisStringSize As SizeF
-
 
     Private Enum ViewStateIndex
         Overview
