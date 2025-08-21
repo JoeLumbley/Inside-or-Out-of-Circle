@@ -158,11 +158,11 @@ Public Class Form1
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
 
-    Private HeadingFontSize As Integer = 16
-    Private MouseFontSize As Integer = 12
-    Private RadiusFontSize As Integer = 12
-    Private CenterFontSize As Integer = 12
-    Private FooterFontSize As Integer = 10
+    'Private HeadingFontSize As Integer = 16
+    'Private MouseFontSize As Integer = 12
+    'Private RadiusFontSize As Integer = 12
+    'Private CenterFontSize As Integer = 12
+    'Private FooterFontSize As Integer = 10
 
     Private LightGray128W2Pen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
@@ -551,11 +551,11 @@ Public Class Form1
 
     Private Sub UpdateFontSizes()
         Dim baseSize = Math.Min(ClientSize.Width, ClientSize.Height) \ 20
-        MouseFontSize = Math.Max(10, baseSize)
-        RadiusFontSize = MouseFontSize
-        CenterFontSize = MouseFontSize
-        HeadingFontSize = MouseFontSize
-        FooterFontSize = MouseFontSize
+        'MouseFontSize = Math.Max(10, baseSize)
+        'RadiusFontSize = MouseFontSize
+        'CenterFontSize = MouseFontSize
+        'HeadingFontSize = MouseFontSize
+        'FooterFontSize = MouseFontSize
 
         SetTextDisplayFontSize(TextDisplayIndex.Heading, Math.Max(10, baseSize))
         SetTextDisplayFontSize(TextDisplayIndex.Mouse, Math.Max(10, baseSize))
