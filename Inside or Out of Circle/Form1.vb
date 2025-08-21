@@ -234,20 +234,20 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        Dim g = e.Graphics
+        'Dim g = e.Graphics
 
-        g.SmoothingMode = Drawing2D.SmoothingMode.None
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
 
-        DrawGrid(g)
+        DrawGrid(e.Graphics)
 
-        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-        g.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        e.Graphics.TextRenderingHint = Drawing.Text.TextRenderingHint.AntiAlias
 
-        DrawCircles(g)
+        DrawCircles(e.Graphics)
 
-        DrawLines(g)
+        DrawLines(e.Graphics)
 
-        DrawTextOverlays(g)
+        DrawTextOverlays(e.Graphics)
 
     End Sub
 
@@ -564,9 +564,6 @@ Public Class Form1
         SetTextDisplayFontSize(TextDisplayIndex.Radius, Math.Max(10, baseSize))
         SetTextDisplayFontSize(TextDisplayIndex.Center, Math.Max(10, baseSize))
         SetTextDisplayFontSize(TextDisplayIndex.Footer, Math.Max(10, baseSize))
-
-
-
 
     End Sub
 
