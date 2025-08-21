@@ -1034,6 +1034,7 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
+<img width="1920" height="1080" alt="020" src="https://github.com/user-attachments/assets/cfcaabf8-7400-45c5-83ba-1c9d36576eca" />
 
 
 
