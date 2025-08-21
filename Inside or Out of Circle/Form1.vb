@@ -234,8 +234,6 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        'Dim g = e.Graphics
-
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None
 
         DrawGrid(e.Graphics)
