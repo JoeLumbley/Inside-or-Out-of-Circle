@@ -221,7 +221,7 @@ Public Class Form1
 
         YDistance = e.Y - CircleCenterPoint.Y
 
-        DistanceSquared = CalculateDistances()
+        DistanceSquared = XDistance * XDistance + YDistance * YDistance
 
         UpdateViewOnMouseMove()
 
