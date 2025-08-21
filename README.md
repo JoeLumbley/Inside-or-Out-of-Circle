@@ -1,6 +1,6 @@
 # Inside or Out of Circle 🔵 
 
-The **Inside or Out of Circle** application is an interactive educational tool designed to demonstrate and explore the concept of hit detection using squared distance calculations. This app provides a visual and engaging way to understand how proximity to a defined area (in this case, a circle) can be quantified and represented graphically.
+The **Inside or Out of Circle** application is an interactive tool designed to demonstrate and explore the concept of hit detection using squared distance calculations. This app provides a visual and engaging way to understand how proximity to a defined area (in this case, a circle) can be quantified and represented graphically.
 
 <img width="1920" height="1080" alt="015" src="https://github.com/user-attachments/assets/f54e5b88-ce4d-41e8-b6ab-fb9609a13a45" />
 
@@ -38,8 +38,11 @@ The **Inside or Out of Circle** app is not just a simple interactive tool; it is
 <img width="1920" height="1080" alt="016" src="https://github.com/user-attachments/assets/f4da8a40-75f7-4b56-a646-52e819e2c3c7" />
 
 <img width="1920" height="1080" alt="017" src="https://github.com/user-attachments/assets/fcdc7b95-53d6-4374-ba57-cd825dd77ddb" />
-<img width="1920" height="1080" alt="018" src="https://github.com/user-attachments/assets/db80f46a-291d-4bbe-afcf-03dd5a235461" />
-<img width="1920" height="1080" alt="019" src="https://github.com/user-attachments/assets/9e67af2b-aa9b-4606-a870-aa4e1ff1eb2e" />
+
+<img width="1920" height="1080" alt="018" src="https://github.com/user-attachments/assets/3aecbc33-9b65-4c14-ac63-03b12cdbdcbc" />
+
+
+<img width="1920" height="1080" alt="021" src="https://github.com/user-attachments/assets/67217b63-1395-46b7-8c57-cdda290a8f5d" />
 
 ---
 
@@ -1034,6 +1037,7 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
+<img width="1920" height="1080" alt="020" src="https://github.com/user-attachments/assets/cfcaabf8-7400-45c5-83ba-1c9d36576eca" />
 
 
 
