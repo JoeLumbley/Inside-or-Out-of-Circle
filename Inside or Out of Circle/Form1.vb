@@ -587,37 +587,50 @@ Public Class Form1
 
                 Case LineDisplayIndex.MouseCenterHorizontalLine
 
-
                     SetLine(ld,
                             ClientRectangle.Left, MousePointerLocation.Y,
                             ClientRectangle.Right, MousePointerLocation.Y)
 
-
                 Case LineDisplayIndex.RadiusLine
-                    SetLine(ld, CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y)
+
+                    SetLine(ld,
+                            CircleCenterPoint.X, CircleCenterPoint.Y,
+                            CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y)
 
                 Case LineDisplayIndex.XDistanceLine
-                    SetLine(ld, CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y)
+
+                    SetLine(ld,
+                            CircleCenterPoint.X, CircleCenterPoint.Y,
+                            MousePointerLocation.X, CircleCenterPoint.Y)
 
                 Case LineDisplayIndex.YDistanceLine
 
                     If ViewState = ViewStateIndex.YDistanceView Then
+
                         SetLine(ld,
                                 CircleCenterPoint.X, CircleCenterPoint.Y,
                                 CircleCenterPoint.X, MousePointerLocation.Y)
 
                     Else
-                        SetLine(ld, MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y)
+
+                        SetLine(ld,
+                                MousePointerLocation.X, CircleCenterPoint.Y,
+                                MousePointerLocation.X, MousePointerLocation.Y)
+
                     End If
 
-
                 Case LineDisplayIndex.DistanceLine
-                    SetLine(ld, CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y)
+
+                    SetLine(ld,
+                            CircleCenterPoint.X, CircleCenterPoint.Y,
+                            MousePointerLocation.X, MousePointerLocation.Y)
 
             End Select
 
             LineDisplays(i) = ld
+
         Next
+
     End Sub
 
     Private Sub SetLine(ByRef ld As LineDisplay, X1 As Integer, Y1 As Integer, X2 As Integer, Y2 As Integer)
