@@ -48,12 +48,16 @@ Public Class Form1
         End Sub
     End Structure
 
+    Private FontFamilyName As String = "Segoe UI"
+
+    Private InitDisplayFont = New Font(FontFamilyName, 10)
+
     Private TextDisplays() As TextDisplay = {
-        New TextDisplay(0, 0, "Heading", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Mouse", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Radius", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Center", Brushes.Transparent, 10, New Font("Segoe UI", 10)),
-        New TextDisplay(0, 0, "Footer", Brushes.Transparent, 10, New Font("Segoe UI", 10))
+        New TextDisplay(0, 0, "Heading", Brushes.Chartreuse, 10, InitDisplayFont),
+        New TextDisplay(0, 0, "Mouse", Brushes.Chartreuse, 10, InitDisplayFont),
+        New TextDisplay(0, 0, "Radius", Brushes.Chartreuse, 10, InitDisplayFont),
+        New TextDisplay(0, 0, "Center", Brushes.Chartreuse, 10, InitDisplayFont),
+        New TextDisplay(0, 0, "Footer", Brushes.Chartreuse, 10, InitDisplayFont)
     }
 
     Private Enum TextDisplayIndex
@@ -79,16 +83,15 @@ Public Class Form1
         End Sub
     End Structure
 
-
     Private LineDisplays() As LineDisplay = {
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, CircleCenterPoint.X + CircleRadius, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, CircleCenterPoint.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(MousePointerLocation.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2)),
-        New LineDisplay(CircleCenterPoint.X, CircleCenterPoint.Y, MousePointerLocation.X, MousePointerLocation.Y, New Pen(Color.Chartreuse, 2))
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse),
+        New LineDisplay(0, 0, 0, 0, Pens.Chartreuse)
     }
 
     Private Enum LineDisplayIndex
@@ -496,7 +499,7 @@ Public Class Form1
 
         SquaredDistanceViewButton.Width = ButtonSize
         SquaredDistanceViewButton.Height = ButtonSize
-        SquaredDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        SquaredDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         SquaredDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -504,7 +507,7 @@ Public Class Form1
 
         YDistanceViewButton.Width = ButtonSize
         YDistanceViewButton.Height = ButtonSize
-        YDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        YDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         YDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -512,7 +515,7 @@ Public Class Form1
 
         XDistanceViewButton.Width = ButtonSize
         XDistanceViewButton.Height = ButtonSize
-        XDistanceViewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        XDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -520,7 +523,7 @@ Public Class Form1
 
         ParametersViewButton.Width = ButtonSize
         ParametersViewButton.Height = ButtonSize
-        ParametersViewButton.Font = New Font("Segoe UI", Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 55))
+        ParametersViewButton.Font = New Font(FontFamilyName, Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 55))
         ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 4 - Pad * 4,
                                        ClientSize.Height - ButtonSize - Pad,
                                        ButtonSize,
@@ -528,7 +531,7 @@ Public Class Form1
 
         OverviewButton.Width = ButtonSize
         OverviewButton.Height = ButtonSize
-        OverviewButton.Font = New Font("Segoe UI", Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        OverviewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
         OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 5 - Pad * 5,
                                  ClientSize.Height - ButtonSize - Pad,
                                  ButtonSize,
@@ -660,7 +663,7 @@ Public Class Form1
     Private Sub SetTextDisplayFontSize(index As TextDisplayIndex, size As Integer)
         Dim td = TextDisplays(index)
         td.FontSize = size
-        td.Font = New Font("Segoe UI", size)
+        td.Font = New Font(FontFamilyName, size)
         TextDisplays(index) = td
     End Sub
 
