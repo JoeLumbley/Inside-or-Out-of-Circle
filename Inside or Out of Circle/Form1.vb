@@ -52,13 +52,7 @@ Public Class Form1
 
     Private InitDisplayFont = New Font(FontFamilyName, 10)
 
-    Private TextDisplays() As TextDisplay = {
-        New TextDisplay(0, 0, "Heading", Brushes.Chartreuse, 10, InitDisplayFont),
-        New TextDisplay(0, 0, "Mouse", Brushes.Chartreuse, 10, InitDisplayFont),
-        New TextDisplay(0, 0, "Radius", Brushes.Chartreuse, 10, InitDisplayFont),
-        New TextDisplay(0, 0, "Center", Brushes.Chartreuse, 10, InitDisplayFont),
-        New TextDisplay(0, 0, "Footer", Brushes.Chartreuse, 10, InitDisplayFont)
-    }
+    Private InitDisplayFontSize As Integer = 10
 
     Private Enum TextDisplayIndex
         Heading = 0
@@ -67,6 +61,14 @@ Public Class Form1
         Center = 3
         Footer = 4
     End Enum
+
+    Private TextDisplays() As TextDisplay = {
+        New TextDisplay(0, 0, TextDisplayIndex.Heading.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.Mouse.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.Radius.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.Center.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.Footer.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont)
+    }
 
     Private Structure LineDisplay
         Public X1 As Integer
@@ -123,19 +125,19 @@ Public Class Form1
     Private MouseHilightBrush As New SolidBrush(Color.FromArgb(128, Color.Yellow))
 
     Private CircleDisplays() As CircleDisplay = {
-        New CircleDisplay(CircleCenterPoint.X - CircleRadius, CircleCenterPoint.Y - CircleRadius, CircleRadius * 2, CircleRadius * 2, Brushes.LightGray),
-        New CircleDisplay(CircleCenterPoint.X + CircleRadius - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
-        New CircleDisplay(CircleCenterPoint.X - 3, CircleCenterPoint.Y - 3, 6, 6, Brushes.LightGray),
-        New CircleDisplay(MousePointerLocation.X - 20, MousePointerLocation.Y - 20, 40, 40, MouseHilightBrush),
-        New CircleDisplay(MousePointerLocation.X - 3, MousePointerLocation.Y - 3, 6, 6, Brushes.LightGray)
+        New CircleDisplay(0, 0, 0, 0, Brushes.Chartreuse),
+        New CircleDisplay(0, 0, 0, 0, Brushes.Chartreuse),
+        New CircleDisplay(0, 0, 0, 0, Brushes.Chartreuse),
+        New CircleDisplay(0, 0, 0, 0, Brushes.Chartreuse),
+        New CircleDisplay(0, 0, 0, 0, Brushes.Chartreuse)
     }
 
     Private Enum CircleDisplayIndex
-        Circle = 0
-        RadiusEndPoint = 1
-        CenterPoint = 2
-        MouseHilight = 3
-        MousePoint = 4
+        Circle
+        RadiusEndPoint
+        CenterPoint
+        MouseHilight
+        MousePoint
     End Enum
 
     Private CircleCenterPoint As New Point(150, 150)
