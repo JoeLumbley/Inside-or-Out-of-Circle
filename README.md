@@ -1127,6 +1127,7 @@ By engaging with this application, users can deepen their understanding of geome
 
 
 
+<img width="1920" height="1080" alt="022" src="https://github.com/user-attachments/assets/ac2cfdce-7c81-41e2-a48b-4d704c2459da" />
 
 
 
