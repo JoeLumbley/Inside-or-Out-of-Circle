@@ -158,12 +158,6 @@ Public Class Form1
     Private CircleBrush As SolidBrush = Brushes.LightGray
     Private RadiusBrush As SolidBrush = Brushes.Gray
 
-    'Private HeadingFontSize As Integer = 16
-    'Private MouseFontSize As Integer = 12
-    'Private RadiusFontSize As Integer = 12
-    'Private CenterFontSize As Integer = 12
-    'Private FooterFontSize As Integer = 10
-
     Private LightGray128W2Pen As New Pen(Color.FromArgb(128, Color.LightGray), 2)
 
     Private gridPen As Pen = LightGray128W2Pen
@@ -499,7 +493,6 @@ Public Class Form1
 
         Dim ButtonSize As Integer = Math.Max(32, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 15)
         Dim Pad As Integer = 10
-
 
         SquaredDistanceViewButton.Width = ButtonSize
         SquaredDistanceViewButton.Height = ButtonSize
