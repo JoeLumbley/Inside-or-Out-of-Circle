@@ -551,11 +551,6 @@ Public Class Form1
 
     Private Sub UpdateFontSizes()
         Dim baseSize = Math.Min(ClientSize.Width, ClientSize.Height) \ 20
-        'MouseFontSize = Math.Max(10, baseSize)
-        'RadiusFontSize = MouseFontSize
-        'CenterFontSize = MouseFontSize
-        'HeadingFontSize = MouseFontSize
-        'FooterFontSize = MouseFontSize
 
         SetTextDisplayFontSize(TextDisplayIndex.Heading, Math.Max(10, baseSize))
         SetTextDisplayFontSize(TextDisplayIndex.Mouse, Math.Max(10, baseSize))
@@ -574,24 +569,17 @@ Public Class Form1
                 ' Circle center vertical line
                 Case LineDisplayIndex.CircleCenterVerticalLine
 
-
-                    'SetLine(ld,
-                    '        New Point(CircleCenterPoint.X, ClientRectangle.Top),
-                    '        New Point(CircleCenterPoint.X, ClientRectangle.Bottom))
                     SetLine(ld,
                             CircleCenterPoint.X, ClientRectangle.Top,
                             CircleCenterPoint.X, ClientRectangle.Bottom)
 
-
                 Case LineDisplayIndex.CircleCenterHorizontallLine
-
 
                     SetLine(ld,
                             ClientRectangle.Left, CircleCenterPoint.Y,
                             ClientRectangle.Right, CircleCenterPoint.Y)
 
                 Case LineDisplayIndex.MouseCenterVerticalLine
-
 
                     SetLine(ld,
                             MousePointerLocation.X, ClientRectangle.Top,
