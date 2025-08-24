@@ -501,7 +501,7 @@ Public Class Form1
 
         SquaredDistanceViewButton.Width = ButtonSize
         SquaredDistanceViewButton.Height = ButtonSize
-        SquaredDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        SquaredDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 70))
         SquaredDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize - Pad,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -509,7 +509,7 @@ Public Class Form1
 
         YDistanceViewButton.Width = ButtonSize
         YDistanceViewButton.Height = ButtonSize
-        YDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        YDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 50))
         YDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 2 - Pad * 2,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -517,7 +517,7 @@ Public Class Form1
 
         XDistanceViewButton.Width = ButtonSize
         XDistanceViewButton.Height = ButtonSize
-        XDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        XDistanceViewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 50))
         XDistanceViewButton.SetBounds(ClientSize.Width - ButtonSize * 3 - Pad * 3,
                                       ClientSize.Height - ButtonSize - Pad,
                                       ButtonSize,
@@ -525,7 +525,7 @@ Public Class Form1
 
         ParametersViewButton.Width = ButtonSize
         ParametersViewButton.Height = ButtonSize
-        ParametersViewButton.Font = New Font(FontFamilyName, Math.Max(9, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 55))
+        ParametersViewButton.Font = New Font(FontFamilyName, Math.Max(7, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 70))
         ParametersViewButton.SetBounds(ClientSize.Width - ButtonSize * 4 - Pad * 4,
                                        ClientSize.Height - ButtonSize - Pad,
                                        ButtonSize,
@@ -533,7 +533,7 @@ Public Class Form1
 
         OverviewButton.Width = ButtonSize
         OverviewButton.Height = ButtonSize
-        OverviewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 45))
+        OverviewButton.Font = New Font(FontFamilyName, Math.Max(10, Math.Min(Me.ClientSize.Width, Me.ClientSize.Height) \ 50))
         OverviewButton.SetBounds(ClientSize.Width - ButtonSize * 5 - Pad * 5,
                                  ClientSize.Height - ButtonSize - Pad,
                                  ButtonSize,

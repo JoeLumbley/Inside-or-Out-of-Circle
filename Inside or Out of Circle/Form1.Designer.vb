@@ -35,7 +35,7 @@ Partial Class Form1
         ParametersViewButton.Location = New Point(978, 605)
         ParametersViewButton.Name = "ParametersViewButton"
         ParametersViewButton.Size = New Size(64, 64)
-        ParametersViewButton.TabIndex = 0
+        ParametersViewButton.TabIndex = 1
         ParametersViewButton.Text = "(  )"
         ParametersViewButton.UseVisualStyleBackColor = True
         ' 
@@ -45,7 +45,7 @@ Partial Class Form1
         OverviewButton.Location = New Point(908, 605)
         OverviewButton.Name = "OverviewButton"
         OverviewButton.Size = New Size(64, 64)
-        OverviewButton.TabIndex = 1
+        OverviewButton.TabIndex = 0
         OverviewButton.Text = ""
         OverviewButton.UseVisualStyleBackColor = True
         ' 
