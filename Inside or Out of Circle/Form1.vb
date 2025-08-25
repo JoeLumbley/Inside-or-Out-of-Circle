@@ -364,8 +364,6 @@ Public Class Form1
         SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
         SetLineDisplayPen(LineDisplayIndex.MouseCenterHorizontalLine, XYDistancePen)
 
-        'SetLineDisplayPen(LineDisplayIndex.XDistanceLine, TransparentPen)
-
         SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
 
         SetTextDisplayBlack(TextDisplayIndex.Center)
