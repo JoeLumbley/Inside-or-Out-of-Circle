@@ -1165,7 +1165,6 @@ Public Class Form1
 
         UpdateMouseTextPositionContent(TextDisplays(TextDisplayIndex.Mouse))
 
-
         UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading))
 
         UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center))
