@@ -770,13 +770,19 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Center)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
-                SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
 
+                SetLineDisplayTransparent(LineDisplayIndex.DistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
 
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, Brushes.Transparent)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, Brushes.Transparent)
+
             Case ViewStateIndex.ParametersView
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
+
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, Brushes.Transparent)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, Brushes.Transparent)
 
             Case ViewStateIndex.XDistanceView
                 SetTextDisplayTransparent(TextDisplayIndex.Heading)
@@ -786,13 +792,19 @@ Public Class Form1
                 SetLineDisplayTransparent(LineDisplayIndex.MouseCenterVerticalLine)
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
 
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, Brushes.Transparent)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, Brushes.Transparent)
+
             Case ViewStateIndex.YDistanceView
                 SetTextDisplayTransparent(TextDisplayIndex.Heading)
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
+
                 SetLineDisplayTransparent(LineDisplayIndex.YDistanceLine)
                 SetLineDisplayTransparent(LineDisplayIndex.MouseCenterHorizontalLine)
 
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, Brushes.Transparent)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, Brushes.Transparent)
 
             Case ViewStateIndex.SquaredDistanceView
 
@@ -804,20 +816,24 @@ Public Class Form1
                 SetTextDisplayTransparent(TextDisplayIndex.Mouse)
                 SetTextDisplayTransparent(TextDisplayIndex.Footer)
 
+                SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, Brushes.Transparent)
+                SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, Brushes.Transparent)
 
         End Select
 
-        For i As Integer = 0 To CircleDisplays.Count - 1
-            Dim ld = CircleDisplays(i)
-            Select Case i
-                Case CircleDisplayIndex.MousePoint
-                    ld.Brush = Brushes.Transparent
-                Case CircleDisplayIndex.MouseHilight
-                    ld.Brush = Brushes.Transparent
-            End Select
-            CircleDisplays(i) = ld
+        'For i As Integer = 0 To CircleDisplays.Count - 1
+        '    Dim ld = CircleDisplays(i)
 
-        Next
+        '    Select Case i
+        '        Case CircleDisplayIndex.MousePoint
+        '            ld.Brush = Brushes.Transparent
+        '        Case CircleDisplayIndex.MouseHilight
+        '            ld.Brush = Brushes.Transparent
+        '    End Select
+
+        '    CircleDisplays(i) = ld
+
+        'Next
 
     End Sub
 
