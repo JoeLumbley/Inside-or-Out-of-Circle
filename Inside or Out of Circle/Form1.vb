@@ -1204,8 +1204,6 @@ Public Class Form1
         ArrowBlack3Pen.CustomStartCap = DistanceArrowCap
         ArrowBlack3Pen.CustomEndCap = DistanceArrowCap
 
-        XYDistancePen = Pens.Transparent
-
         MousePointBrush = Brushes.Transparent
 
         DistancePen = ArrowBlack3Pen
