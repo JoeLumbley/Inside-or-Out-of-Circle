@@ -980,6 +980,7 @@ Public Class Form1
             End Select
 
             CircleDisplays(i) = cd
+
         Next
 
     End Sub
@@ -1014,13 +1015,8 @@ Public Class Form1
 
     Private Sub UpdateTextDisplays(distanceSquared As Double)
 
-        'Dim headingFont As New Font("Segoe UI", HeadingFontSize)
-        'Dim mouseFont As New Font("Segoe UI", MouseFontSize)
-        'Dim radiusFont As New Font("Segoe UI", RadiusFontSize)
-        'Dim centerFont As New Font("Segoe UI", CenterFontSize)
-        'Dim footerFont As New Font("Segoe UI", FooterFontSize)
+        For i As Integer = 0 To TextDisplays.Length - 1
 
-        For i As Integer = 0 To TextDisplays.Count - 1
             Dim td As TextDisplay = TextDisplays(i)
 
             Select Case i
@@ -1037,11 +1033,13 @@ Public Class Form1
             End Select
 
             TextDisplays(i) = td
+
         Next
 
     End Sub
 
     Private Sub UpdateMouseTextPositionContent(ByRef td As TextDisplay)
+
         ' Update mouse text display
         Select Case ViewState
             Case ViewStateIndex.Overview
@@ -1057,11 +1055,10 @@ Public Class Form1
 
         End Select
 
-        'td.FontSize = MouseFontSize
-        'td.Font = mouseFont
         ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
 
         td.X = If(MousePointerLocation.X + 30 + ThisStringSize.Width > ClientSize.Width, MousePointerLocation.X - ThisStringSize.Width - 30, MousePointerLocation.X + 30)
+
         If MousePointerLocation.Y + ThisStringSize.Height \ 4 > ClientSize.Height Then
             td.Y = MousePointerLocation.Y - ThisStringSize.Height
         ElseIf MousePointerLocation.Y - ThisStringSize.Height \ 4 < ClientRectangle.Top Then
@@ -1069,10 +1066,13 @@ Public Class Form1
         Else
             td.Y = MousePointerLocation.Y - ThisStringSize.Height \ 2
         End If
+
         TextDisplays(TextDisplayIndex.Mouse) = td
+
     End Sub
 
     Private Sub UpdateHeadingTextPositionContent(ByRef td As TextDisplay)
+
         Select Case ViewState
             Case ViewStateIndex.Overview
                 td.Text = $"Inside Circle {IsPointerInsideCircle}"
@@ -1087,14 +1087,15 @@ Public Class Form1
 
         End Select
 
-        'td.FontSize = HeadingFontSize
         ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
+
         td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
         td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
-        'td.Font = headingFont
+
     End Sub
 
     Private Sub UpdateCenterTextPositionContent(ByRef td As TextDisplay)
+
         Select Case ViewState
             Case ViewStateIndex.Overview
             Case ViewStateIndex.ParametersView
@@ -1107,11 +1108,11 @@ Public Class Form1
 
         End Select
 
-        'td.FontSize = CenterFontSize
         ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
+
         td.X = CircleCenterPoint.X - ThisStringSize.Width \ 2
         td.Y = CircleCenterPoint.Y
-        'td.Font = centerFont
+
     End Sub
 
     Private Sub UpdateFooterTextPositionContent(ByRef td As TextDisplay, distanceSquared As Double)
@@ -1129,14 +1130,15 @@ Public Class Form1
 
         End Select
 
-        'td.FontSize = FooterFontSize
         ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
+
         td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
         td.Y = (CircleCenterPoint.Y + CircleRadius) + (ClientSize.Height - (CircleCenterPoint.Y + CircleRadius)) \ 2 - (ThisStringSize.Height \ 2)
-        'td.Font = footerFont
+
     End Sub
 
     Private Sub UpdateRadiusTextPositionContent(ByRef td As TextDisplay)
+
         Select Case ViewState
             Case ViewStateIndex.Overview
                 td.Text = $"Radius² {RadiusSquared}"
@@ -1146,11 +1148,11 @@ Public Class Form1
 
         End Select
 
-        'td.FontSize = RadiusFontSize
         ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
+
         td.X = CircleCenterPoint.X + CircleRadius + 10
         td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
-        'td.Font = radiusFont
+
     End Sub
 
     Private Sub UpdateViewOnMouseMove()
@@ -1161,26 +1163,14 @@ Public Class Form1
 
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
 
-        'Using g As Graphics = CreateGraphics()
-        'UpdateMouseTextPositionContent(TextDisplays(TextDisplayIndex.Mouse), g, New Font("Segoe UI", MouseFontSize))
-        'UpdateMouseTextPositionContent(TextDisplays(TextDisplayIndex.Mouse), g, TextDisplays(TextDisplayIndex.Mouse).Font)
         UpdateMouseTextPositionContent(TextDisplays(TextDisplayIndex.Mouse))
 
 
-            'UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading), g, New Font("Segoe UI", HeadingFontSize))
-            'UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading), g, TextDisplays(TextDisplayIndex.Heading).Font)
-            UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading))
+        UpdateHeadingTextPositionContent(TextDisplays(TextDisplayIndex.Heading))
 
-            'UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center), g, New Font("Segoe UI", CenterFontSize))
-            'UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center), g, TextDisplays(TextDisplayIndex.Center).Font)
-            UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center))
+        UpdateCenterTextPositionContent(TextDisplays(TextDisplayIndex.Center))
 
-
-            'UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), g, New Font("Segoe UI", FooterFontSize), DistanceSquared)
-            'UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), g, TextDisplays(TextDisplayIndex.Footer).Font, DistanceSquared)
-            UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), DistanceSquared)
-
-        'End Using
+        UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), DistanceSquared)
 
         UpdateLineDisplays()
 
