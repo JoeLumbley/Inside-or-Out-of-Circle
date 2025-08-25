@@ -821,20 +821,6 @@ Public Class Form1
 
         End Select
 
-        'For i As Integer = 0 To CircleDisplays.Count - 1
-        '    Dim ld = CircleDisplays(i)
-
-        '    Select Case i
-        '        Case CircleDisplayIndex.MousePoint
-        '            ld.Brush = Brushes.Transparent
-        '        Case CircleDisplayIndex.MouseHilight
-        '            ld.Brush = Brushes.Transparent
-        '    End Select
-
-        '    CircleDisplays(i) = ld
-
-        'Next
-
     End Sub
 
     Private Sub UpdateBrushesPens4MouseEnter()
@@ -849,23 +835,30 @@ Public Class Form1
                 SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
                 SetLineDisplayPen(LineDisplayIndex.XDistanceLine, XYDistancePen)
                 SetLineDisplayPen(LineDisplayIndex.YDistanceLine, XYDistancePen)
+
                 SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
 
             Case ViewStateIndex.ParametersView
                 SetLineDisplayTransparent(LineDisplayIndex.XDistanceLine)
+
                 SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
 
             Case ViewStateIndex.XDistanceView
                 SetLineDisplayPen(LineDisplayIndex.XDistanceLine, DistancePen)
+
                 SetTextDisplayTransparent(TextDisplayIndex.Radius)
+
                 SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
@@ -878,14 +871,17 @@ Public Class Form1
                 SetLineDisplayPen(LineDisplayIndex.YDistanceLine, DistancePen)
 
                 SetTextDisplayTransparent(TextDisplayIndex.Radius)
+
                 SetCircleDisplayBrush(CircleDisplayIndex.MousePoint, MousePointBrush)
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
+
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
 
             Case ViewStateIndex.SquaredDistanceView
                 SetLineDisplayPen(LineDisplayIndex.DistanceLine, DistancePen)
+
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
