@@ -55,11 +55,13 @@ Public Class Form1
     Private InitDisplayFontSize As Integer = 10
 
     Private Enum TextDisplayIndex
-        Heading = 0
-        Mouse = 1
-        Radius = 2
-        Center = 3
-        Footer = 4
+        Heading
+        Mouse
+        Radius
+        Center
+        Footer
+        XDistance
+        YDistance
     End Enum
 
     Private TextDisplays() As TextDisplay = {
@@ -67,7 +69,9 @@ Public Class Form1
         New TextDisplay(0, 0, TextDisplayIndex.Mouse.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
         New TextDisplay(0, 0, TextDisplayIndex.Radius.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
         New TextDisplay(0, 0, TextDisplayIndex.Center.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
-        New TextDisplay(0, 0, TextDisplayIndex.Footer.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont)
+        New TextDisplay(0, 0, TextDisplayIndex.Footer.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.XDistance.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont),
+        New TextDisplay(0, 0, TextDisplayIndex.YDistance.ToString, Brushes.Chartreuse, InitDisplayFontSize, InitDisplayFont)
     }
 
     Private Structure LineDisplay
