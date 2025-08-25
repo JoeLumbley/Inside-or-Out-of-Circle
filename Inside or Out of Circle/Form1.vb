@@ -1218,6 +1218,7 @@ Public Class Form1
         SetTextDisplayTransparent(TextDisplayIndex.Footer)
         SetTextDisplayTransparent(TextDisplayIndex.Mouse)
         SetTextDisplayTransparent(TextDisplayIndex.Heading)
+
         SetTextDisplayBlack(TextDisplayIndex.Radius)
 
     End Sub
@@ -1242,6 +1243,7 @@ Public Class Form1
 
         SetCircleDisplayTransparent(CircleDisplayIndex.MousePoint)
         SetCircleDisplayTransparent(CircleDisplayIndex.MouseHilight)
+
         SetCircleDisplayBrush(CircleDisplayIndex.Circle, CircleBrush)
         SetCircleDisplayBrush(CircleDisplayIndex.RadiusEndPoint, RadiusBrush)
         SetCircleDisplayBrush(CircleDisplayIndex.CenterPoint, RadiusBrush)
