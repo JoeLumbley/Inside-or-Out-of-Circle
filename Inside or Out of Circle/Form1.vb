@@ -889,6 +889,8 @@ Public Class Form1
                 SetTextDisplayBlack(TextDisplayIndex.Heading)
                 SetTextDisplayBlack(TextDisplayIndex.Footer)
                 SetTextDisplayBlack(TextDisplayIndex.Mouse)
+                SetTextDisplayBlack(TextDisplayIndex.XDistance)
+                SetTextDisplayBlack(TextDisplayIndex.YDistance)
 
                 SetCircleDisplayBrush(CircleDisplayIndex.MouseHilight, MouseHilightBrush)
 
@@ -1098,6 +1100,31 @@ Public Class Form1
 
     End Sub
 
+    Private Sub UpdateXDistanceTextPositionContent(ByRef td As TextDisplay)
+
+        'Update Text
+        Select Case ViewState
+            Case ViewStateIndex.SquaredDistanceView
+                td.Text = $"X Distance {XDistance}"
+
+        End Select
+
+        ThisStringSize = gRuler.MeasureString(td.Text, td.Font)
+
+        'td.X = ClientSize.Width \ 2 - ThisStringSize.Width \ 2
+        'td.Y = ((CircleCenterPoint.Y - CircleRadius) \ 2) - (ThisStringSize.Height \ 2)
+        ' Center with the X distance line.
+
+        ' Center horizontally between circle center and mouse pointer
+        Dim xMid As Integer = (CircleCenterPoint.X + MousePointerLocation.X) \ 2
+        td.X = xMid - ThisStringSize.Width \ 2
+
+        ' Align vertically with the X distance line (circle center Y)
+        td.Y = CircleCenterPoint.Y - ThisStringSize.Height \ 2
+
+    End Sub
+
+
     Private Sub UpdateCenterTextPositionContent(ByRef td As TextDisplay)
 
         Select Case ViewState
@@ -1175,6 +1202,12 @@ Public Class Form1
 
         UpdateFooterTextPositionContent(TextDisplays(TextDisplayIndex.Footer), DistanceSquared)
 
+        'UpdateXDistance
+        UpdateXDistanceTextPositionContent(TextDisplays(TextDisplayIndex.XDistance))
+
+        'UpdateYDistance
+
+
         UpdateLineDisplays()
 
         UpdateCircleDisplaysPostion()
@@ -1221,6 +1254,8 @@ Public Class Form1
         SetTextDisplayTransparent(TextDisplayIndex.Footer)
         SetTextDisplayTransparent(TextDisplayIndex.Mouse)
         SetTextDisplayTransparent(TextDisplayIndex.Heading)
+        SetTextDisplayTransparent(TextDisplayIndex.XDistance)
+        SetTextDisplayTransparent(TextDisplayIndex.YDistance)
 
         SetTextDisplayBlack(TextDisplayIndex.Radius)
 
